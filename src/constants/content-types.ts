@@ -1,0 +1,35 @@
+// src/constants/content-types.ts
+import {
+  AppWindowIcon,
+  MusicIcon,
+  BookIcon,
+  GraduationCapIcon,
+  FilmIcon,
+  InstagramIcon,
+  PodcastIcon,
+  TvIcon,
+  Music2Icon,
+  MonitorPlayIcon,
+  GlobeIcon,
+  YoutubeIcon,
+  FileTextIcon,
+  PenIcon,
+} from "lucide-react";
+
+export const contentTypes = [
+  { value: "APP", label: "Application", icon: AppWindowIcon },
+  { value: "BAND", label: "Music Band", icon: MusicIcon },
+  { value: "BLOG", label: "Blog", icon: PenIcon },
+  { value: "BOOK", label: "Book", icon: BookIcon },
+  { value: "COURSE", label: "Course", icon: GraduationCapIcon },
+  { value: "DOCUMENTARY", label: "Documentary", icon: FileTextIcon },
+  { value: "INSTAGRAM", label: "Instagram", icon: InstagramIcon },
+  { value: "MOVIE", label: "Movie", icon: FilmIcon },
+  { value: "PODCAST", label: "Podcast", icon: PodcastIcon },
+  { value: "SERIES", label: "Series", icon: TvIcon },
+  { value: "SONG", label: "Song", icon: Music2Icon },
+  { value: "TIKTOK", label: "Tiktok", icon: MonitorPlayIcon },
+  { value: "VIDEO", label: "Video", icon: MonitorPlayIcon },
+  { value: "WEBSITE", label: "Website", icon: GlobeIcon },
+  { value: "YOUTUBE", label: "Youtube", icon: YoutubeIcon },
+];
