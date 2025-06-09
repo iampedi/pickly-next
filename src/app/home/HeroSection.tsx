@@ -1,6 +1,7 @@
 // src/pages/home/HeroSection.tsx
 "use client";
 import image from "@/assets/images/hero-section-01.webp";
+import { AuthButton } from "@/components/AuthButton";
 import { Logo } from "@/components/Logo";
 import { SubmitButton } from "@/components/SubmitButton";
 import Image from "next/image";
@@ -34,7 +35,10 @@ export default function HeroSection() {
         <div className="_wrapper flex h-full flex-col">
           <div className="_header flex items-center justify-between pt-4 md:pt-5">
             <Logo />
-            <SubmitButton />
+            <div className="flex gap-2">
+              <SubmitButton />
+              <AuthButton />
+            </div>
           </div>
 
           <div className="_content flex flex-1 flex-col content-around items-center justify-center gap-10 p-2 md:flex-row md:gap-10 md:px-0">

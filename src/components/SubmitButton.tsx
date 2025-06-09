@@ -1,7 +1,7 @@
 // src/components/SubmitButton.tsx
 import Link from "next/link";
 import { Button } from "./theme/Button";
-import { CirclePlusIcon } from "lucide-react";
+import { PlusCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 type SubmitButtonProps = {
   className?: string;
@@ -10,8 +10,8 @@ type SubmitButtonProps = {
 export const SubmitButton = ({ className }: SubmitButtonProps) => {
   return (
     <Button className={className} variant={"outline"} size={"lg"} asChild>
-      <Link href="/contents/create">
-        <CirclePlusIcon /> Submit
+      <Link href="/panel/contents/create">
+        <PlusCircleIcon weight="duotone" /> Submit
       </Link>
     </Button>
   );

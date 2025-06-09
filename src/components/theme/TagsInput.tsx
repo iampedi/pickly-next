@@ -1,6 +1,6 @@
 // src/components/theme/TagsInput.tsx
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/theme/input";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -35,29 +35,31 @@ export function TagsInput({ value, onChange }: TagsInputProps) {
 
   return (
     <div className="space-y-2">
-      <div className="flex flex-wrap gap-2">
-        {safeValue.map((tag) => (
-          <Badge
-            key={tag}
-            variant="secondary"
-            className="flex items-center gap-1 px-2 py-1"
-          >
-            {tag}
-            <div
-              className="flex cursor-pointer items-center justify-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                removeTag(tag);
-              }}
+      {safeValue.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {safeValue.map((tag) => (
+            <Badge
+              key={tag}
+              variant="secondary"
+              className="flex items-center gap-1 px-2 py-1"
             >
-              <XIcon
-                size={12}
-                className="text-muted-foreground hover:text-black"
-              />
-            </div>
-          </Badge>
-        ))}
-      </div>
+              {tag}
+              <div
+                className="flex cursor-pointer items-center justify-center"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeTag(tag);
+                }}
+              >
+                <XIcon
+                  size={12}
+                  className="text-muted-foreground hover:text-black"
+                />
+              </div>
+            </Badge>
+          ))}
+        </div>
+      )}
 
       <Input
         placeholder="Add a tag and press Enter"

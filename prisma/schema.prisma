@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Content {
+  id           String         @id @default(uuid())
+  title        String
+  type         ContentType
+  link         String
+  tags         String[]
+  description  String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Contribution Contribution[]
+
+  @@unique([title, type])
+}
+
+model Contribution {
+  id        String   @id @default(uuid())
+  contentId String
+  Content   Content  @relation(fields: [contentId], references: [id])
+  userId    String
+  User      User     @relation(fields: [userId], references: [id])
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id           String         @id @default(uuid())
+  fullname     String
+  username     String?
+  avatar       String?
+  email        String         @unique
+  password     String
+  isActive     Boolean        @default(false)
+  isVerified   Boolean        @default(false)
+  isAdmin      Boolean        @default(false)
+  isCurator    Boolean        @default(false)
+  Contribution Contribution[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+enum ContentType {
+  BOOK
+  MOVIE
+  PODCAST
+  SONG
+  BAND
+  VIDEO
+  INSTAGRAM
+  YOUTUBE
+  TIKTOK
+  WEBSITE
+  ARTICLE
+  BLOG
+  DOCUMENTARY
+  SERIES
+  COURSE
+  APP
+  EVENT
+  NEWS
+  IMAGE
+  TOOL
+  RESOURCE
+  PROJECT
+}

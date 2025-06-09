@@ -9,7 +9,7 @@ import { use, useEffect, useState } from "react";
 // UI Imports
 import image from "@/assets/images/submit-01.webp";
 import { Button } from "@/components/theme/Button";
-import Loader from "@/components/theme/Loader";
+import Loader from "@/components/Loader";
 import { ArrowLeftIcon } from "lucide-react";
 import ContentForm from "../../Form";
 

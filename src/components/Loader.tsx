@@ -9,10 +9,13 @@ interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Loader({ className, ...props }: LoaderProps) {
   return (
     <div
-      className={cn("flex items-center justify-center", className)}
+      className={cn(
+        "flex h-full items-center justify-center",
+        className,
+      )}
       {...props}
     >
-      <LoaderCircleIcon className="size-8 animate-spin" />
+      <LoaderCircleIcon className="size-7 animate-spin" />
     </div>
   );
 }

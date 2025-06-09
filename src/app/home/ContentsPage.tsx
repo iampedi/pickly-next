@@ -10,8 +10,8 @@ import { Fragment, useEffect, useRef, useState } from "react";
 // UI Imports
 import { Logo } from "@/components/Logo";
 import { SubmitButton } from "@/components/SubmitButton";
-import Loader from "@/components/theme/Loader";
-import TooltipWrapper from "@/components/theme/TooltipWrapper";
+import Loader from "@/components/Loader";
+import { TooltipWrapper } from "@/components/theme/TooltipWrapper";
 import {
   Carousel,
   CarouselContent,
@@ -251,7 +251,9 @@ export default function ContentsPage() {
                         <FilePenLineIcon
                           className="cursor-pointer text-lime-600 md:hover:text-lime-600"
                           size={20}
-                          onClick={() => router.push(`/contents/update/${content.id}`)}
+                          onClick={() =>
+                            router.push(`/contents/update/${content.id}`)
+                          }
                         />
                       </TooltipWrapper>
                       <TooltipWrapper tooltip="Delete Content">

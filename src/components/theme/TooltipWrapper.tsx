@@ -11,10 +11,7 @@ interface TooltipWrapperProps {
   tooltip: React.ReactNode;
 }
 
-export default function TooltipWrapper({
-  children,
-  tooltip,
-}: TooltipWrapperProps) {
+export function TooltipWrapper({ children, tooltip }: TooltipWrapperProps) {
   return (
     <TooltipProvider>
       <Tooltip>
