@@ -21,7 +21,7 @@ type ContentCardProps = {
   content: Content;
   Icon?: ComponentType<IconProps>;
   meta?: Meta;
-  handleDelete: (id: string) => void;
+  handleDelete?: (id: string) => void;
 };
 
 export const ContentCard = ({
@@ -59,14 +59,16 @@ export const ContentCard = ({
             <NotePencilIcon
               className="cursor-pointer text-lime-600 md:text-gray-400 md:hover:text-lime-600"
               size={20}
-              onClick={() => router.push(`/panel/contents/update/${content.id}`)}
+              onClick={() =>
+                router.push(`/panel/contents/update/${content.id}`)
+              }
             />
           </TooltipWrapper>
           <TooltipWrapper tooltip="Delete Content">
             <TrashIcon
               className="cursor-pointer text-red-600 md:text-gray-400 md:hover:text-red-600"
               size={20}
-              onClick={() => handleDelete(content.id)}
+              onClick={() => handleDelete?.(content.id)}
             />
           </TooltipWrapper>
         </div>

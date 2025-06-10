@@ -35,7 +35,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Loader from "@/components/Loader";
-import { Loader2Icon } from "lucide-react";
+import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -260,7 +260,7 @@ export default function ContentForm({
               >
                 {loading ? (
                   <>
-                    <Loader2Icon className="animate-spin" />
+                    <CircleNotchIcon className="animate-spin" />
                     Please wait...
                   </>
                 ) : (

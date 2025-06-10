@@ -3,7 +3,6 @@ import { NavLink } from "@/components/theme/NavLink";
 import {
   BookBookmarkIcon,
   CrownSimpleIcon,
-  ToggleLeftIcon,
   UsersIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
@@ -22,10 +21,6 @@ export const PanelSide = () => {
         <NavLink href="/panel/users">
           <UsersIcon weight="duotone" />
           <span>Users</span>
-        </NavLink>
-        <NavLink href="/panel/setting">
-          <ToggleLeftIcon weight="duotone" />
-          <span>Settings</span>
         </NavLink>
       </div>
     </aside>

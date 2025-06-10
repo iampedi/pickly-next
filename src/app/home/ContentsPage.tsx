@@ -1,6 +1,5 @@
 // src/pages/ContentsPage.tsx
 "use client";
-import { API_URL } from "@/config/api";
 import { contentTypes } from "@/constants/content-types";
 import { cn } from "@/lib/utils";
 import type { Content } from "@/types/contents";
@@ -18,7 +17,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { toast } from "sonner";
 import { CrownIcon, RowsIcon } from "@phosphor-icons/react/dist/ssr";
 import { ContentCard } from "../layout/ContentCard";
 
@@ -69,8 +67,9 @@ export default function ContentsPage() {
     setLoading(true);
     const fetchContents = async (): Promise<void> => {
       try {
-        const response = await fetch(`/api/contents`);
-        const data: Content[] = await response.json();
+        const res = await axios.get(`/api/contents`);
+        const data: Content[] = res.data;
+
         setContents(data);
         setLoading(false);
       } catch (error) {
@@ -87,17 +86,6 @@ export default function ContentsPage() {
     { value: null, label: "All", icon: RowsIcon },
     ...contentTypes.filter((type) => usedTypes.has(type.value)),
   ];
-
-  async function handleDelete(id: string) {
-    try {
-      await axios.delete(`${API_URL}/contents/${id}`);
-      setContents(Contents.filter((c) => c.id !== id));
-      toast.success("Content deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting content:", error);
-      toast.error("Failed to delete content. Please try again.");
-    }
-  }
 
   return (
     <div className={cn("_wrapper bg-white")}>
@@ -192,7 +180,6 @@ export default function ContentsPage() {
                     content={content}
                     Icon={Icon}
                     meta={meta}
-                    handleDelete={handleDelete}
                   />
                 );
               })}

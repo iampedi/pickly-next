@@ -13,6 +13,8 @@ import { z } from "zod";
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
+import { FormDescription } from "@/components/theme/form";
+import { Switch } from "@/components/theme/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -22,7 +24,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/theme/input";
+import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -33,6 +36,7 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
+  isCurator: z.boolean().optional(),
 });
 
 type RegisterFormValues = z.infer<typeof formSchema>;
@@ -43,6 +47,7 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
@@ -50,18 +55,18 @@ export function RegisterForm({
       fullname: "",
       email: "",
       password: "",
+      isCurator: false,
     },
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
+    setLoading(true);
     setServerError("");
+
     try {
       await axios.post("/api/auth/register", values);
-      toast.success("Registration successful! Please login.");
       form.reset();
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 1200);
+      router.push("/auth/login?registered=true");
     } catch (err) {
       let errorMsg = "Registration failed.";
       if (axios.isAxiosError(err)) {
@@ -69,6 +74,7 @@ export function RegisterForm({
       } else if (err instanceof Error) {
         errorMsg = err.message;
       }
+
       setServerError(errorMsg);
       toast.error(errorMsg);
     }
@@ -87,54 +93,78 @@ export function RegisterForm({
                     Create a new account
                   </p>
                 </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="fullname"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  Register
+                <FormField
+                  control={form.control}
+                  name="fullname"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="isCurator"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>Curator Mode</FormLabel>
+                        <FormDescription>
+                          Curators can add and gather content.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <CircleNotchIcon className="animate-spin" />
+                      Please wait...
+                    </>
+                  ) : (
+                    "Register"
+                  )}
                 </Button>
+
                 <div className="text-center text-sm">
                   Do have an account?{" "}
                   <Link
@@ -148,8 +178,8 @@ export function RegisterForm({
             </form>
           </Form>
           <div className="relative hidden bg-white md:block">
-            <Image src={image} alt="Login Image" />
-          </div>{" "}
+            <Image src={image} alt="Login Image" priority />
+          </div>
         </CardContent>
       </Card>
       <Agree />

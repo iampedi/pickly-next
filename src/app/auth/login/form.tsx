@@ -3,17 +3,17 @@
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 // UI Imports
 import image from "@/assets/images/login.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
+import { Input } from "@/components/theme/input";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -23,7 +23,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/theme/input";
+import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
+import { toast } from "sonner";
 
 // Zod schema
 const formSchema = z.object({
@@ -41,6 +42,15 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+
+  useEffect(() => {
+    if (message === "login-required") {
+      toast.info("You must be logged in to access this page.");
+    }
+  }, [message]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
@@ -52,13 +62,12 @@ export function LoginForm({
 
   const onSubmit = async (values: LoginFormValues) => {
     setServerError("");
+    setLoading(true);
+    
     try {
       await axios.post("/api/auth/login", values);
-
-      toast.success("Welcome! You are logged in.");
-      setTimeout(() => {
-        router.push("/");
-      }, 1200);
+      const next = searchParams.get("next");
+      router.push(next || "/panel");
     } catch (err) {
       let errorMsg = "Login failed.";
       if (axios.isAxiosError(err)) {
@@ -92,7 +101,12 @@ export function LoginForm({
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input type="email" autoComplete="email" {...field} />
+                          <Input
+                            type="email"
+                            autoComplete="email"
+                            {...field}
+                            disabled={loading}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -120,6 +134,7 @@ export function LoginForm({
                             type="password"
                             autoComplete="current-password"
                             {...field}
+                            disabled={loading}
                           />
                         </FormControl>
                         <FormMessage />
@@ -127,9 +142,17 @@ export function LoginForm({
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <CircleNotchIcon className="animate-spin" />
+                      Please wait...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
+
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
                   <Link
@@ -143,7 +166,7 @@ export function LoginForm({
             </form>
           </Form>
           <div className="relative hidden bg-white md:block">
-            <Image src={image} alt="Login Image" />
+            <Image src={image} alt="Login Image" priority />
           </div>
         </CardContent>
       </Card>

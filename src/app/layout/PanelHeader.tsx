@@ -2,6 +2,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
+import { UserAvatar } from "./UserAvatar";
 
 const titles: Record<string, string> = {
   "/panel": "Panel",
@@ -9,7 +10,6 @@ const titles: Record<string, string> = {
   "/panel/contents/create": "Create a content",
   "/panel/contents/update/:id": "Update a content",
   "/panel/users": "Users",
-  "/panel/settings": "Settings",
 };
 
 function getTitle(path: string) {
@@ -31,11 +31,14 @@ export const PanelHeader = () => {
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-white">
       <Logo />
+
       <h1 className="flex items-center gap-2 font-semibold">
         <span className="text-3xl text-gray-400">{"{"}</span>
         <span className="text-2xl">{title}</span>
         <span className="text-3xl text-gray-400">{"}"}</span>
       </h1>
+
+      <UserAvatar />
     </header>
   );
 };
