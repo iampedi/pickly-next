@@ -1,6 +1,5 @@
-// src/pages/contents/Form.tsx
+// src/app/panel/contents/Form.tsx
 "use client";
-import { API_URL } from "@/config/api";
 import { contentTypes } from "@/constants/content-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -32,10 +31,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/theme/form";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Loader from "@/components/Loader";
+import { Loader2Icon } from "lucide-react";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -113,35 +113,36 @@ export default function ContentForm({
   }, [initialValues, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     try {
       if (mode === "update" && id) {
-        await axios.put(`${API_URL}/contents/${id}`, values);
-        toast.success("Content updated successfully!");
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        await axios.put(`/api/contents/${id}`, values);
+        router.push("/panel/contents?updated=true");
       } else {
-        await axios.post(`${API_URL}/contents`, values);
-        toast.success("Content submitted successfully!");
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        await axios.post(`/api/contents`, values);
+        router.push("/panel/contents?submitted=true");
       }
     } catch (error) {
-      console.error("Error submitting content:", error);
+      let errorMsg = "Something went wrong. Please try again.";
+
+      if (axios.isAxiosError(error)) {
+        errorMsg = error.response?.data?.error || error.message || errorMsg;
+      } else if (error instanceof Error) {
+        errorMsg = error.message;
+      }
+
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
     }
   }
 
   if (mode === "update" && !initialValues) {
-    return null;
-  }
-
-  if (loading) {
     return <Loader />;
   }
 
   return (
-    <div className="container mx-auto max-w-lg">
+    <div className="container mx-auto mt-4 max-w-lg">
       <Card>
         <CardHeader>
           <CardDescription>
@@ -252,8 +253,19 @@ export default function ContentForm({
                 )}
               />
 
-              <Button type="submit" className="mt-2 w-full md:col-span-2">
-                {mode === "create" ? "Submit" : "Update"} Content
+              <Button
+                type="submit"
+                className="mt-2 w-full md:col-span-2"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2Icon className="animate-spin" />
+                    Please wait...
+                  </>
+                ) : (
+                  <>{mode === "create" ? "Submit" : "Update"} Content</>
+                )}
               </Button>
             </form>
           </Form>

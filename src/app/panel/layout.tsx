@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { PanelSide } from "../layout/PanelSide";
 import { PanelHeader } from "../layout/PanelHeader";
+import { Footer } from "../layout/Footer";
 
 export const metadata: Metadata = {
   title: "PICKY :: App",
@@ -13,14 +14,16 @@ export default function PanelLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex h-screen py-10">
-      <div className="flex flex-col gap-5 container max-w-5xl mx-auto h-full">
+    <div className="flex min-h-screen">
+      <div className="container mx-auto flex max-w-5xl flex-col">
         <PanelHeader />
 
-        <div className="flex flex-1 gap-10">
+        <div className="flex flex-1 gap-8">
           <PanelSide />
           <main className="flex-1">{children}</main>
         </div>
+        
+        <Footer />
       </div>
     </div>
   );
