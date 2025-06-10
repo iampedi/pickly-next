@@ -9,7 +9,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import Image from "next/image";
 // UI Imports
+import image from "@/assets/images/login.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/theme/input";
 
 // Zod schema
 const formSchema = z.object({
@@ -77,7 +79,7 @@ export function LoginForm({
             <form className="p-6 md:p-8" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Welcome back</h1>
+                  <h1 className="text-2xl font-semibold">Welcome back</h1>
                   <p className="text-muted-foreground text-balance">
                     Login to your PICKLY account
                   </p>
@@ -90,12 +92,7 @@ export function LoginForm({
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="Email"
-                            autoComplete="email"
-                            {...field}
-                          />
+                          <Input type="email" autoComplete="email" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -105,12 +102,12 @@ export function LoginForm({
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <FormLabel htmlFor="password">Password</FormLabel>
-                    <a
+                    {/* <a
                       href="#"
                       className="ml-auto text-sm underline-offset-2 hover:underline"
                     >
                       Forgot your password?
-                    </a>
+                    </a> */}
                   </div>
                   <FormField
                     control={form.control}
@@ -121,7 +118,6 @@ export function LoginForm({
                           <Input
                             id="password"
                             type="password"
-                            placeholder="Password"
                             autoComplete="current-password"
                             {...field}
                           />
@@ -146,7 +142,9 @@ export function LoginForm({
               </div>
             </form>
           </Form>
-          <div className="bg-muted relative hidden md:block"></div>
+          <div className="relative hidden bg-white md:block">
+            <Image src={image} alt="Login Image" />
+          </div>
         </CardContent>
       </Card>
       <Agree />

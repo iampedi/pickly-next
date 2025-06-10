@@ -9,7 +9,7 @@ type AuthButtonProps = {
 
 export const AuthButton = ({ className }: AuthButtonProps) => {
   return (
-    <Button className={className} variant={"outline"} size={"lg"} asChild>
+    <Button className={className} variant={"outline"} asChild>
       <Link href="/auth/login">
         <UserCircleIcon />
         Login

@@ -69,7 +69,7 @@ export default function ContentsPage() {
     setLoading(true);
     const fetchContents = async (): Promise<void> => {
       try {
-        const response = await fetch(`${API_URL}/contents`);
+        const response = await fetch(`/api/contents`);
         const data: Content[] = await response.json();
         setContents(data);
         setLoading(false);
