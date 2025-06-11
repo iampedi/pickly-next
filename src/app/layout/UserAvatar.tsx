@@ -22,6 +22,7 @@ import {
   ToggleLeftIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import { useEffect } from "react";
 
 export const UserAvatar = () => {
   const { user, loading, setUser } = useAuth();
@@ -43,6 +44,10 @@ export const UserAvatar = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   if (loading) return <Loader />;
 
@@ -66,7 +71,14 @@ export const UserAvatar = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36" align="center">
         <DropdownMenuLabel className="flex items-center gap-2 text-rose-600">
-          {user.isCurator ? (
+          {!user ? (
+            <span>Loading...</span>
+          ) : user.isAdmin ? (
+            <>
+              <HeartIcon className="size-5" weight="duotone" />
+              <span className="uppercase">Admin</span>
+            </>
+          ) : user.isCurator ? (
             <>
               <CrownIcon className="size-5" weight="duotone" />
               <span className="uppercase">Curator</span>

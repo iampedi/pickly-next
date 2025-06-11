@@ -3,8 +3,9 @@
 import image from "@/assets/images/hero-section-01.webp";
 import { AuthButton } from "@/components/AuthButton";
 import { Logo } from "@/components/Logo";
-import { SubmitButton } from "@/components/SubmitButton";
+import { Button } from "@/components/theme/Button";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function HeroSection() {
@@ -36,7 +37,6 @@ export default function HeroSection() {
           <div className="_header flex items-center justify-between pt-4 md:pt-5">
             <Logo />
             <div className="flex gap-2">
-              <SubmitButton />
               <AuthButton />
             </div>
           </div>
@@ -55,6 +55,9 @@ export default function HeroSection() {
                   No likes. No followers. Just curated content.
                 </span>
               </p>
+              <Button className="mt-8" size={"lg"} asChild>
+                <Link href="/auth/login">Become a Curator</Link>
+              </Button>
             </div>
             <div className="md:w-1/3">
               <Image

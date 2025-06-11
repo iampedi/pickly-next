@@ -15,6 +15,7 @@ type User = {
   email: string;
   fullname: string;
   isCurator: boolean;
+  isAdmin: boolean;
   avatarUrl?: string;
 };
 
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const refetch = async () => {
     setLoading(true);
+
     try {
       const res = await axios.get("/api/auth/me", { withCredentials: true });
       setUser(res.data.user);

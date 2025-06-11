@@ -1,7 +1,7 @@
 // src/components/AuthButton.tsx
 import Link from "next/link";
 import { Button } from "./theme/Button";
-import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { LockSimpleIcon, UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { useAuth } from "@/contexts/AuthContext";
 
 type AuthButtonProps = {
@@ -25,7 +25,7 @@ export const AuthButton = ({ className }: AuthButtonProps) => {
       ) : (
         <Button className={className} variant="outline" asChild>
           <Link href="/auth/login" className="flex items-center gap-2">
-            <UserCircleIcon />
+            <LockSimpleIcon />
             Login
           </Link>
         </Button>
