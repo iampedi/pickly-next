@@ -6,6 +6,7 @@ import { use, useEffect, useState } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
 import ContentForm from "../../Form";
+import { PanelPageHeader } from "@/components/PanelPageHeader";
 
 export default function UpdateContentPage({
   params,
@@ -44,5 +45,11 @@ export default function UpdateContentPage({
     return <Loader />;
   }
 
-  return <ContentForm mode="update" initialValues={initialValues} id={id} />;
+  return (
+    <>
+      <PanelPageHeader />
+
+      <ContentForm mode="update" initialValues={initialValues} id={id} />
+    </>
+  );
 }

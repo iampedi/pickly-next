@@ -1,6 +1,12 @@
 // src/app/contents/create/page.tsx
 import ContentForm from "../Form";
+import { PanelPageHeader } from "@/components/PanelPageHeader";
 
 export default function CreateContentPage() {
-  return <ContentForm mode="create" />;
+  return (
+    <>
+      <PanelPageHeader/>
+      <ContentForm mode="create" />;
+    </>
+  );
 }

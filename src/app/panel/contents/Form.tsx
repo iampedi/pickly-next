@@ -142,7 +142,7 @@ export default function ContentForm({
   }
 
   return (
-    <div className="container mx-auto mt-4 max-w-lg">
+    <div className="container mx-auto mt-6 max-w-lg">
       <Card>
         <CardHeader>
           <CardDescription>

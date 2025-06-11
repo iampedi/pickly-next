@@ -8,7 +8,7 @@ import {
 
 export const PanelSide = () => {
   return (
-    <aside className="sticky top-20 w-1/4 self-start">
+    <aside className="sticky top-22 w-1/4 self-start">
       <div className="flex flex-col gap-3">
         <NavLink href="/panel">
           <CrownSimpleIcon weight="duotone" />

@@ -10,6 +10,7 @@ import Loader from "@/components/Loader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
 import { ContentCard } from "../../layout/ContentCard";
+import { PanelPageHeader } from "@/components/PanelPageHeader";
 
 export default function PanelContentPage() {
   const params = useSearchParams();
@@ -63,9 +64,9 @@ export default function PanelContentPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-2">
-      <div className="sticky top-16 flex justify-end bg-white pb-2">
+      <PanelPageHeader>
         <SubmitButton />
-      </div>
+      </PanelPageHeader>
 
       <div className="_contents-list mb-10 flex flex-col gap-3">
         {contents
