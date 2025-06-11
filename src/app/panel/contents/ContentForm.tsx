@@ -36,6 +36,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Loader from "@/components/Loader";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -159,21 +160,6 @@ export default function ContentForm({
             >
               <FormField
                 control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter content title" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="type"
                 render={({ field }) => (
                   <FormItem>
@@ -192,6 +178,21 @@ export default function ContentForm({
                         ))}
                       </SelectContent>
                     </Select>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter content title" {...field} />
+                    </FormControl>
 
                     <FormMessage />
                   </FormItem>
@@ -253,20 +254,25 @@ export default function ContentForm({
                 )}
               />
 
-              <Button
-                type="submit"
-                className="mt-2 w-full md:col-span-2"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <CircleNotchIcon className="animate-spin" />
-                    Please wait...
-                  </>
-                ) : (
-                  <>{mode === "create" ? "Submit" : "Update"} Content</>
-                )}
-              </Button>
+              <div className="mt-2 flex items-center gap-3">
+                <Button className="w-full" variant="secondary" asChild>
+                  <Link href="/panel/contents">Cancel</Link>
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full md:col-span-2"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <CircleNotchIcon className="animate-spin" />
+                      Please wait...
+                    </>
+                  ) : (
+                    <>{mode === "create" ? "Submit" : "Update"} Content</>
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

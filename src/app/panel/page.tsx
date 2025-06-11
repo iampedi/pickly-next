@@ -1,5 +1,6 @@
 // src/app/panel/page.tsx
 "use client";
+import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -14,8 +15,8 @@ export default function PanelPage() {
   }, [params]);
 
   return (
-    <div className="">
-      <div className="">test</div>
+    <div className="flex flex-1 flex-col gap-2">
+      <PanelPageHeader />
     </div>
   );
 }

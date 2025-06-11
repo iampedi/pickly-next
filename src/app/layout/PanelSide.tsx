@@ -5,7 +5,6 @@ import {
   BookBookmarkIcon,
   CrownSimpleIcon,
   StarIcon,
-  UsersIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -33,12 +32,6 @@ const panelMenu: MenuItem[] = [
     label: "Contents",
     href: "/panel/contents",
     icon: <BookBookmarkIcon weight="duotone" />,
-    canAccess: (user) => !!user.isAdmin,
-  },
-  {
-    label: "Users",
-    href: "/panel/users",
-    icon: <UsersIcon weight="duotone" />,
     canAccess: (user) => !!user.isAdmin,
   },
 ];

@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -19,8 +18,6 @@ import {
   CrownIcon,
   HeartIcon,
   PowerIcon,
-  ToggleLeftIcon,
-  UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useEffect } from "react";
 
@@ -90,15 +87,6 @@ export const UserAvatar = () => {
             </>
           )}
         </DropdownMenuLabel>
-        {/* <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="hover:bg-gray-100">
-            <UserCircleIcon className="text-primary size-5" /> Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem className="hover:bg-gray-100">
-            <ToggleLeftIcon className="text-primary size-5" /> Settings
-          </DropdownMenuItem>
-        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer hover:bg-gray-100"

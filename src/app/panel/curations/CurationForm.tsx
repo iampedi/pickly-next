@@ -34,6 +34,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -329,7 +330,7 @@ export default function ContentCurationForm({
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
                     <FormLabel>
-                      Your Note{" "}
+                      Your Note
                       <span className="text-xs text-gray-400">(Optional)</span>
                     </FormLabel>
                     <FormControl>
@@ -343,21 +344,29 @@ export default function ContentCurationForm({
                   </FormItem>
                 )}
               />
-
-              <Button
-                type="submit"
-                className="mt-2 w-full md:col-span-2"
-                disabled={loading || (mode === "create" && isDuplicate)}
-              >
-                {loading ? (
-                  <>
-                    <CircleNotchIcon className="animate-spin" />
-                    Please wait...
-                  </>
-                ) : (
-                  <>{mode === "update" ? "Update Curation" : "Submit Curation"}</>
-                )}
-              </Button>
+              <div className="mt-2 flex items-center gap-3">
+                <Button className="w-full" variant="secondary" asChild>
+                  <Link href="/panel/curations">Cancel</Link>
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full md:col-span-2"
+                  disabled={loading || (mode === "create" && isDuplicate)}
+                >
+                  {loading ? (
+                    <>
+                      <CircleNotchIcon className="animate-spin" />
+                      Please wait...
+                    </>
+                  ) : (
+                    <>
+                      {mode === "update"
+                        ? "Update Curation"
+                        : "Submit Curation"}
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>
