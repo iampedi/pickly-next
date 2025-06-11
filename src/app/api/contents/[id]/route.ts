@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 
 // Get a content: GET /api/contents/:id
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } },
+  request: Request,
+  context: { params: { id: string } },
 ) {
   try {
-    const { id } = params;
+    const { id } = context.params;
     const content = await prisma.content.findUnique({ where: { id } });
     return NextResponse.json(content);
   } catch (error) {
@@ -24,12 +24,12 @@ export async function GET(
 
 // Update content: PUT /api/contents/[id]
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } },
+  request: Request,
+  context: { params: { id: string } },
 ) {
-  const { id } = params;
+  const { id } = context.params;
   try {
-    const body = await req.json();
+    const body = await request.json();
     const { title, type, link, tags, description } = body;
 
     const existing = await prisma.content.findFirst({
@@ -69,11 +69,11 @@ export async function PUT(
 
 // Delete a content: DELETE /api/contents/:id
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
+  request: Request,
+  context: { params: { id: string } },
 ) {
   try {
-    const { id } = params;
+    const { id } = context.params;
     await prisma.content.delete({ where: { id } });
     return NextResponse.json(
       { message: "Content deleted successfully" },
