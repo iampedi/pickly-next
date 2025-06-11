@@ -1,12 +1,12 @@
 // src/app/api/contents/[id]/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 // Get a content: GET /api/contents/:id
 export async function GET(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   try {
@@ -24,7 +24,7 @@ export async function GET(
 
 // Update content: PUT /api/contents/[id]
 export async function PUT(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
@@ -69,7 +69,7 @@ export async function PUT(
 
 // Delete a content: DELETE /api/contents/:id
 export async function DELETE(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   try {

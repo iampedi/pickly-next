@@ -1,12 +1,12 @@
 // src/app/api/curations/[id]/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 // GET /api/curations/:id
 export async function GET(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
@@ -35,7 +35,7 @@ export async function GET(
 
 // Update a curation: PUT /api/curations/:id
 export async function PUT(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
@@ -63,7 +63,7 @@ export async function PUT(
 
 // Delete a curation : DELETE /api/curations/:id
 export async function DELETE(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } },
 ) {
   try {
