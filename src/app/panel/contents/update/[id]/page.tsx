@@ -5,7 +5,7 @@ import axios from "axios";
 import { use, useEffect, useState } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
-import ContentForm from "../../Form";
+import ContentForm from "../../ContentForm";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 
 export default function UpdateContentPage({

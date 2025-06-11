@@ -72,6 +72,7 @@ export function LoginForm({
       const next = searchParams.get("next");
       router.push(next || "/panel?login=true");
     } catch (err) {
+      setLoading(false);
       let errorMsg = "Login failed.";
       if (axios.isAxiosError(err)) {
         errorMsg = err.response?.data?.error || err.message || errorMsg;

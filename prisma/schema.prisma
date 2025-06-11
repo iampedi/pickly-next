@@ -8,43 +8,44 @@ datasource db {
 }
 
 model Content {
-  id           String         @id @default(uuid())
-  title        String
-  type         ContentType
-  link         String
-  tags         String[]
-  description  String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Contribution Contribution[]
+  id          String      @id @default(uuid())
+  title       String
+  type        ContentType
+  link        String
+  tags        String[]
+  description String?
+  curations   Curation[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@unique([title, type])
 }
 
-model Contribution {
+model Curation {
   id        String   @id @default(uuid())
-  contentId String
-  Content   Content  @relation(fields: [contentId], references: [id])
   userId    String
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  contentId String
+  content   Content  @relation(fields: [contentId], references: [id])
   comment   String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User {
-  id           String         @id @default(uuid())
-  fullname     String
-  username     String?
-  avatar       String?
-  email        String         @unique
-  password     String
-  isActive     Boolean        @default(false)
-  isVerified   Boolean        @default(false)
-  isAdmin      Boolean        @default(false)
-  isCurator    Boolean        @default(false)
-  Contribution Contribution[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id         String     @id @default(uuid())
+  fullname   String
+  username   String?
+  avatar     String?
+  email      String     @unique
+  password   String
+  isActive   Boolean    @default(false)
+  isVerified Boolean    @default(false)
+  isAdmin    Boolean    @default(false)
+  isCurator  Boolean    @default(false)
+  curations  Curation[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 enum ContentType {

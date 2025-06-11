@@ -16,20 +16,21 @@ CREATE TABLE "Content" (
 );
 
 -- CreateTable
-CREATE TABLE "Contribution" (
+CREATE TABLE "Curation" (
     "id" TEXT NOT NULL,
-    "contentId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "contentId" TEXT NOT NULL,
     "comment" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Contribution_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Curation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "fullname" TEXT,
+    "fullname" TEXT NOT NULL,
     "username" TEXT,
     "avatar" TEXT,
     "email" TEXT NOT NULL,
@@ -51,7 +52,7 @@ CREATE UNIQUE INDEX "Content_title_type_key" ON "Content"("title", "type");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Contribution" ADD CONSTRAINT "Contribution_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Curation" ADD CONSTRAINT "Curation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Contribution" ADD CONSTRAINT "Contribution_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Curation" ADD CONSTRAINT "Curation_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

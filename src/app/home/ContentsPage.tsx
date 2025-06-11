@@ -1,6 +1,6 @@
 // src/pages/ContentsPage.tsx
 "use client";
-import { contentTypes } from "@/constants/content-types";
+import { contentTypes } from "@/constants/conent-types";
 import { cn } from "@/lib/utils";
 import type { Content } from "@/types/contents";
 import axios from "axios";
@@ -144,7 +144,7 @@ export default function ContentsPage() {
           </Carousel>
         </div>
 
-        {isStuck && <SubmitButton className="hidden md:flex" />}
+        {isStuck && <SubmitButton href="/panel" className="hidden md:flex" />}
       </div>
 
       <div className="_content mb-8">

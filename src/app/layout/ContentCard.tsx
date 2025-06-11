@@ -1,4 +1,4 @@
-// src/app/panel/contents/ContentCard.tsx
+// src/app/layout/ContentCard.tsx
 import { Content } from "@/types/contents";
 import { IconProps } from "@phosphor-icons/react/dist/lib/types";
 import { useRouter } from "next/navigation";

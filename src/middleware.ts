@@ -11,7 +11,6 @@ export default async function middleware(request: NextRequest) {
     return;
   }
 
-  // بررسی لاگین بودن برای مسیرهای auth
   if (
     pathname.startsWith("/auth/login") ||
     pathname.startsWith("/auth/register")
@@ -21,10 +20,8 @@ export default async function middleware(request: NextRequest) {
       ? await verifyJwt(token, process.env.JWT_SECRET!)
       : null;
     if (payload) {
-      // اگر لاگین بود، منتقل کن به /panel
       return NextResponse.redirect(new URL("/panel", request.url));
     }
-    // اگر لاگین نبود، اجازه بده ادامه بده به صفحه login/register
     return NextResponse.next();
   }
 
@@ -45,7 +42,6 @@ export default async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// این مسیرها رو چک می‌کنه:
 export const config = {
   matcher: ["/panel/:path*", "/auth/login", "/auth/register"],
 };

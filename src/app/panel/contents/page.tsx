@@ -1,6 +1,6 @@
 // src/app/panel/contents/page.tsx
 "use client";
-import { contentTypes } from "@/constants/content-types";
+import { contentTypes } from "@/constants/conent-types";
 import { Content } from "@/types/contents";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
@@ -65,10 +65,16 @@ export default function PanelContentPage() {
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
-        <SubmitButton />
+        <SubmitButton href="/panel/contents/create" />
       </PanelPageHeader>
 
       <div className="_contents-list mb-10 flex flex-col gap-3">
+        {contents.length === 0 && (
+          <div className="flex items-center justify-center">
+            <p className="text-gray-400">No content found.</p>
+          </div>
+        )}
+
         {contents
           .slice()
           .sort(

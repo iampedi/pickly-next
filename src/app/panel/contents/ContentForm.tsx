@@ -1,6 +1,6 @@
-// src/app/panel/contents/Form.tsx
+// src/app/panel/contents/ContentForm.tsx
 "use client";
-import { contentTypes } from "@/constants/content-types";
+import { contentTypes } from "@/constants/conent-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
