@@ -13,7 +13,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (params.get("logout") === "true") {
-      toast.success("User registered successfully!");
+      toast.success("Logout successful!");
     }
   }, [params]);
 

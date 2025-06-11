@@ -1,7 +1,8 @@
 // src/app/layout/UserAvatar.tsx
-import axios from "axios";
+
+"use client";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,49 +17,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   CrownIcon,
+  HeartIcon,
   PowerIcon,
   ToggleLeftIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
-type User = {
-  id: string;
-  fullname: string;
-  email: string;
-  isCurator: boolean;
-  avatarUrl?: string;
-};
-
 export const UserAvatar = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user, loading, setUser } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("/api/auth/me", { withCredentials: true });
-        setUser(res.data.user);
-      } catch (error) {
-        setError("Failed to fetch user data");
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  const logout = async () => {
-    await axios.post("/api/auth/logout", {}, { withCredentials: true });
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    setUser(null);
     router.push("/?logout=true");
   };
-
-  if (loading) return <Loader />;
-
-  if (error) return <div>?</div>;
 
   const getInitials = (name: string) => {
     if (!name?.trim()) return "?";
@@ -71,35 +44,41 @@ export const UserAvatar = () => {
       .slice(0, 2);
   };
 
+  if (loading) return <Loader />;
+
+  if (!user) return <div>?</div>;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <div className="group flex items-center gap-2">
-          {user && (
-            <span className="font-medium group-hover:bg-lime-100">
-              {user.fullname}
-            </span>
-          )}
+          <span className="font-medium group-hover:bg-lime-100">
+            {user.fullname}
+          </span>
           <Avatar>
             <AvatarImage
-              src={user?.avatarUrl || "https://github.com/shadcn.png"}
+              src={user.avatarUrl || "https://github.com/shadcn.png"}
               className="opacity-80 group-hover:opacity-100"
             />
-            <AvatarFallback>{getInitials(user?.fullname || "")}</AvatarFallback>
+            <AvatarFallback>{getInitials(user.fullname)}</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36" align="center">
         <DropdownMenuLabel className="flex items-center gap-2 text-rose-600">
-          {user?.isCurator ? (
+          {user.isCurator ? (
             <>
-              <CrownIcon className="size-5" weight="duotone" /> Curator
+              <CrownIcon className="size-5" weight="duotone" />
+              <span className="uppercase">Curator</span>
             </>
           ) : (
-            "User"
+            <>
+              <HeartIcon className="size-5" weight="duotone" />
+              <span className="uppercase">User</span>
+            </>
           )}
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:bg-gray-100">
             <UserCircleIcon className="text-primary size-5" /> Profile
@@ -107,9 +86,12 @@ export const UserAvatar = () => {
           <DropdownMenuItem className="hover:bg-gray-100">
             <ToggleLeftIcon className="text-primary size-5" /> Settings
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:bg-gray-100 cursor-pointer" onClick={logout}>
+        <DropdownMenuItem
+          className="cursor-pointer hover:bg-gray-100"
+          onClick={handleLogout}
+        >
           <PowerIcon className="text-primary size-5" /> Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

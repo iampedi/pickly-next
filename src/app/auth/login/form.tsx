@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAuth } from "@/contexts/AuthContext";
 // UI Imports
 import image from "@/assets/images/login.webp";
 import { Agree } from "@/components/Agree";
@@ -45,6 +46,7 @@ export function LoginForm({
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
+  const { refetch } = useAuth();
 
   useEffect(() => {
     if (message === "login-required") {
@@ -63,11 +65,12 @@ export function LoginForm({
   const onSubmit = async (values: LoginFormValues) => {
     setServerError("");
     setLoading(true);
-    
+
     try {
       await axios.post("/api/auth/login", values);
+      await refetch();
       const next = searchParams.get("next");
-      router.push(next || "/panel");
+      router.push(next || "/panel?login=true");
     } catch (err) {
       let errorMsg = "Login failed.";
       if (axios.isAxiosError(err)) {

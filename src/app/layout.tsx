@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   title: "PICKY :: App",
@@ -14,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <Toaster richColors duration={3000} />
+        <AuthProvider>
+          {children}
+          <Toaster richColors duration={3000} />
+        </AuthProvider>
       </body>
     </html>
   );
