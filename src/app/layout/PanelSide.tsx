@@ -42,7 +42,7 @@ export const PanelSide = () => {
   if (!user) return null;
 
   return (
-    <aside className="sticky top-22 w-1/4 self-start">
+    <aside className="sticky top-22 w-1/4 self-start hidden md:block">
       <div className="flex flex-col gap-3">
         {panelMenu
           .filter((item) => item.canAccess(user))

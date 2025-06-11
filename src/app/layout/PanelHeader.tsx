@@ -5,7 +5,7 @@ import { UserAvatar } from "./UserAvatar";
 
 export const PanelHeader = () => {
   return (
-    <header className="sticky top-0 z-50 flex h-20 items-center justify-between bg-white">
+    <header className="sticky top-0 z-50 flex h-16 md:h-20 items-center justify-between bg-white">
       <Logo />
 
       <UserAvatar />

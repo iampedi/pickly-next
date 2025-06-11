@@ -15,14 +15,14 @@ export default function PanelLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="flex min-h-screen">
-      <div className="container mx-auto flex max-w-5xl flex-col">
+      <div className="container mx-auto flex max-w-5xl flex-col px-3">
         <PanelHeader />
 
         <div className="flex flex-1 gap-8">
           <PanelSide />
           <main className="flex-1">{children}</main>
         </div>
-        
+
         <Footer />
       </div>
     </div>

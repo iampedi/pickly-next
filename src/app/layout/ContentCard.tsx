@@ -94,7 +94,7 @@ export const ContentCard = ({
           )}
 
           {content.description && (
-            <p className="text-gray-600">{content.description}</p>
+            <p className="text-gray-600 line-clamp-2">{content.description}</p>
           )}
         </div>
       ) : null}

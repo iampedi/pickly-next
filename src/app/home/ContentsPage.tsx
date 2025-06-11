@@ -6,9 +6,10 @@ import type { Content } from "@/types/contents";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 // UI Imports
-import { Logo } from "@/components/Logo";
-import { SubmitButton } from "@/components/SubmitButton";
+import { HomeContentCard } from "@/app/layout/HomeContentCard";
+import { AuthButton } from "@/components/AuthButton";
 import Loader from "@/components/Loader";
+import { Logo } from "@/components/Logo";
 import {
   Carousel,
   CarouselContent,
@@ -16,9 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import { CrownIcon, RowsIcon } from "@phosphor-icons/react/dist/ssr";
-import { ContentCard } from "../layout/ContentCard";
 
 export default function ContentsPage() {
   const ref = useRef<HTMLDivElement>(null);
@@ -92,7 +91,7 @@ export default function ContentsPage() {
       <div ref={ref} className="h-1" />
       <div
         className={cn(
-          "sticky top-0 z-20 flex items-center justify-between px-4",
+          "sticky top-0 z-20 flex items-center justify-between px-6",
           isStuck ? "border-b bg-white" : "",
         )}
       >
@@ -109,7 +108,7 @@ export default function ContentsPage() {
             }}
             className={cn(
               "w-full duration-300",
-              isStuck ? "py-2 md:py-2.5" : "py-4 md:py-5",
+              isStuck ? "py-2 md:py-3" : "py-4 md:py-5",
             )}
           >
             <CarouselContent>
@@ -144,17 +143,17 @@ export default function ContentsPage() {
           </Carousel>
         </div>
 
-        {isStuck && <SubmitButton href="/panel" className="hidden md:flex" />}
+        {isStuck && <AuthButton className="hidden md:flex" />}
       </div>
 
       <div className="_content mb-8">
         <div className="container mx-auto max-w-4xl px-4">
-          <h1 className="mb-6 flex items-center gap-2 text-2xl font-medium text-lime-600 md:mt-6 md:px-6">
-            <CrownIcon size={22} />
+          <h1 className="mb-6 flex items-center gap-2 text-2xl font-medium text-lime-600 md:mt-6">
+            <CrownIcon size={28} />
             Latest Contents
           </h1>
 
-          <div className="grid gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             {loading && <Loader />}
 
             {!loading && Contents.length === 0 && (
@@ -175,7 +174,7 @@ export default function ContentsPage() {
                 const Icon = meta?.icon;
 
                 return (
-                  <ContentCard
+                  <HomeContentCard
                     key={content.id}
                     content={content}
                     Icon={Icon}
