@@ -1,6 +1,6 @@
 // src/app/api/curations/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { ContentType } from "@prisma/client";
+import { ContentType, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 // Type for expected request body
@@ -96,8 +96,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(contents);
   }
 
+  const where: Prisma.CurationWhereInput = {};
+  if (userId) {
+    where.userId = userId;
+  }
+
   // اگر هیچ پارامتری نبود، همه کیوریشن‌ها را برگردون
   const curations = await prisma.curation.findMany({
+    where,
     include: {
       content: true,
     },

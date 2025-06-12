@@ -46,7 +46,11 @@ export const UserAvatar = () => {
           <span className="font-medium group-hover:bg-lime-100">
             Hi {getFirstName(user.fullname)}
           </span>
-          <UserCircleIcon size={30} weight="duotone" />
+          <UserCircleIcon
+            className="group-hover:text-lime-700"
+            size={30}
+            weight="duotone"
+          />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36" align="center">

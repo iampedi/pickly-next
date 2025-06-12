@@ -16,7 +16,12 @@ export const PanelHeader = () => {
 
         <div className="flex items-center gap-2">
           <UserAvatar />
-          <ListIcon size={32} weight="bold" onClick={() => setOpen(true)} />
+          <ListIcon
+            className="md:hidden"
+            size={32}
+            weight="bold"
+            onClick={() => setOpen(true)}
+          />
         </div>
       </header>
       <MobileMenu open={open} setOpen={setOpen} />

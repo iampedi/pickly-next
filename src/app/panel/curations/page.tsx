@@ -11,6 +11,7 @@ import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
 import { CurationCard } from "@/app/layout/CurationCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function PanelCurationPage() {
   return (
@@ -24,6 +25,7 @@ function PanelCurationPageContent() {
   const params = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [curations, setCurations] = useState<Curation[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (params.get("submitted") === "true") {
@@ -39,10 +41,13 @@ function PanelCurationPageContent() {
 
   // Fetch Curations
   useEffect(() => {
+    if (!user) return;
+
     const fetchCurations = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`/api/curations`);
+        const params = user.isCurator ? { userId: user.id } : {};
+        const res = await axios.get(`/api/curations`, { params });
         const data = res.data;
 
         setCurations(data);
@@ -52,7 +57,7 @@ function PanelCurationPageContent() {
       }
     };
     fetchCurations();
-  }, []);
+  }, [user]);
 
   // Delete Curation
   async function handleDelete(id: string) {

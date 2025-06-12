@@ -30,12 +30,14 @@ model Curation {
   comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, contentId])
 }
 
 model User {
   id         String     @id @default(uuid())
   fullname   String
-  username   String?
+  username   String
   avatar     String?
   email      String     @unique
   password   String
@@ -49,27 +51,27 @@ model User {
 }
 
 enum ContentType {
-  BOOK
-  MOVIE
-  PODCAST
-  SONG
-  BAND
-  VIDEO
-  INSTAGRAM
-  YOUTUBE
-  TIKTOK
-  WEBSITE
-  ARTICLE
-  BLOG
-  DOCUMENTARY
-  SERIES
-  COURSE
   APP
+  ARTICLE
+  BAND
+  BLOG
+  BOOK
+  COURSE
+  DOCUMENTARY
   EVENT
-  NEWS
-  IMAGE
-  TOOL
-  RESOURCE
-  PROJECT
   GAME
+  IMAGE
+  INSTAGRAM
+  MOVIE
+  NEWS
+  PODCAST
+  PROJECT
+  RESOURCE
+  SERIES
+  SONG
+  TIKTOK
+  TOOL
+  VIDEO
+  WEBSITE
+  YOUTUBE
 }
