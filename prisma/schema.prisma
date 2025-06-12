@@ -8,15 +8,16 @@ datasource db {
 }
 
 model Content {
-  id          String      @id @default(uuid())
-  title       String
-  type        ContentType
-  link        String
-  tags        String[]
-  description String?
-  curations   Curation[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                String              @id @default(uuid())
+  title             String
+  type              ContentType
+  link              String
+  tags              String[]
+  description       String?
+  curations         Curation[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  UserContentAction UserContentAction[]
 
   @@unique([title, type])
 }
@@ -35,19 +36,39 @@ model Curation {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  fullname   String
-  username   String
-  avatar     String?
-  email      String     @unique
-  password   String
-  isActive   Boolean    @default(false)
-  isVerified Boolean    @default(false)
-  isAdmin    Boolean    @default(false)
-  isCurator  Boolean    @default(false)
-  curations  Curation[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                String              @id @default(uuid())
+  fullname          String
+  username          String
+  avatar            String?
+  email             String              @unique
+  password          String
+  isActive          Boolean             @default(false)
+  isVerified        Boolean             @default(false)
+  isAdmin           Boolean             @default(false)
+  isCurator         Boolean             @default(false)
+  curations         Curation[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  UserContentAction UserContentAction[]
+}
+
+model UserContentAction {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  contentId String
+  content   Content    @relation(fields: [contentId], references: [id])
+  type      ActionType
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@unique([userId, contentId, type])
+}
+
+enum ActionType {
+  BOOKMARK
+  INSPIRED
+  THANKS
 }
 
 enum ContentType {
