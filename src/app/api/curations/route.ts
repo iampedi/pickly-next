@@ -106,6 +106,15 @@ export async function GET(request: NextRequest) {
     where,
     include: {
       content: true,
+      user: {
+        select: {
+          id: true,
+          email: true,
+          fullname: true,
+          isCurator: true,
+          isAdmin: true,
+        },
+      },
     },
   });
   return NextResponse.json(curations);

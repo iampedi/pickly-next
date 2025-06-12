@@ -23,7 +23,7 @@ export default function ContentsPage() {
   const ref = useRef<HTMLDivElement>(null);
   const [isStuck, setIsStuck] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [Contents, setContents] = useState<Content[]>([]);
+  const [contents, setContents] = useState<Content[]>([]);
   const [activeType, setActiveType] = useState<string | null>(null);
   const [pendingScroll, setPendingScroll] = useState(false);
 
@@ -58,6 +58,10 @@ export default function ContentsPage() {
     }
   }, [pendingScroll]);
 
+  useEffect(() => {
+    console.log("Pedram is watching... ", contents);
+  }, [contents]);
+
   const getContentTypeMeta = (value: string) => {
     return contentTypes.find((c) => c.value === value);
   };
@@ -79,7 +83,7 @@ export default function ContentsPage() {
     fetchContents();
   }, []);
 
-  const usedTypes = new Set<string>(Contents.map((c) => c.type));
+  const usedTypes = new Set<string>(contents.map((c) => c.type));
 
   const filterItems = [
     { value: null, label: "All", icon: RowsIcon },
@@ -121,7 +125,7 @@ export default function ContentsPage() {
                   return (
                     <CarouselItem
                       key={type.value}
-                      className={cn("basis-2/5 md:basis-auto pl-2")}
+                      className={cn("basis-2/5 pl-2 md:basis-auto")}
                       onClick={() => handleFilterClick(type.value)}
                     >
                       <div
@@ -157,13 +161,14 @@ export default function ContentsPage() {
             <Loader />
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
-              {!loading && Contents.length === 0 && (
+              {!loading && contents.length === 0 && (
                 <div className="flex items-center px-6 text-lg text-gray-500">
                   There are no contents yet.
                 </div>
               )}
 
-              {Contents.slice()
+              {contents
+                .slice()
                 .sort(
                   (a, b) =>
                     new Date(b.createdAt).getTime() -

@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const contents = await prisma.content.findMany({
+      include: { curations: true },
       orderBy: { createdAt: "desc" },
     });
 

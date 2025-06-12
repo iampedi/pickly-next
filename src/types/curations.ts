@@ -1,5 +1,6 @@
 // src/types/curations.ts
 import { Content } from "./contents";
+import { User } from "./user";
 
 export type Curation = {
   id: string;
@@ -9,4 +10,5 @@ export type Curation = {
   comment?: string;
   createdAt: string;
   updatedAt: string;
+  user: User;
 };

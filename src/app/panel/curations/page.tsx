@@ -95,13 +95,16 @@ function PanelCurationPageContent() {
             const Icon = meta?.icon;
 
             return (
-              <CurationCard
-                key={curation.id}
-                curation={curation}
-                Icon={Icon}
-                meta={meta}
-                handleDelete={handleDelete}
-              />
+              user && (
+                <CurationCard
+                  key={curation.id}
+                  curation={curation}
+                  currentUser={user}
+                  Icon={Icon}
+                  meta={meta}
+                  handleDelete={handleDelete}
+                />
+              )
             );
           })}
       </div>
