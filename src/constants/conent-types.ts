@@ -1,10 +1,10 @@
 // src/constants/content-types.ts
-
 import {
   AppWindowIcon,
   BookIcon,
   FileTextIcon,
   FilmSlateIcon,
+  GameControllerIcon,
   GlobeIcon,
   GraduationCapIcon,
   InstagramLogoIcon,
@@ -32,4 +32,5 @@ export const contentTypes = [
   { value: "VIDEO", label: "Video", icon: MonitorPlayIcon },
   { value: "WEBSITE", label: "Website", icon: GlobeIcon },
   { value: "YOUTUBE", label: "Youtube", icon: YoutubeLogoIcon },
+  { value: "GAME", label: "Game", icon: GameControllerIcon },
 ];

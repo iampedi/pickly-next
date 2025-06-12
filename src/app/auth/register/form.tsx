@@ -99,6 +99,7 @@ export function RegisterForm({
 
       setServerError(errorMsg);
       toast.error(errorMsg);
+      
     }
   };
 
