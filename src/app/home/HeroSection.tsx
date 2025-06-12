@@ -56,7 +56,7 @@ export default function HeroSection() {
                   No likes. No followers. Just curated content.
                 </span>
               </p>
-              <Button className="mt-5 w-full md:mt-8" size={"lg"} asChild>
+              <Button className="mt-5 w-full md:w-auto md:mt-8" size={"lg"} asChild>
                 <Link href="/auth/login">Become a Curator</Link>
               </Button>
             </div>

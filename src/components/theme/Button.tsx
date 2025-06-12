@@ -19,14 +19,14 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-gray-200",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:underline font-normal ",
         panel:
           "bg-gray-100 text-gray-500 hover:bg-lime-100 duration-300 justify-start rounded-xl [&_svg:not([class*='size-'])]:size-6 gap-4 hover:text-lime-700",
       },
       size: {
         default:
           "h-10 px-4 py-2 has-[>svg]:px-3 [&_svg:not([class*='size-'])]:size-5",
-        sm: "h-9 gap-1.5 px-3 has-[>svg]:px-2.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-9 gap-1.5 text-sm px-3 has-[>svg]:px-2.5 [&_svg:not([class*='size-'])]:size-3",
         lg: "h-11 px-6 has-[>svg]:pl-4 has-[>svg]:pr-5 [&_svg:not([class*='size-'])]:size-6 text-[17px]",
         icon: "size-11",
         menu: "h-13 px-4",

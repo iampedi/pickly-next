@@ -13,8 +13,14 @@ import { z } from "zod";
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
-import { FormDescription } from "@/components/theme/form";
-import { Switch } from "@/components/theme/switch";
+import { Input } from "@/components/theme/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/theme/select";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -24,9 +30,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/theme/input";
-import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  CircleNotchIcon,
+  CrownIcon,
+  HeartIcon,
+  ShieldCheckIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
+import { UserTypesDialog } from "./UserTypesDialog";
 
 const formSchema = z.object({
   fullname: z
@@ -36,7 +47,9 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
-  isCurator: z.boolean().optional(),
+  type: z.enum(["user", "curator", "admin"], {
+    required_error: "User type is required",
+  }),
 });
 
 type RegisterFormValues = z.infer<typeof formSchema>;
@@ -48,6 +61,7 @@ export function RegisterForm({
   const router = useRouter();
   const [, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
@@ -55,7 +69,7 @@ export function RegisterForm({
       fullname: "",
       email: "",
       password: "",
-      isCurator: false,
+      type: "user",
     },
   });
 
@@ -63,8 +77,16 @@ export function RegisterForm({
     setLoading(true);
     setServerError("");
 
+    const submitData = { ...values } as Record<string, unknown>;
+
+    if (values.type === "curator") {
+      submitData.isCurator = true;
+    } else if (values.type === "admin") {
+      submitData.isAdmin = true;
+    }
+
     try {
-      await axios.post("/api/auth/register", values);
+      await axios.post("/api/auth/register", submitData);
       form.reset();
       router.push("/auth/login?registered=true");
     } catch (err) {
@@ -132,29 +154,67 @@ export function RegisterForm({
                     </FormItem>
                   )}
                 />
+                <div className="grid gap-2">
+                  <div className="flex items-center justify-between">
+                    <FormLabel>User Type</FormLabel>
+                    <div
+                      onClick={() => setOpen(true)}
+                      className="cursor-pointer text-sm text-red-600 hover:text-black hover:underline"
+                    >
+                      Important Note
+                    </div>
+                  </div>
 
-                <FormField
-                  control={form.control}
-                  name="isCurator"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel>Curator Mode</FormLabel>
-                        <FormDescription>
-                          Curators can add and gather content.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl className="w-full">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select user type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="user">
+                              <HeartIcon
+                                weight="duotone"
+                                className="text-rose-600"
+                              />
+                              User
+                            </SelectItem>
+                            <SelectItem value="curator">
+                              <CrownIcon
+                                weight="duotone"
+                                className="text-rose-600"
+                              />
+                              Curator
+                            </SelectItem>
+                            <SelectItem value="admin">
+                              <ShieldCheckIcon
+                                weight="duotone"
+                                className="text-rose-600"
+                              />
+                              Admin
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
 
-                <Button type="submit" className="w-full" disabled={loading}>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="mt-2 w-full"
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
                       <CircleNotchIcon className="animate-spin" />
@@ -176,7 +236,10 @@ export function RegisterForm({
                 </div>
               </div>
             </form>
+
+            <UserTypesDialog open={open} setOpen={setOpen} />
           </Form>
+
           <div className="relative hidden bg-white md:block">
             <Image src={image} alt="Login Image" priority />
           </div>

@@ -17,6 +17,7 @@ import {
   CrownIcon,
   HeartIcon,
   PowerIcon,
+  ShieldCheckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { useEffect } from "react";
 
@@ -47,7 +48,7 @@ export const UserAvatar = () => {
 
   if (loading) return <Loader />;
 
-  if (!user) return <div>?</div>;
+  if (!user) return null;
 
   return (
     <DropdownMenu>
@@ -68,10 +69,10 @@ export const UserAvatar = () => {
       <DropdownMenuContent className="w-36" align="center">
         <DropdownMenuLabel className="flex items-center gap-2 text-rose-600">
           {!user ? (
-            <span>Loading...</span>
+            <Loader />
           ) : user.isAdmin ? (
             <>
-              <HeartIcon className="size-5" weight="duotone" />
+              <ShieldCheckIcon className="size-5" weight="duotone" />
               <span className="uppercase">Admin</span>
             </>
           ) : user.isCurator ? (
