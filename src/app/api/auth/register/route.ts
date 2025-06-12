@@ -6,7 +6,8 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
-  const { fullname, email, password, isCurator, isAdmin } = await req.json();
+  const { fullname, username, email, password, isCurator, isAdmin } =
+    await req.json();
 
   if (!fullname || !email || !password) {
     return NextResponse.json(
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     data: {
       fullname,
       email,
+      username: username || email,
       password: hashedPassword,
       isCurator,
       isAdmin,
