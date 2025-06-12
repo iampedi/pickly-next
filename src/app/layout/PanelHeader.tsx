@@ -2,13 +2,24 @@
 "use client";
 import { Logo } from "@/components/Logo";
 import { UserAvatar } from "./UserAvatar";
+import { ListIcon } from "@phosphor-icons/react/dist/ssr";
+import { MobileMenu } from "./MobileMenu";
+import { useState } from "react";
 
 export const PanelHeader = () => {
-  return (
-    <header className="sticky top-0 z-50 flex h-16 md:h-20 items-center justify-between bg-white">
-      <Logo />
+  const [open, setOpen] = useState(false);
 
-      <UserAvatar />
-    </header>
+  return (
+    <>
+      <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-white md:h-20">
+        <Logo />
+
+        <div className="flex items-center gap-2">
+          <UserAvatar />
+          <ListIcon size={32} weight="bold" onClick={() => setOpen(true)} />
+        </div>
+      </header>
+      <MobileMenu open={open} setOpen={setOpen} />
+    </>
   );
 };

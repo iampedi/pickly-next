@@ -8,12 +8,14 @@ import { Button } from "./Button";
 export function NavLink({
   href,
   children,
+  onClick,
   exact = true,
   className,
   ...props
 }: {
   href: string;
   children: React.ReactNode;
+  onClick?: () => void;
   exact?: boolean;
   className?: string;
   activeClass?: string;
@@ -28,6 +30,7 @@ export function NavLink({
       size={"menu"}
       active={isActive && true}
       asChild
+      onClick={onClick}
     >
       <Link href={href} {...props}>
         {children}

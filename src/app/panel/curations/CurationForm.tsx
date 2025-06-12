@@ -298,7 +298,6 @@ export default function ContentCurationForm({
                     <FormControl>
                       <Input
                         autoComplete="off"
-                        placeholder="Start typing content title"
                         {...field}
                         disabled={mode === "update"}
                       />
@@ -335,7 +334,7 @@ export default function ContentCurationForm({
                     </FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Why did you curate this? What do you want to say?"
+                        placeholder="Your opinion on this content"
                         className="min-h-[100px]"
                         {...field}
                       />
@@ -344,7 +343,7 @@ export default function ContentCurationForm({
                   </FormItem>
                 )}
               />
-              <div className="mt-2 flex items-center gap-3">
+              <div className="mt-2 flex flex-col-reverse md:flex-row items-center gap-3">
                 <Button className="w-full" variant="secondary" asChild>
                   <Link href="/panel/curations">Cancel</Link>
                 </Button>

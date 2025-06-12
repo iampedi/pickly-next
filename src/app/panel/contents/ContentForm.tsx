@@ -254,7 +254,7 @@ export default function ContentForm({
                 )}
               />
 
-              <div className="mt-2 flex items-center gap-3">
+              <div className="mt-2 flex flex-col-reverse items-center gap-3 md:flex-row">
                 <Button className="w-full" variant="secondary" asChild>
                   <Link href="/panel/contents">Cancel</Link>
                 </Button>

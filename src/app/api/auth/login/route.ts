@@ -9,8 +9,6 @@ const prisma = new PrismaClient();
 export async function POST(request: NextRequest) {
   const { email, password } = await request.json();
 
-console.log('JWT_SECRET in login:', process.env.JWT_SECRET);
-
   if (!email || !password) {
     return NextResponse.json(
       { error: "Email and password required" },

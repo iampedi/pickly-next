@@ -5,8 +5,8 @@ import { PanelPageHeader } from "@/components/PanelPageHeader";
 export default function CreateContentPage() {
   return (
     <>
-      <PanelPageHeader/>
-      <ContentForm mode="create" />;
+      <PanelPageHeader />
+      <ContentForm mode="create" />
     </>
   );
 }

@@ -37,7 +37,7 @@ import {
   ShieldCheckIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
-import { UserTypesDialog } from "./UserTypesDialog";
+import { UserTypesDialog } from "../../layout/UserTypesDialog";
 
 const formSchema = z.object({
   fullname: z
@@ -99,7 +99,7 @@ export function RegisterForm({
 
       setServerError(errorMsg);
       toast.error(errorMsg);
-      
+      setLoading(false);
     }
   };
 

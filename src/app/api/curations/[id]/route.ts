@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 // GET /api/curations/:id
 export async function GET(request: Request, context: any) {
-  const { id } = context.params;
+  const { id } = await context.params;
   try {
     const curation = await prisma.curation.findUnique({
       where: { id },
@@ -31,7 +31,7 @@ export async function GET(request: Request, context: any) {
 
 // Update a curation: PUT /api/curations/:id
 export async function PUT(request: Request, context: any) {
-  const { id } = context.params;
+  const { id } = await context.params;
   if (!id) {
     return NextResponse.json({ error: "Missing curation id" }, { status: 400 });
   }
@@ -57,7 +57,7 @@ export async function PUT(request: Request, context: any) {
 // Delete a curation : DELETE /api/curations/:id
 export async function DELETE(request: Request, context: any) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     await prisma.curation.delete({ where: { id } });
     return NextResponse.json(
       { message: "Curation deleted successfully" },

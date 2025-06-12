@@ -121,7 +121,7 @@ export default function ContentsPage() {
                   return (
                     <CarouselItem
                       key={type.value}
-                      className={cn("basis-2/5 md:basis-auto")}
+                      className={cn("basis-2/5 md:basis-auto pl-2")}
                       onClick={() => handleFilterClick(type.value)}
                     >
                       <div
@@ -153,36 +153,38 @@ export default function ContentsPage() {
             Latest Contents
           </h1>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {loading && <Loader />}
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {!loading && Contents.length === 0 && (
+                <div className="flex items-center px-6 text-lg text-gray-500">
+                  There are no contents yet.
+                </div>
+              )}
 
-            {!loading && Contents.length === 0 && (
-              <div className="flex items-center px-6 text-lg text-gray-500">
-                There are no contents yet.
-              </div>
-            )}
+              {Contents.slice()
+                .sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime(),
+                )
+                .filter((content) => !activeType || content.type === activeType)
+                .map((content) => {
+                  const meta = getContentTypeMeta(content.type);
+                  const Icon = meta?.icon;
 
-            {Contents.slice()
-              .sort(
-                (a, b) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime(),
-              )
-              .filter((content) => !activeType || content.type === activeType)
-              .map((content) => {
-                const meta = getContentTypeMeta(content.type);
-                const Icon = meta?.icon;
-
-                return (
-                  <HomeContentCard
-                    key={content.id}
-                    content={content}
-                    Icon={Icon}
-                    meta={meta}
-                  />
-                );
-              })}
-          </div>
+                  return (
+                    <HomeContentCard
+                      key={content.id}
+                      content={content}
+                      Icon={Icon}
+                      meta={meta}
+                    />
+                  );
+                })}
+            </div>
+          )}
         </div>
       </div>
     </div>

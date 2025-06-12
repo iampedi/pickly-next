@@ -4,7 +4,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 // UI Imports
 import Loader from "@/components/Loader";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +17,8 @@ import {
   HeartIcon,
   PowerIcon,
   ShieldCheckIcon,
+  UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { useEffect } from "react";
 
 export const UserAvatar = () => {
   const { user, loading, setUser } = useAuth();
@@ -31,39 +30,23 @@ export const UserAvatar = () => {
     router.push("/?logout=true");
   };
 
-  const getInitials = (name: string) => {
+  const getFirstName = (name: string) => {
     if (!name?.trim()) return "?";
-    return name
-      .split(" ")
-      .filter((part) => part.length > 0)
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+    return name.trim().split(" ")[0];
   };
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   if (loading) return <Loader />;
 
-  if (!user) return null;
+  if (!user) return <Loader />;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <div className="group flex items-center gap-2">
+        <div className="group flex items-center gap-1.5">
           <span className="font-medium group-hover:bg-lime-100">
-            {user.fullname}
+            Hi {getFirstName(user.fullname)}
           </span>
-          <Avatar>
-            <AvatarImage
-              src={user.avatarUrl || "https://github.com/shadcn.png"}
-              className="opacity-80 group-hover:opacity-100"
-            />
-            <AvatarFallback>{getInitials(user.fullname)}</AvatarFallback>
-          </Avatar>
+          <UserCircleIcon size={30} weight="duotone" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36" align="center">
