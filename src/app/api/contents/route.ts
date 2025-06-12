@@ -1,8 +1,6 @@
 // src/app/api/contents/route.ts
-import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 // Create content: POST /api/contents
 export async function POST(req: NextRequest) {

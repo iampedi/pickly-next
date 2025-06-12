@@ -4,7 +4,7 @@ import { contentTypes } from "@/constants/conent-types";
 import { Curation } from "@/types/curations";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
@@ -13,6 +13,14 @@ import { toast } from "sonner";
 import { CurationCard } from "@/app/layout/CurationCard";
 
 export default function PanelCurationPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <PanelCurationPageContent />
+    </Suspense>
+  );
+}
+
+function PanelCurationPageContent() {
   const params = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [curations, setCurations] = useState<Curation[]>([]);

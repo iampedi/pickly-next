@@ -1,12 +1,7 @@
 // src/app/api/curations/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, ContentType } from "@prisma/client";
-
-// --------- Prisma singleton pattern for Next.js -----------
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-// ----------------------------------------------------------
+import { ContentType } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 // Type for expected request body
 type CurationPayload = {

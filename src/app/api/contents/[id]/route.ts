@@ -1,14 +1,9 @@
 // src/app/api/contents/[id]/route.ts
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const prisma = new PrismaClient();
-
-// Get a content: GET /api/contents/:id
-export async function GET(
-  request: Request,
-  context: { params: { id: string } },
-) {
+export async function GET(request: Request, context: any) {
   try {
     const { id } = context.params;
     const content = await prisma.content.findUnique({ where: { id } });
@@ -22,11 +17,7 @@ export async function GET(
   }
 }
 
-// Update content: PUT /api/contents/[id]
-export async function PUT(
-  request: Request,
-  context: { params: { id: string } },
-) {
+export async function PUT(request: Request, context: any) {
   const { id } = context.params;
   try {
     const body = await request.json();
@@ -67,11 +58,7 @@ export async function PUT(
   }
 }
 
-// Delete a content: DELETE /api/contents/:id
-export async function DELETE(
-  request: Request,
-  context: { params: { id: string } },
-) {
+export async function DELETE(request: Request, context: any) {
   try {
     const { id } = context.params;
     await prisma.content.delete({ where: { id } });

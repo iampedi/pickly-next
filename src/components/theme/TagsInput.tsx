@@ -1,4 +1,5 @@
 // src/components/theme/TagsInput.tsx
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/theme/input";
 import { XIcon } from "lucide-react";

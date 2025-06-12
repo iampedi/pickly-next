@@ -4,15 +4,23 @@ import { contentTypes } from "@/constants/conent-types";
 import { Content } from "@/types/contents";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
+import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
 import { ContentCard } from "../../layout/ContentCard";
-import { PanelPageHeader } from "@/components/PanelPageHeader";
 
 export default function PanelContentPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <PanelContentPageContent />
+    </Suspense>
+  );
+}
+
+function PanelContentPageContent() {
   const params = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [contents, setContents] = useState<Content[]>([]);

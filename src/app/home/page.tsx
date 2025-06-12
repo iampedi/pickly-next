@@ -1,14 +1,23 @@
 // src/app/home/page.tsx
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 // UI Imports
 import { Footer } from "@/app/layout/Footer";
+import Loader from "@/components/Loader";
+import { toast } from "sonner";
 import ContentsPage from "./ContentsPage";
 import HeroSection from "./HeroSection";
-import { toast } from "sonner";
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
   const params = useSearchParams();
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 // src/components/theme/Loader.tsx
+"use client";
 import { cn } from "@/lib/utils";
 import { SpinnerGapIcon } from "@phosphor-icons/react/dist/ssr";
 

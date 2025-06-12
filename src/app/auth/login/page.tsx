@@ -2,11 +2,20 @@
 "use client";
 import { Logo } from "@/components/Logo";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { toast } from "sonner";
 import { LoginForm } from "./form";
+import Loader from "@/components/Loader";
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <RegisterPageContent />
+    </Suspense>
+  );
+}
+
+function RegisterPageContent() {
   const params = useSearchParams();
 
   useEffect(() => {

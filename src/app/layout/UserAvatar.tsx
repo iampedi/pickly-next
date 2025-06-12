@@ -1,5 +1,4 @@
 // src/app/layout/UserAvatar.tsx
-
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";

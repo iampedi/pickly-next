@@ -1,4 +1,5 @@
 // src/components/AuthButton.tsx
+"use client";
 import Link from "next/link";
 import { Button } from "./theme/Button";
 import { LockSimpleIcon, UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
