@@ -35,6 +35,7 @@ import {
   CrownIcon,
   HeartIcon,
   ShieldCheckIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
 import { UserTypesDialog } from "../../layout/UserTypesDialog";
@@ -160,9 +161,9 @@ export function RegisterForm({
                     <FormLabel>User Type</FormLabel>
                     <div
                       onClick={() => setOpen(true)}
-                      className="cursor-pointer text-sm text-red-600 hover:text-black hover:underline"
+                      className="flex cursor-pointer items-center gap-1 text-sm text-red-600 hover:text-black hover:underline"
                     >
-                      Important Note
+                      <WarningCircleIcon size={16} /> Important Note
                     </div>
                   </div>
 
@@ -241,7 +242,7 @@ export function RegisterForm({
             <UserTypesDialog open={open} setOpen={setOpen} />
           </Form>
 
-          <div className="relative hidden bg-white md:block">
+          <div className="relative my-auto hidden bg-white md:block">
             <Image src={image} alt="Login Image" priority />
           </div>
         </CardContent>
