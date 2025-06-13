@@ -43,7 +43,7 @@ const panelMenu: MenuItem[] = [
     label: "Bookmarks",
     href: "/panel/bookmarks",
     icon: <BookmarkIcon weight="duotone" />,
-    canAccess: (user) => !!user.isAdmin,
+    canAccess: () => true,
   },
 ];
 export const MenuList = ({ onClick }: MenuListProps) => {
