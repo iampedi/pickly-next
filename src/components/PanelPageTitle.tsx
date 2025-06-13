@@ -10,6 +10,7 @@ const titles: Record<string, string> = {
   "/panel/curations": "Curations",
   "/panel/curations/create": "Create a curation",
   "/panel/curations/update/:id": "Update curation",
+  "/panel/bookmarks": "Bookmarks",
   "/panel/users": "Users",
 };
 

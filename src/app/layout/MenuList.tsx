@@ -3,6 +3,7 @@ import { NavLink } from "@/components/theme/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   BookBookmarkIcon,
+  BookmarkIcon,
   CrownSimpleIcon,
   StarIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -36,6 +37,12 @@ const panelMenu: MenuItem[] = [
     label: "Contents",
     href: "/panel/contents",
     icon: <BookBookmarkIcon weight="duotone" />,
+    canAccess: (user) => !!user.isAdmin,
+  },
+  {
+    label: "Bookmarks",
+    href: "/panel/bookmarks",
+    icon: <BookmarkIcon weight="duotone" />,
     canAccess: (user) => !!user.isAdmin,
   },
 ];

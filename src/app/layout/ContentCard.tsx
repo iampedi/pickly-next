@@ -54,24 +54,26 @@ export const ContentCard = ({
           )}
         </h2>
 
-        <div className="_tools flex items-center justify-end gap-2 text-gray-400 drop-shadow-blue-300">
-          <TooltipWrapper tooltip="Edit Content">
-            <NotePencilIcon
-              className="cursor-pointer text-lime-600 md:text-gray-400 md:hover:text-lime-600"
-              size={20}
-              onClick={() =>
-                router.push(`/panel/contents/update/${content.id}`)
-              }
-            />
-          </TooltipWrapper>
-          <TooltipWrapper tooltip="Delete Content">
-            <TrashIcon
-              className="cursor-pointer text-red-600 md:text-gray-400 md:hover:text-red-600"
-              size={20}
-              onClick={() => handleDelete?.(content.id)}
-            />
-          </TooltipWrapper>
-        </div>
+        {handleDelete && (
+          <div className="_tools flex items-center justify-end gap-2 text-gray-400 drop-shadow-blue-300">
+            <TooltipWrapper tooltip="Edit Content">
+              <NotePencilIcon
+                className="cursor-pointer text-lime-600 md:text-gray-400 md:hover:text-lime-600"
+                size={20}
+                onClick={() =>
+                  router.push(`/panel/contents/update/${content.id}`)
+                }
+              />
+            </TooltipWrapper>
+            <TooltipWrapper tooltip="Delete Content">
+              <TrashIcon
+                className="cursor-pointer text-red-600 md:text-gray-400 md:hover:text-red-600"
+                size={20}
+                onClick={() => handleDelete?.(content.id)}
+              />
+            </TooltipWrapper>
+          </div>
+        )}
       </div>
 
       {content.tags?.length > 0 || content.description ? (
@@ -94,7 +96,7 @@ export const ContentCard = ({
           )}
 
           {content.description && (
-            <p className="text-gray-600 line-clamp-2">{content.description}</p>
+            <p className="line-clamp-2 text-gray-600">{content.description}</p>
           )}
         </div>
       ) : null}

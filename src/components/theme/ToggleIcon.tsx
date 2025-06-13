@@ -1,30 +1,31 @@
 // src/components/theme/ToggleIcon
 "use client";
-import { BookmarkIcon } from "@phosphor-icons/react/dist/ssr";
+import { StarIcon } from "@phosphor-icons/react/dist/ssr";
 import { TooltipWrapper } from "./TooltipWrapper";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export type ToggleIconProp = {
   icon?: React.ElementType;
   tooltip?: string;
+  active?: boolean;
+  onClick?: () => void;
 };
 
-export function ToggleIcon({ icon, tooltip }: ToggleIconProp) {
-  const [active, setActive] = useState(false);
-  const Icon = icon || BookmarkIcon;
-
+export function ToggleIcon({
+  icon: Icon = StarIcon,
+  tooltip,
+  active,
+  onClick,
+}: ToggleIconProp) {
   return (
     <TooltipWrapper tooltip={tooltip || ""}>
-      <Icon
-        size={24}
-        weight="duotone"
-        className={cn(
-          "cursor-pointer transition-colors",
-          active ? "text-rose-600" : "text-gray-400",
-        )}
-        onClick={() => setActive((prev) => !prev)}
-      />
+      <span onClick={onClick} className="cursor-pointer transition-colors">
+        <Icon
+          size={24}
+          weight="duotone"
+          className={cn(active ? "text-rose-600" : "text-gray-400")}
+        />
+      </span>
     </TooltipWrapper>
   );
 }
