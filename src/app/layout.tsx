@@ -1,4 +1,5 @@
 // src/app/layout.tsx
+
 import "@/styles/globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -19,7 +20,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "fa" ? "rtl" : "ltr"}>
-      <body className="min-h-screen antialiased">
+      <body className="flex min-h-screen flex-col antialiased">
         <NextIntlClientProvider>
           <AuthProvider>
             {children}

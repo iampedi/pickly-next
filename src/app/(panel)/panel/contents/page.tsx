@@ -6,11 +6,11 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 // UI Imports
+import { ContentCard } from "@/app/(panel)/layout/ContentCard";
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
-import { ContentCard } from "../../layout/ContentCard";
 
 export default function PanelContentPage() {
   return (

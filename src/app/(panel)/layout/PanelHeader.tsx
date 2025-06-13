@@ -1,9 +1,9 @@
 // src/app/layout/PanelHeader.tsx
 "use client";
 import { Logo } from "@/components/Logo";
-import { UserAvatar } from "./UserAvatar";
+import { UserAvatar } from "@/app/(panel)/layout/UserAvatar";
 import { ListIcon } from "@phosphor-icons/react/dist/ssr";
-import { MobileMenu } from "./MobileMenu";
+import { MobileMenu } from "@/app/(panel)/layout/MobileMenu";
 import { useState } from "react";
 
 export const PanelHeader = () => {

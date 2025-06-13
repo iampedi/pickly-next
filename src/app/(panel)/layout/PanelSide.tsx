@@ -1,6 +1,6 @@
 // src/app/layout/PanelSide.tsx
 "use client";
-import { MenuList } from "./MenuList";
+import { MenuList } from "@/app/(panel)/layout/MenuList";
 
 export const PanelSide = () => {
   return (

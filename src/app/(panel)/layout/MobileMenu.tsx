@@ -1,5 +1,6 @@
+// src/app/(panel)/layout/MobileMenu.tsx
+import { MenuList } from "@/app/(panel)/layout/MenuList";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
-import { MenuList } from "./MenuList";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
 type MobileMenuDrawerProps = {

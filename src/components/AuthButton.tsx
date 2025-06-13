@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./theme/Button";
+import { Button } from "@/components/theme/Button";
 import { LockSimpleIcon, UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { useAuth } from "@/contexts/AuthContext";
 

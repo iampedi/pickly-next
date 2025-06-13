@@ -10,7 +10,7 @@ interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function Loader({ className, ...props }: LoaderProps) {
   return (
     <div
-      className={cn("flex h-full items-center justify-center", className)}
+      className={cn("flex flex-1 items-center justify-center", className)}
       {...props}
     >
       <SpinnerGapIcon className="size-7 animate-spin" />

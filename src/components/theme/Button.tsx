@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-gray-200",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline font-normal ",
+        link: "text-primary underline-offset-6 hover:underline font-semibold",
         panel:
           "bg-gray-100 text-gray-500 hover:bg-lime-100 duration-300 justify-start rounded-xl [&_svg:not([class*='size-'])]:size-6 gap-4 hover:text-lime-700",
       },

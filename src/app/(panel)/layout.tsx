@@ -1,9 +1,13 @@
 // src/app/panel/layout.tsx
-import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { PanelSide } from "../layout/PanelSide";
-import { PanelHeader } from "../layout/PanelHeader";
-import { Footer } from "../layout/Footer";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+
+// UI Imports
+import { PanelHeader } from "@/app/(panel)/layout/PanelHeader";
+import { PanelSide } from "@/app/(panel)/layout/PanelSide";
+import { Footer } from "@/app/layout/Footer";
+import Loader from "@/components/Loader";
 
 export const metadata: Metadata = {
   title: "PICKY :: App",
@@ -20,7 +24,9 @@ export default function PanelLayout({
 
         <div className="flex flex-1 gap-8">
           <PanelSide />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <Suspense fallback={<Loader />}>{children}</Suspense>
+          </main>
         </div>
 
         <Footer />
