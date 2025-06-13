@@ -1,10 +1,6 @@
-import type { NextConfig } from "next";
+// next.config.ts
+import withNextIntl from "next-intl/plugin";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
-};
-
-export default nextConfig;
+export default withNextIntl("./src/i18n/request.ts")({
+  reactStrictMode: true,
+});

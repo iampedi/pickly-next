@@ -1,5 +1,8 @@
 // src/app/auth/register/form.tsx
 "use client";
+
+import { useAuth } from "@/contexts/AuthContext";
+import { handleClientError } from "@/lib/handleClientError";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -8,8 +11,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+
 // UI Imports
+import { UserTypesDialog } from "@/app/layout/UserTypesDialog";
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
@@ -37,8 +43,6 @@ import {
   ShieldCheckIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { toast } from "sonner";
-import { UserTypesDialog } from "../../layout/UserTypesDialog";
 
 const formSchema = z.object({
   fullname: z
@@ -63,6 +67,7 @@ export function RegisterForm({
   const [, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { refetch } = useAuth();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
@@ -87,19 +92,16 @@ export function RegisterForm({
     }
 
     try {
-      await axios.post("/api/auth/register", submitData);
-      form.reset();
-      router.push("/auth/login?registered=true");
-    } catch (err) {
-      let errorMsg = "Registration failed.";
-      if (axios.isAxiosError(err)) {
-        errorMsg = err.response?.data?.error || err.message || errorMsg;
-      } else if (err instanceof Error) {
-        errorMsg = err.message;
-      }
+      await axios.post("/api/auth/register", submitData, {
+        withCredentials: true,
+      });
 
-      setServerError(errorMsg);
-      toast.error(errorMsg);
+      await refetch();
+      form.reset();
+      toast.success("Registration successful.");
+      router.push("/panel");
+    } catch (err) {
+      handleClientError(err, "Registration failed.");
       setLoading(false);
     }
   };

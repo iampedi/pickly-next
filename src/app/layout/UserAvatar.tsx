@@ -1,7 +1,11 @@
 // src/app/layout/UserAvatar.tsx
 "use client";
+
 import { useAuth } from "@/contexts/AuthContext";
+import { handleClientError } from "@/lib/handleClientError";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+
 // UI Imports
 import Loader from "@/components/Loader";
 import {
@@ -19,15 +23,22 @@ import {
   ShieldCheckIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import { toast } from "sonner";
 
 export const UserAvatar = () => {
-  const { user, loading, setUser } = useAuth();
+  const { user, loading, setUser, refetch } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    setUser(null);
-    router.push("/?logout=true");
+    try {
+      await axios.post("/api/auth/logout", {}, { withCredentials: true });
+      await refetch();
+      toast.success("Logout successful.");
+      router.push("/");
+    } catch (err) {
+      handleClientError(err, "Logout failed.");
+      setUser(null);
+    }
   };
 
   const getFirstName = (name: string) => {
@@ -35,9 +46,7 @@ export const UserAvatar = () => {
     return name.trim().split(" ")[0];
   };
 
-  if (loading) return <Loader />;
-
-  if (!user) return <Loader />;
+  if (loading || !user) return <Loader />;
 
   return (
     <DropdownMenu>
@@ -55,9 +64,7 @@ export const UserAvatar = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36" align="center">
         <DropdownMenuLabel className="flex items-center gap-2 text-rose-600">
-          {!user ? (
-            <Loader />
-          ) : user.isAdmin ? (
+          {user.isAdmin ? (
             <>
               <ShieldCheckIcon className="size-5" weight="duotone" />
               <span className="uppercase">Admin</span>

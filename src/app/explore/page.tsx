@@ -58,10 +58,6 @@ export default function ContentsPage() {
     }
   }, [pendingScroll]);
 
-  useEffect(() => {
-    console.log("Pedram is watching... ", contents);
-  }, [contents]);
-
   const getContentTypeMeta = (value: string) => {
     return contentTypes.find((c) => c.value === value);
   };

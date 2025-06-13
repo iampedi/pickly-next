@@ -1,5 +1,7 @@
 // src/contexts/AuthContext.tsx
 "use client";
+import { User } from "@/types/user";
+import axios from "axios";
 import {
   ReactNode,
   createContext,
@@ -7,17 +9,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import axios from "axios";
-
-// نوع یوزر
-type User = {
-  id: string;
-  email: string;
-  fullname: string;
-  isCurator: boolean;
-  isAdmin: boolean;
-  avatarUrl?: string;
-};
 
 type AuthContextType = {
   user: User | null;
@@ -26,7 +17,7 @@ type AuthContextType = {
   refetch: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -42,7 +33,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const res = await axios.get("/api/auth/me", { withCredentials: true });
       setUser(res.data.user);
-    } catch {
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("AuthContext → /api/auth/me error", err);
+      }
       setUser(null);
     } finally {
       setLoading(false);
@@ -62,7 +56,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;

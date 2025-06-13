@@ -1,37 +1,41 @@
-// src/app/api/me/route.ts
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/auth";
+// src/app/api/auth/me/route.ts
+import { verifyJwt } from "@/lib/auth/jwt";
+import { UnauthorizedError } from "@/lib/errors";
+import { handleApiError } from "@/lib/handleApiError";
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
-import { PrismaClient } from "@prisma/client";
+export async function GET(req: NextRequest) {
+  try {
+    const token = req.cookies.get("token")?.value;
 
-const prisma = new PrismaClient();
+    if (!token) {
+      throw new UnauthorizedError("Token missing");
+    }
 
-export async function GET() {
-  const token = (await cookies()).get("token")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const payload = verifyJwt(token);
+    if (!payload || !payload.userId) {
+      throw new UnauthorizedError("Invalid token");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        email: true,
+        fullname: true,
+        username: true,
+        isAdmin: true,
+        isCurator: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedError("User not found");
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
+  } catch (err) {
+    return handleApiError(err);
   }
-
-  const payload = await verifyJwt(token, process.env.JWT_SECRET!);
-  if (!payload?.id || typeof payload.id !== "string") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { id: payload.id as string },
-    select: {
-      id: true,
-      email: true,
-      fullname: true,
-      isCurator: true,
-      isAdmin: true,
-    },
-  });
-
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ user });
 }
