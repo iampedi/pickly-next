@@ -1,5 +1,5 @@
 // src/api/bookmarks/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
@@ -17,7 +17,7 @@ function getUserIdFromToken(token: string) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE)?.value;
   const userId = token ? getUserIdFromToken(token) : null;
