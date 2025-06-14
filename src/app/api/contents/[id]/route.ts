@@ -1,7 +1,7 @@
 // src/app/api/contents/[id]/route.ts
 import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export async function GET(request: Request, context: any) {
@@ -52,11 +52,11 @@ export async function PUT(request: Request, context: any) {
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     await prisma.content.delete({ where: { id } });
     return NextResponse.json(
       { message: "Content deleted successfully" },
