@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.tsx
 "use client";
+
 import { User } from "@/types/user";
 import axios from "axios";
 import {

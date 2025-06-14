@@ -1,12 +1,5 @@
 // src/app/panel/curations/CurationForm.tsx
 "use client";
-import { contentTypes } from "@/constants/conent-types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/theme/Button";
 import {
   Form,
@@ -31,10 +24,18 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { contentTypes } from "@/constants/conent-types";
 import { useAuth } from "@/contexts/AuthContext";
+import { handleClientError } from "@/lib/handleClientError";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
-import { toast } from "sonner";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -98,7 +99,6 @@ export default function ContentCurationForm({
     },
   });
 
-  // برای هماهنگ شدن با مقدار اولیه (مثلاً وقتی initialValues آپدیت شد)
   useEffect(() => {
     if (initialValues) {
       form.reset({
@@ -109,7 +109,7 @@ export default function ContentCurationForm({
     }
   }, [initialValues, form]);
 
-  // ---- Fetch suggestions on title/type change (فقط در حالت create)
+  // ---- Fetch suggestions on title/type change (create mode)
   useEffect(() => {
     if (mode === "update") return;
     const type = form.watch("type");
@@ -144,12 +144,13 @@ export default function ContentCurationForm({
     setShowSuggestions(false);
     setCheckedContentId(s.id);
 
-    // بررسی duplication
+    // Check duplication
     if (user?.id && s.id) {
       try {
         const res = await axios.get("/api/curations", {
           params: { userId: user.id, contentId: s.id },
         });
+
         if (Array.isArray(res.data) && res.data.length > 0) {
           setIsDuplicate(true);
           toast.warning(
@@ -164,7 +165,6 @@ export default function ContentCurationForm({
     }
   };
 
-  // کنترل تغییر title یا type برای فعال/غیرفعال شدن دکمه (فقط در حالت create)
   useEffect(() => {
     if (mode === "update") return;
     const subscription = form.watch((values) => {
@@ -180,19 +180,18 @@ export default function ContentCurationForm({
     return () => subscription.unsubscribe();
   }, [form, mode]);
 
-  // --- Submit Handler
+  // Submit Handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
 
     try {
       if (mode === "update" && id) {
-        // فقط comment را بفرست
         await axios.put(`/api/curations/${id}`, { comment: values.comment });
-        router.push("/panel/curations?updated=true");
+        toast.success("Curation updated successfully.");
+        router.push("/panel/curations");
         return;
       }
 
-      // حالت create
       // Duplication check
       if (user?.id && values.title && values.type) {
         const res = await axios.get("/api/curations", {
@@ -230,15 +229,10 @@ export default function ContentCurationForm({
       lastClickedTitle.current = "";
       checkedTypeRef.current = "";
       setIsDuplicate(false);
-      router.push("/panel/curations?submitted=true");
-    } catch (error) {
-      let errorMsg = "Something went wrong. Please try again.";
-      if (axios.isAxiosError(error)) {
-        errorMsg = error.response?.data?.error || error.message || errorMsg;
-      } else if (error instanceof Error) {
-        errorMsg = error.message;
-      }
-      toast.error(errorMsg);
+      toast.success("Curation submitted successfully.");
+      router.push("/panel/curations");
+    } catch (err) {
+      handleClientError(err, "Failed to submit curation.");
     } finally {
       setLoading(false);
     }
@@ -343,7 +337,7 @@ export default function ContentCurationForm({
                   </FormItem>
                 )}
               />
-              <div className="mt-2 flex flex-col-reverse md:flex-row items-center gap-3">
+              <div className="mt-2 flex flex-col-reverse items-center gap-3 md:flex-row">
                 <Button className="w-full" variant="secondary" asChild>
                   <Link href="/panel/curations">Cancel</Link>
                 </Button>

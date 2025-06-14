@@ -1,37 +1,22 @@
 // src/app/panel/contents/page.tsx
 "use client";
+
 import { contentTypes } from "@/constants/conent-types";
 import { Content } from "@/types/contents";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 // UI Imports
 import { ContentCard } from "@/app/(panel)/layout/ContentCard";
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
+import { handleClientError } from "@/lib/handleClientError";
 
 export default function PanelContentPage() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <PanelContentPageContent />
-    </Suspense>
-  );
-}
-
-function PanelContentPageContent() {
-  const params = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [contents, setContents] = useState<Content[]>([]);
-
-  useEffect(() => {
-    if (params.get("submitted") === "true") {
-      toast.success("Content submitted successfully!");
-    } else if (params.get("updated") === "true") {
-      toast.success("Content updated successfully!");
-    }
-  }, [params]);
 
   const getContentTypeMeta = (value: string) => {
     return contentTypes.find((c) => c.value === value);
@@ -48,7 +33,7 @@ function PanelContentPageContent() {
         setContents(data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching contents:", error);
+        handleClientError(error, "Failed to fetch contents.");
       }
     };
     fetchContents();
@@ -61,8 +46,7 @@ function PanelContentPageContent() {
       setContents(contents.filter((c) => c.id !== id));
       toast.success("Content deleted successfully!");
     } catch (error) {
-      console.error("Error deleting content:", error);
-      toast.error("Failed to delete content. Please try again.");
+      handleClientError(error, "Failed to delete content.");
     }
   }
 

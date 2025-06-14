@@ -2,9 +2,9 @@
 import Link from "next/link";
 
 // UI Imports
-import { AuthButton } from "@/components/AuthButton";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/theme/Button";
+import { UserAvatar } from "@/components/UserAvatar";
 
 export const Header = () => {
   return (
@@ -18,7 +18,7 @@ export const Header = () => {
               <Link href="/explore">Explore</Link>
             </Button>
 
-            <AuthButton />
+            <UserAvatar />
           </div>
         </div>
       </div>

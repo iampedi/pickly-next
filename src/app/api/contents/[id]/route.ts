@@ -1,6 +1,7 @@
 // src/app/api/contents/[id]/route.ts
-import { NextResponse } from "next/server";
+import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export async function GET(request: Request, context: any) {
@@ -8,12 +9,8 @@ export async function GET(request: Request, context: any) {
     const { id } = context.params;
     const content = await prisma.content.findUnique({ where: { id } });
     return NextResponse.json(content);
-  } catch (error) {
-    console.error("Error fetching content:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch content" },
-      { status: 500 },
-    );
+  } catch (err) {
+    return handleApiError(err);
   }
 }
 
@@ -49,28 +46,23 @@ export async function PUT(request: Request, context: any) {
     });
 
     return NextResponse.json(updated);
-  } catch (error) {
-    console.error("Error updating content:", error);
-    return NextResponse.json(
-      { error: "Failed to update content" },
-      { status: 500 },
-    );
+  } catch (err) {
+    return handleApiError(err);
   }
 }
 
-export async function DELETE(request: Request, context: any) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     await prisma.content.delete({ where: { id } });
     return NextResponse.json(
       { message: "Content deleted successfully" },
       { status: 200 },
     );
-  } catch (error) {
-    console.error("Error deleting content:", error);
-    return NextResponse.json(
-      { error: "Failed to delete content" },
-      { status: 500 },
-    );
+  } catch (err) {
+    return handleApiError(err);
   }
 }

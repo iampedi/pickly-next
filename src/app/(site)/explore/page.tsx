@@ -16,8 +16,9 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+} from "@/components/theme/carousel";
 import { RowsIcon } from "@phosphor-icons/react/dist/ssr";
+import { handleClientError } from "@/lib/handleClientError";
 
 export default function ContentsPage() {
   const ref = useRef<HTMLDivElement>(null);
@@ -48,11 +49,10 @@ export default function ContentsPage() {
       try {
         const res = await axios.get(`/api/contents`);
         const data: Content[] = res.data;
-
         setContents(data);
         setLoading(false);
-      } catch (error) {
-        console.error("Error fetching contents:", error);
+      } catch (err) {
+        handleClientError(err, "Failed to fetch contents.");
       }
     };
 
@@ -83,7 +83,7 @@ export default function ContentsPage() {
                 return (
                   <CarouselItem
                     key={type.value}
-                    className="basis-2/5 pl-2 md:basis-auto"
+                    className="basis-2/5 md:basis-auto"
                     onClick={() => handleFilterClick(type.value)}
                   >
                     <div
@@ -110,7 +110,7 @@ export default function ContentsPage() {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid flex-1 gap-4 md:grid-cols-2">
+            <div className="grid flex-1 content-start gap-4 md:grid-cols-2">
               {!loading && contents.length === 0 && (
                 <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500">
                   There are no contents to show.

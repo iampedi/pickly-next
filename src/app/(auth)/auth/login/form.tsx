@@ -47,7 +47,7 @@ export function LoginForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
-  const { refetch } = useAuth();
+  const { user, refetch } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -67,15 +67,22 @@ export function LoginForm({
 
   const onSubmit = async (values: LoginFormValues) => {
     setLoading(true);
+
     try {
       await axios.post("/api/auth/login", values, {
         withCredentials: true,
       });
-
       await refetch();
 
+      if (!user?.isAdmin && !user?.isCurator) {
+        toast.success("Login successful.");
+        router.push("/");
+        return;
+      }
+
       const next = searchParams.get("next");
-      router.push(next || "/panel?login=true");
+      toast.success("Login successful.");
+      router.push(next || "/panel");
     } catch (err) {
       handleClientError(err, "Login failed.");
     } finally {

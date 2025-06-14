@@ -1,14 +1,27 @@
 // src/app/panel/contents/ContentForm.tsx
 "use client";
+
 import { contentTypes } from "@/constants/conent-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+
 // UI Imports
+import Loader from "@/components/Loader";
 import { Button } from "@/components/theme/Button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/theme/form";
 import { Input } from "@/components/theme/input";
 import {
   Select,
@@ -24,19 +37,9 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/theme/form";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import Loader from "@/components/Loader";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
+import { handleClientError } from "@/lib/handleClientError";
 
 const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
   string,
@@ -118,21 +121,15 @@ export default function ContentForm({
     try {
       if (mode === "update" && id) {
         await axios.put(`/api/contents/${id}`, values);
-        router.push("/panel/contents?updated=true");
+        toast.success("Content updated successfully.");
+        router.push("/panel/contents");
       } else {
         await axios.post(`/api/contents`, values);
-        router.push("/panel/contents?submitted=true");
+        toast.success("Content submitted successfully.");
+        router.push("/panel/contents");
       }
-    } catch (error) {
-      let errorMsg = "Something went wrong. Please try again.";
-
-      if (axios.isAxiosError(error)) {
-        errorMsg = error.response?.data?.error || error.message || errorMsg;
-      } else if (error instanceof Error) {
-        errorMsg = error.message;
-      }
-
-      toast.error(errorMsg);
+    } catch (err) {
+      handleClientError(err, "Failed to submit content.");
     } finally {
       setLoading(false);
     }

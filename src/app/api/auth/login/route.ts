@@ -62,11 +62,6 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    console.log(
-      "login file --------------------------",
-      process.env.JWT_SECRET,
-    );
-
     return response;
   } catch (err) {
     return handleApiError(err);

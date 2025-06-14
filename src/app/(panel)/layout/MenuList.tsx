@@ -2,9 +2,9 @@
 import { NavLink } from "@/components/theme/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  BookBookmarkIcon,
   BookmarkIcon,
-  CrownSimpleIcon,
+  BooksIcon,
+  SquaresFourIcon,
   StarIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
@@ -24,7 +24,7 @@ const panelMenu: MenuItem[] = [
   {
     label: "Panel",
     href: "/panel",
-    icon: <CrownSimpleIcon weight="duotone" />,
+    icon: <SquaresFourIcon weight="duotone" />,
     canAccess: () => true,
   },
   {
@@ -36,7 +36,7 @@ const panelMenu: MenuItem[] = [
   {
     label: "Contents",
     href: "/panel/contents",
-    icon: <BookBookmarkIcon weight="duotone" />,
+    icon: <BooksIcon weight="duotone" />,
     canAccess: (user) => !!user.isAdmin,
   },
   {

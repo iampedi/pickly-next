@@ -5,25 +5,28 @@ import { useAuth } from "@/contexts/AuthContext";
 import { handleClientError } from "@/lib/handleClientError";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // UI Imports
 import Loader from "@/components/Loader";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   CrownIcon,
-  HeartIcon,
   PowerIcon,
   ShieldCheckIcon,
+  SquaresFourIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { toast } from "sonner";
+import { LoginButton } from "./LoginButton";
 
 export const UserAvatar = () => {
   const { user, loading, setUser, refetch } = useAuth();
@@ -46,7 +49,9 @@ export const UserAvatar = () => {
     return name.trim().split(" ")[0];
   };
 
-  if (loading || !user) return <Loader />;
+  if (loading) return <Loader />;
+
+  if (!user) return <LoginButton />;
 
   return (
     <DropdownMenu>
@@ -62,32 +67,46 @@ export const UserAvatar = () => {
           />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-36" align="center">
-        <DropdownMenuLabel className="flex items-center gap-2 text-rose-600">
+      <DropdownMenuContent className="w-40" align="center">
+        <DropdownMenuLabel className="flex items-center gap-1.5 text-rose-600">
           {user.isAdmin ? (
             <>
-              <ShieldCheckIcon className="size-5" weight="duotone" />
-              <span className="uppercase">Admin</span>
+              <ShieldCheckIcon size={20} weight="duotone" />
+              <span>Admin</span>
             </>
           ) : user.isCurator ? (
             <>
-              <CrownIcon className="size-5" weight="duotone" />
-              <span className="uppercase">Curator</span>
+              <CrownIcon size={20} weight="duotone" />
+              <span>Curator</span>
             </>
-          ) : (
+          ) : null}
+        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          {(user.isAdmin || user.isCurator) && (
             <>
-              <HeartIcon className="size-5" weight="duotone" />
-              <span className="uppercase">User</span>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => router.push("/panel")}
+              >
+                Dashboard
+                <DropdownMenuShortcut>
+                  <SquaresFourIcon />
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
             </>
           )}
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer hover:bg-gray-100"
-          onClick={handleLogout}
-        >
-          <PowerIcon className="text-primary size-5" /> Log out
-        </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="cursor-pointer hover:bg-gray-100"
+            onClick={handleLogout}
+          >
+            Log out
+            <DropdownMenuShortcut>
+              <PowerIcon />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
