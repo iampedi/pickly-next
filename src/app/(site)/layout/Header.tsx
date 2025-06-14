@@ -1,4 +1,7 @@
 // src/app/(site)/layout/Header.tsx
+"use client";
+
+import { useAuth } from "@/contexts/AuthContext";
 
 // UI Imports
 import { Logo } from "@/components/Logo";
@@ -10,6 +13,8 @@ type MenuListProps = {
 };
 
 export const Header = ({ onClick }: MenuListProps) => {
+  const { user } = useAuth();
+
   return (
     <header>
       <div className="continer mx-auto h-full max-w-5xl px-4">
@@ -27,15 +32,17 @@ export const Header = ({ onClick }: MenuListProps) => {
               Explore
             </NavLink>
 
-            <NavLink
-              variant="menu"
-              size="link"
-              key={"collection"}
-              href="/collection"
-              onClick={onClick}
-            >
-              My Collection
-            </NavLink>
+            {user && (
+              <NavLink
+                variant="menu"
+                size="link"
+                key={"collection"}
+                href="/collection"
+                onClick={onClick}
+              >
+                My Collection
+              </NavLink>
+            )}
 
             <UserAvatar />
           </div>

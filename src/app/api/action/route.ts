@@ -24,7 +24,11 @@ export async function POST(req: NextRequest) {
   const { contentId, type } = await req.json();
 
   // --- چک کردن معتبر بودن پارامترها
-  if (!contentId || !type || !Object.values(ActionType).includes(type as ActionType)) {
+  if (
+    !contentId ||
+    !type ||
+    !Object.values(ActionType).includes(type as ActionType)
+  ) {
     return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
   }
 
@@ -33,7 +37,10 @@ export async function POST(req: NextRequest) {
   const userId = token ? getUserIdFromToken(token) : null;
 
   if (!userId) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json(
+      { error: "You need to be logged in." },
+      { status: 401 },
+    );
   }
 
   // --- toggle رفتار
