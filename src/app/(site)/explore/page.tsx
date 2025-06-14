@@ -45,6 +45,7 @@ export default function ExplorePage() {
 
   useEffect(() => {
     setLoading(true);
+
     const fetchContents = async (): Promise<void> => {
       try {
         const res = await axios.get(`/api/contents`);

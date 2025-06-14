@@ -10,33 +10,34 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 function getUserIdFromToken(token: string) {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
-    return payload.id;
+    const payload = jwt.verify(token, JWT_SECRET) as { userId: string };
+    return payload.userId;
   } catch {
     return null;
   }
 }
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(AUTH_COOKIE)?.value;
+  const token = (await cookies()).get(AUTH_COOKIE)?.value;
   const userId = token ? getUserIdFromToken(token) : null;
 
   if (!userId) {
     return NextResponse.json([], { status: 200 });
   }
 
-  // پیدا کردن تمام بوکمارک‌های کاربر
+  if (!userId) {
+    return NextResponse.json([], { status: 200 });
+  }
+
   const bookmarks = await prisma.userContentAction.findMany({
     where: {
       userId,
       type: "BOOKMARK",
     },
-    include: { content: true }, // اطلاعات کامل محتوا
+    include: { content: true },
     orderBy: { createdAt: "desc" },
   });
 
-  // فقط contentها رو برگردون (یا اگر اطلاعات کامل action می‌خوای، عوضش کن)
   const contents = bookmarks.map((b) => b.content);
 
   return NextResponse.json(contents);

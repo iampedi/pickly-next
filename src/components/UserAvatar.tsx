@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   CrownIcon,
+  HeartIcon,
   PowerIcon,
   ShieldCheckIcon,
   SquaresFourIcon,
@@ -79,12 +80,18 @@ export const UserAvatar = () => {
               <CrownIcon size={20} weight="duotone" />
               <span>Curator</span>
             </>
-          ) : null}
+          ) : (
+            <>
+              <HeartIcon size={20} weight="duotone" />
+              <span>User</span>
+            </>
+          )}
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
           {(user.isAdmin || user.isCurator) && (
             <>
-              <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer hover:bg-gray-100"
                 onClick={() => router.push("/panel")}

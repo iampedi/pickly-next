@@ -5,7 +5,7 @@ import { contentTypes } from "@/constants/conent-types";
 import { cn } from "@/lib/utils";
 import type { Content } from "@/types/contents";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // UI Imports
 import { HomeContentCard } from "@/app/layout/HomeContentCard";
@@ -21,50 +21,46 @@ import { RowsIcon } from "@phosphor-icons/react/dist/ssr";
 import { handleClientError } from "@/lib/handleClientError";
 
 export default function CollectionPage() {
-  const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [contents, setContents] = useState<Content[]>([]);
   const [activeType, setActiveType] = useState<string | null>(null);
-  const [pendingScroll, setPendingScroll] = useState(false);
+  const [changeBookmark, setChangeBookmark] = useState(0);
+  const usedTypes = new Set<string>(contents.map((c) => c.type));
+  const filterItems = [
+    { value: null, label: "All", icon: RowsIcon },
+    ...contentTypes.filter((type) => usedTypes.has(type.value)),
+  ];
 
   function handleFilterClick(type: string | null) {
     setActiveType(type);
-    setPendingScroll(true);
   }
-
-  useEffect(() => {
-    if (pendingScroll) {
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      setPendingScroll(false);
-    }
-  }, [pendingScroll]);
 
   const getContentTypeMeta = (value: string) => {
     return contentTypes.find((c) => c.value === value);
   };
 
   useEffect(() => {
-    setLoading(true);
-    const fetchContents = async (): Promise<void> => {
+    const fetchContents = async () => {
+      setLoading(true);
+
       try {
-        const res = await axios.get(`/api/contents`);
-        const data: Content[] = res.data;
-        setContents(data);
+        const res = await axios.get(`/api/bookmarks`, {
+          withCredentials: true,
+        });
+        setContents(res.data);
+      } catch (error) {
+        handleClientError(error, "Failed to fetch bookmarks.");
+      } finally {
         setLoading(false);
-      } catch (err) {
-        handleClientError(err, "Failed to fetch contents.");
       }
     };
 
     fetchContents();
-  }, []);
+  }, [changeBookmark]);
 
-  const usedTypes = new Set<string>(contents.map((c) => c.type));
-
-  const filterItems = [
-    { value: null, label: "All", icon: RowsIcon },
-    ...contentTypes.filter((type) => usedTypes.has(type.value)),
-  ];
+  useEffect(() => {
+    console.log(changeBookmark);
+  }, [changeBookmark]);
 
   return (
     <main className="flex flex-1 flex-col">
@@ -113,7 +109,7 @@ export default function CollectionPage() {
             <div className="grid flex-1 content-start gap-4 md:grid-cols-2">
               {!loading && contents.length === 0 && (
                 <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500">
-                  There are no contents to show.
+                  There are no collected items.
                 </div>
               )}
 
@@ -135,6 +131,9 @@ export default function CollectionPage() {
                       content={content}
                       Icon={Icon}
                       meta={meta}
+                      onChangeBookmark={() =>
+                        setChangeBookmark(changeBookmark + 1)
+                      }
                     />
                   );
                 })}

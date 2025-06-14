@@ -2,7 +2,6 @@
 import { NavLink } from "@/components/theme/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  BookmarkIcon,
   BooksIcon,
   SquaresFourIcon,
   StarIcon,
@@ -39,12 +38,6 @@ const panelMenu: MenuItem[] = [
     icon: <BooksIcon weight="duotone" />,
     canAccess: (user) => !!user.isAdmin,
   },
-  {
-    label: "Bookmarks",
-    href: "/panel/bookmarks",
-    icon: <BookmarkIcon weight="duotone" />,
-    canAccess: () => true,
-  },
 ];
 export const MenuList = ({ onClick }: MenuListProps) => {
   const { user } = useAuth();
@@ -56,7 +49,13 @@ export const MenuList = ({ onClick }: MenuListProps) => {
       {panelMenu
         .filter((item) => item.canAccess(user))
         .map((item) => (
-          <NavLink variant="panel" size="menu" key={item.href} href={item.href} onClick={onClick}>
+          <NavLink
+            variant="panel"
+            size="menu"
+            key={item.href}
+            href={item.href}
+            onClick={onClick}
+          >
             {item.icon}
             <span>{item.label}</span>
           </NavLink>

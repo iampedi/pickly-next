@@ -16,6 +16,7 @@ import {
   HandsPrayingIcon,
   SparkleIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import { toast } from "sonner";
 
 type Meta = {
   label: string;
@@ -26,19 +27,26 @@ type ContentCardProps = {
   Icon?: ComponentType<IconProps>;
   meta?: Meta;
   handleDelete?: (id: string) => void;
+  onChangeBookmark?: () => void;
 };
 
-export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
+export const HomeContentCard = ({
+  onChangeBookmark,
+  content,
+  Icon,
+  meta,
+}: ContentCardProps) => {
   const [bookmarkActive, setBookmarkActive] = useState(false);
   const [inspiredActive, setInspiredActive] = useState(false);
   const [thanksActive, setThanksActive] = useState(false);
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchActions = async () => {
       try {
         const res = await axios.get("/api/action", {
           params: { contentId: content.id },
+          withCredentials: true,
         });
         setBookmarkActive(res.data.bookmark);
         setInspiredActive(res.data.inspired);
@@ -59,13 +67,39 @@ export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
         type,
       });
 
-      if (type === "BOOKMARK") setBookmarkActive((v) => !v);
-      if (type === "INSPIRED") setInspiredActive((v) => !v);
-      if (type === "THANKS") setThanksActive((v) => !v);
+      if (type === "BOOKMARK") {
+        const next = !bookmarkActive;
+        setBookmarkActive(next);
+        toast.success(
+          next ? "This item is collected." : "This item is uncollected.",
+        );
+      }
+
+      if (type === "INSPIRED") {
+        const next = !inspiredActive;
+        setInspiredActive(next);
+        toast.success(
+          next ? "This item is inspired." : "This item is uninspired.",
+        );
+      }
+
+      if (type === "THANKS") {
+        const next = !thanksActive;
+        setThanksActive(next);
+        toast.success(
+          next ? "This item is thanked." : "This item is unthanked.",
+        );
+      }
+
+      if (type === "BOOKMARK" && typeof onChangeBookmark === "function") {
+        onChangeBookmark();
+      }
     } catch (err) {
       handleClientError(err, "Failed to handle action.");
     }
   };
+
+  if (loading) return null;
 
   return (
     <Card className="group relative border-lime-200/75 bg-lime-50/35 duration-300 hover:border-lime-300/75 hover:bg-lime-50/70">

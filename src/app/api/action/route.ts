@@ -9,10 +9,11 @@ const AUTH_COOKIE = "token";
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 // Helper: استخراج userId از JWT
-function getUserIdFromToken(token: string) {
+function getUserIdFromToken(token: string): string | null {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
-    return payload.id;
+    // با توجه به ساختار توکن که userId هست
+    const payload = jwt.verify(token, JWT_SECRET) as { userId: string };
+    return payload.userId;
   } catch {
     return null;
   }
@@ -23,13 +24,12 @@ export async function POST(req: NextRequest) {
   const { contentId, type } = await req.json();
 
   // --- چک کردن معتبر بودن پارامترها
-  if (!Object.values(ActionType).includes(type as ActionType)) {
+  if (!contentId || !type || !Object.values(ActionType).includes(type as ActionType)) {
     return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
   }
 
   // --- خواندن و وریفای توکن
-  const cookieStore = await cookies();
-  const token = cookieStore.get(AUTH_COOKIE)?.value;
+  const token = (await cookies()).get(AUTH_COOKIE)?.value;
   const userId = token ? getUserIdFromToken(token) : null;
 
   if (!userId) {
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: "added" });
     }
   } catch (err) {
-    console.error(err);
+    console.error("Server error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
@@ -82,18 +82,18 @@ export async function GET(req: NextRequest) {
   const contentId = searchParams.get("contentId");
 
   // توکن و userId
-  const cookieStore = await cookies();
-  const token = cookieStore.get(AUTH_COOKIE)?.value;
+  const token = (await cookies()).get(AUTH_COOKIE)?.value;
   const userId = token ? getUserIdFromToken(token) : null;
+
+  if (!contentId) {
+    return NextResponse.json({ error: "Missing contentId" }, { status: 400 });
+  }
 
   if (!userId) {
     return NextResponse.json(
       { bookmark: false, inspired: false, thanks: false },
       { status: 200 },
     );
-  }
-  if (!contentId) {
-    return NextResponse.json({ error: "Missing contentId" }, { status: 400 });
   }
 
   // همه اکشن‌های این کاربر روی این content
