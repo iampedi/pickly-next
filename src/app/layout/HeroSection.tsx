@@ -1,7 +1,9 @@
 // src/pages/home/HeroSection.tsx
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
+
 // UI Imports
 import image from "@/assets/images/hero-section-01.webp";
 import { Button } from "@/components/theme/Button";
@@ -30,7 +32,7 @@ export default function HeroSection() {
                 size={"lg"}
                 asChild
               >
-                <Link href="/auth/login">Become a Curator</Link>
+                <Link href="/explore">Explore Contents</Link>
               </Button>
             </div>
             <div className="md:w-1/3">
