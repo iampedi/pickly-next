@@ -1,4 +1,4 @@
-// src/app/(site)/explore/page.tsx
+// src/app/(site)/collection/page.tsx
 "use client";
 
 import { contentTypes } from "@/constants/conent-types";
@@ -20,7 +20,7 @@ import {
 import { RowsIcon } from "@phosphor-icons/react/dist/ssr";
 import { handleClientError } from "@/lib/handleClientError";
 
-export default function ExplorePage() {
+export default function CollectionPage() {
   const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [contents, setContents] = useState<Content[]>([]);

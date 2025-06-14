@@ -22,6 +22,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-6 hover:underline font-semibold",
         panel:
           "bg-gray-100 text-gray-500 hover:bg-lime-100 duration-300 justify-start rounded-xl [&_svg:not([class*='size-'])]:size-6 gap-4 hover:text-lime-700",
+        menu: "text-primary  font-semibold rounded-none leading-normal hover:bg-lime-100",
       },
       size: {
         default:
@@ -30,6 +31,7 @@ const buttonVariants = cva(
         lg: "h-11 px-6 has-[>svg]:pl-4 has-[>svg]:pr-5 [&_svg:not([class*='size-'])]:size-6 text-[17px]",
         icon: "size-11",
         menu: "h-13 px-4",
+        link: "p-0",
       },
       active: {
         true: "bg-lime-100 text-primary",

@@ -31,7 +31,7 @@ const panelMenu: MenuItem[] = [
     label: "Curations",
     href: "/panel/curations",
     icon: <StarIcon weight="duotone" />,
-    canAccess: (user) => !!user.isAdmin || !!user.isCurator,
+    canAccess: () => true,
   },
   {
     label: "Contents",
@@ -56,7 +56,7 @@ export const MenuList = ({ onClick }: MenuListProps) => {
       {panelMenu
         .filter((item) => item.canAccess(user))
         .map((item) => (
-          <NavLink key={item.href} href={item.href} onClick={onClick}>
+          <NavLink variant="panel" size="menu" key={item.href} href={item.href} onClick={onClick}>
             {item.icon}
             <span>{item.label}</span>
           </NavLink>

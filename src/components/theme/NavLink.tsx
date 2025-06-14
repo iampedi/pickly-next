@@ -9,6 +9,8 @@ export function NavLink({
   href,
   children,
   onClick,
+  variant,
+  size,
   exact = true,
   className,
   ...props
@@ -16,6 +18,16 @@ export function NavLink({
   href: string;
   children: React.ReactNode;
   onClick?: () => void;
+  variant?:
+    | "menu"
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "panel";
+  size?: "default" | "sm" | "lg" | "icon" | "menu" | "link";
   exact?: boolean;
   className?: string;
   activeClass?: string;
@@ -26,8 +38,8 @@ export function NavLink({
   return (
     <Button
       className={cn(className)}
-      variant={"panel"}
-      size={"menu"}
+      variant={variant}
+      size={size}
       active={isActive && true}
       asChild
       onClick={onClick}

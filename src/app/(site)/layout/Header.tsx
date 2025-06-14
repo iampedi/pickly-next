@@ -1,22 +1,41 @@
 // src/app/(site)/layout/Header.tsx
-import Link from "next/link";
 
 // UI Imports
 import { Logo } from "@/components/Logo";
-import { Button } from "@/components/theme/Button";
 import { UserAvatar } from "@/components/UserAvatar";
+import { NavLink } from "@/components/theme/NavLink";
 
-export const Header = () => {
+type MenuListProps = {
+  onClick?: () => void;
+};
+
+export const Header = ({ onClick }: MenuListProps) => {
   return (
     <header>
       <div className="continer mx-auto h-full max-w-5xl px-4">
-        <div className="flex items-center justify-between py-5">
+        <div className="leadin flex items-center justify-between py-5">
           <Logo />
 
-          <div className="flex items-center gap-2.5">
-            <Button variant="link" asChild>
-              <Link href="/explore">Explore</Link>
-            </Button>
+          <div className="flex items-center gap-8">
+            <NavLink
+              variant="menu"
+              size="link"
+              key={"explore"}
+              href="/explore"
+              onClick={onClick}
+            >
+              Explore
+            </NavLink>
+
+            <NavLink
+              variant="menu"
+              size="link"
+              key={"collection"}
+              href="/collection"
+              onClick={onClick}
+            >
+              My Collection
+            </NavLink>
 
             <UserAvatar />
           </div>

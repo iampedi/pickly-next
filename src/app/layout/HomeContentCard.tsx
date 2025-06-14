@@ -1,19 +1,21 @@
-// src/app/layout/ContentCard.tsx
+// src/app/layout/Conten
 "use client";
-import { useEffect, useState } from "react";
+
+import { handleClientError } from "@/lib/handleClientError";
+import { Content } from "@/types/contents";
+import axios from "axios";
+import { ComponentType, useEffect, useState } from "react";
+
+// UI Imports
+import { ToggleIcon } from "@/components/theme/ToggleIcon";
 import { TooltipWrapper } from "@/components/theme/TooltipWrapper";
 import { Card, CardContent } from "@/components/ui/card";
-import { Content } from "@/types/contents";
 import { IconProps } from "@phosphor-icons/react/dist/lib/types";
 import {
   BookmarkIcon,
   HandsPrayingIcon,
   SparkleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { ComponentType } from "react";
-import { ToggleIcon } from "@/components/theme/ToggleIcon";
-import axios from "axios";
-import { toast } from "sonner";
 
 type Meta = {
   label: string;
@@ -27,13 +29,11 @@ type ContentCardProps = {
 };
 
 export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
-  // --- state برای فعال بودن هر اکشن
   const [bookmarkActive, setBookmarkActive] = useState(false);
   const [inspiredActive, setInspiredActive] = useState(false);
   const [thanksActive, setThanksActive] = useState(false);
   const [, setLoading] = useState(true);
 
-  // --- گرفتن وضعیت اولیه اکشن‌ها از سرور
   useEffect(() => {
     const fetchActions = async () => {
       try {
@@ -43,8 +43,8 @@ export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
         setBookmarkActive(res.data.bookmark);
         setInspiredActive(res.data.inspired);
         setThanksActive(res.data.thanks);
-      } catch {
-        // می‌تونی خطا رو هندل کنی
+      } catch (err) {
+        handleClientError(err, "Failed to fetch actions.");
       } finally {
         setLoading(false);
       }
@@ -52,21 +52,18 @@ export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
     fetchActions();
   }, [content.id]);
 
-  // --- هندل کلیک برای هر اکشن
   const handleAction = async (type: "BOOKMARK" | "INSPIRED" | "THANKS") => {
     try {
       await axios.post("/api/action", {
         contentId: content.id,
         type,
       });
-      // toggle هر کدوم
+
       if (type === "BOOKMARK") setBookmarkActive((v) => !v);
       if (type === "INSPIRED") setInspiredActive((v) => !v);
       if (type === "THANKS") setThanksActive((v) => !v);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        toast.error("Please login to perform this action.");
-      }
+      handleClientError(err, "Failed to handle action.");
     }
   };
 
@@ -102,13 +99,13 @@ export const HomeContentCard = ({ content, Icon, meta }: ContentCardProps) => {
             <div className="animate-in flex items-center gap-4 text-gray-400 duration-300 group-hover:text-lime-800">
               <ToggleIcon
                 icon={BookmarkIcon}
-                tooltip="Save"
+                tooltip="Collect"
                 active={bookmarkActive}
                 onClick={() => handleAction("BOOKMARK")}
               />
               <ToggleIcon
                 icon={SparkleIcon}
-                tooltip="Inspiring"
+                tooltip="Inspired"
                 active={inspiredActive}
                 onClick={() => handleAction("INSPIRED")}
               />
