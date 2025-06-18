@@ -1,7 +1,7 @@
 // src/app/page.tsx
 "use client";
 
-import HeroSection from "@/app/layout/HeroSection";
+import HeroSection from "@/app/(site)/components/HeroSection";
 
 export default function HomePage() {
   return (

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // UI Imports
-import { CurationCard } from "@/app/layout/CurationCard";
+import { CurationCard } from "@/app/(site)/components/CurationCard";
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";

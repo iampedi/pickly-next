@@ -7,7 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // UI Imports
-import { ContentCard } from "@/app/(panel)/layout/ContentCard";
+import { ContentCard } from "@/app/(panel)/components/ContentCard";
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";

@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 // UI Imports
-import { PanelHeader } from "@/app/(panel)/layout/PanelHeader";
-import { PanelSide } from "@/app/(panel)/layout/PanelSide";
+import { PanelHeader } from "@/app/layout/PanelHeader";
+import { PanelSide } from "@/app/layout/PanelSide";
 import { Footer } from "@/app/layout/Footer";
 import Loader from "@/components/Loader";
 

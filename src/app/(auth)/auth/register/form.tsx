@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 // UI Imports
-import { UserTypesDialog } from "@/app/layout/UserTypesDialog";
+import { UserTypesDialog } from "@/components/UserTypesDialog";
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";

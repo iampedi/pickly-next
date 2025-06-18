@@ -1,5 +1,5 @@
 import { Footer } from "@/app/layout/Footer";
-import { Header } from "@/app/(site)/layout/Header";
+import { Header } from "@/app/layout/Header";
 
 export default function SiteLayout({
   children,

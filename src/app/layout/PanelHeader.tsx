@@ -3,7 +3,7 @@
 import { Logo } from "@/components/Logo";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ListIcon } from "@phosphor-icons/react/dist/ssr";
-import { MobileMenu } from "@/app/(panel)/layout/MobileMenu";
+import { MobileMenu } from "@/app/layout/MobileMenu";
 import { useState } from "react";
 
 export const PanelHeader = () => {

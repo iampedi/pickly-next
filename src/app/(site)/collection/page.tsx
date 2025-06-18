@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // UI Imports
-import { HomeContentCard } from "@/app/layout/HomeContentCard";
+import { HomeContentCard } from "@/app/(site)/components/HomeContentCard";
 import Loader from "@/components/Loader";
 import {
   Carousel,
