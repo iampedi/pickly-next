@@ -74,7 +74,7 @@ export function LoginForm({
       });
       await refetch();
 
-      if (!user?.isAdmin && !user?.isCurator) {
+      if (user?.role === "USER") {
         toast.success("Login successful.");
         router.push("/");
         return;

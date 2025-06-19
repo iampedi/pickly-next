@@ -10,7 +10,7 @@ import {
   TrashIcon,
   UserSoundIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Curation } from "@/types/curations";
+import { Curation } from "@/types/curation";
 
 type Meta = {
   label: string;

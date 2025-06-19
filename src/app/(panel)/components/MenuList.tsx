@@ -12,7 +12,7 @@ type MenuItem = {
   href: string;
   icon: React.ReactNode;
   onClick?: MenuListProps["onClick"];
-  canAccess: (user: { isAdmin?: boolean; isCurator?: boolean }) => boolean;
+  canAccess: (user: { role: string }) => boolean;
 };
 
 type MenuListProps = {
@@ -36,7 +36,7 @@ const panelMenu: MenuItem[] = [
     label: "Contents",
     href: "/panel/contents",
     icon: <BooksIcon weight="duotone" />,
-    canAccess: (user) => !!user.isAdmin,
+    canAccess: (user) => user.role === "ADMIN",
   },
 ];
 export const MenuList = ({ onClick }: MenuListProps) => {

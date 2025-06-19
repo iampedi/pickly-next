@@ -1,6 +1,7 @@
 // src/app/api/contents/[id]/route.ts
 import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -51,13 +52,29 @@ export async function PUT(request: Request, context: any) {
   }
 }
 
+// Delete a Content: DELETE /api/contents/:id
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    await prisma.content.delete({ where: { id } });
+
+    const content = await prisma.content.findUnique({ where: { id } });
+    if (!content) {
+      return NextResponse.json(
+        { error: "Content not found." },
+        { status: 404 },
+      );
+    }
+
+    await prisma.$transaction([
+      prisma.contentTag.deleteMany({ where: { contentId: id } }),
+      prisma.curation.deleteMany({ where: { contentId: id } }),
+      prisma.userContentAction.deleteMany({ where: { contentId: id } }),
+      prisma.content.delete({ where: { id } }),
+    ]);
+
     return NextResponse.json(
       { message: "Content deleted successfully" },
       { status: 200 },

@@ -1,9 +1,9 @@
 // src/app/(site)/collection/page.tsx
 "use client";
 
-import { contentTypes } from "@/constants/conent-types";
+import { contentTypes } from "@/constants/content-categories";
 import { cn } from "@/lib/utils";
-import type { Content } from "@/types/contents";
+import type { Content } from "@/types/content";
 import axios from "axios";
 import { useEffect, useState } from "react";
 

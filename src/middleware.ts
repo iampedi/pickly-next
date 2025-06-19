@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    if (!(payload.isAdmin || payload.isCurator)) {
+    if (payload.role === "USER") {
       return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();

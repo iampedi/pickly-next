@@ -25,8 +25,7 @@ export async function GET(req: NextRequest) {
         email: true,
         fullname: true,
         username: true,
-        isAdmin: true,
-        isCurator: true,
+        role: true,
       },
     });
 

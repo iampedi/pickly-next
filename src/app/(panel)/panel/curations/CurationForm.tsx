@@ -24,7 +24,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { contentTypes } from "@/constants/conent-types";
+import { contentTypes } from "@/constants/content-categories";
 import { useAuth } from "@/contexts/AuthContext";
 import { handleClientError } from "@/lib/handleClientError";
 import { zodResolver } from "@hookform/resolvers/zod";

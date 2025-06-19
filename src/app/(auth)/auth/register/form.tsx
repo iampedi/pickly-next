@@ -4,6 +4,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { handleClientError } from "@/lib/handleClientError";
 import { cn } from "@/lib/utils";
+import { Role } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Image from "next/image";
@@ -15,7 +16,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 // UI Imports
-import { UserTypesDialog } from "@/components/UserTypesDialog";
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
 import { Button } from "@/components/theme/Button";
@@ -36,6 +36,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { UserTypesDialog } from "@/components/UserTypesDialog";
 import {
   CircleNotchIcon,
   CrownIcon,
@@ -52,9 +53,7 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
-  type: z.enum(["user", "curator", "admin"], {
-    required_error: "User type is required",
-  }),
+  role: z.enum(["user", "curator", "admin"]),
 });
 
 type RegisterFormValues = z.infer<typeof formSchema>;
@@ -69,13 +68,19 @@ export function RegisterForm({
   const [open, setOpen] = useState(false);
   const { refetch } = useAuth();
 
+  const roleMap: Record<RegisterFormValues["role"], Role> = {
+    user: "USER",
+    curator: "CURATOR",
+    admin: "ADMIN",
+  };
+
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullname: "",
       email: "",
       password: "",
-      type: "user",
+      role: "user",
     },
   });
 
@@ -85,11 +90,7 @@ export function RegisterForm({
 
     const submitData = { ...values } as Record<string, unknown>;
 
-    if (values.type === "curator") {
-      submitData.isCurator = true;
-    } else if (values.type === "admin") {
-      submitData.isAdmin = true;
-    }
+    submitData.role = roleMap[values.role];
 
     try {
       await axios.post("/api/auth/register", submitData, {
@@ -171,7 +172,7 @@ export function RegisterForm({
 
                   <FormField
                     control={form.control}
-                    name="type"
+                    name="role"
                     render={({ field }) => (
                       <FormItem>
                         <Select

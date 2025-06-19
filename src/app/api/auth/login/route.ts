@@ -37,8 +37,7 @@ export async function POST(request: NextRequest) {
     const token = signJwt({
       userId: user.id,
       email: user.email,
-      isCurator: user.isCurator,
-      isAdmin: user.isAdmin,
+      role: user.role,
     });
 
     const response = NextResponse.json(
@@ -47,8 +46,7 @@ export async function POST(request: NextRequest) {
           id: user.id,
           email: user.email,
           fullname: user.fullname,
-          isCurator: user.isCurator,
-          isAdmin: user.isAdmin,
+          role: user.role,
         },
       },
       { status: 200 },

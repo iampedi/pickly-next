@@ -7,19 +7,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id        String    @id @default(uuid())
+  value     String    @unique
+  label     String
+  icon      String
+  contents  Content[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Tag {
+  id         String       @id @default(uuid())
+  name       String       @unique
+  ContentTag ContentTag[]
+}
+
+model ContentTag {
+  tagId     String
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  contentId String
+  content   Content @relation(fields: [contentId], references: [id])
+
+  @@id([contentId, tagId])
+}
+
 model Content {
   id                String              @id @default(uuid())
+  categoryId        String
+  category          Category            @relation(fields: [categoryId], references: [id])
   title             String
-  type              ContentType
+  image             String
   link              String
-  tags              String[]
-  description       String?
+  description       String
+  contentTags       ContentTag[]
   curations         Curation[]
+  UserContentAction UserContentAction[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  UserContentAction UserContentAction[]
 
-  @@unique([title, type])
+  @@unique([title, categoryId])
+  @@index([categoryId])
+  @@index([createdAt])
 }
 
 model Curation {
@@ -42,14 +71,13 @@ model User {
   avatar            String?
   email             String              @unique
   password          String
+  role              Role                @default(USER)
+  curations         Curation[]
+  UserContentAction UserContentAction[]
   isActive          Boolean             @default(false)
   isVerified        Boolean             @default(false)
-  isAdmin           Boolean             @default(false)
-  isCurator         Boolean             @default(false)
-  curations         Curation[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  UserContentAction UserContentAction[]
 }
 
 model UserContentAction {
@@ -71,28 +99,8 @@ enum ActionType {
   THANKS
 }
 
-enum ContentType {
-  APP
-  ARTICLE
-  BAND
-  BLOG
-  BOOK
-  COURSE
-  DOCUMENTARY
-  EVENT
-  GAME
-  IMAGE
-  INSTAGRAM
-  MOVIE
-  NEWS
-  PODCAST
-  PROJECT
-  RESOURCE
-  SERIES
-  SONG
-  TIKTOK
-  TOOL
-  VIDEO
-  WEBSITE
-  YOUTUBE
+enum Role {
+  USER
+  CURATOR
+  ADMIN
 }

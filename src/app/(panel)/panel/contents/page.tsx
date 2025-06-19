@@ -1,8 +1,7 @@
 // src/app/panel/contents/page.tsx
 "use client";
 
-import { contentTypes } from "@/constants/conent-types";
-import { Content } from "@/types/contents";
+import { Content } from "@/types/content";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -13,19 +12,33 @@ import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
 import { handleClientError } from "@/lib/handleClientError";
+import { Category } from "@/types";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
 
   const getContentTypeMeta = (value: string) => {
-    return contentTypes.find((c) => c.value === value);
+    return categories.find((c) => c.value === value);
   };
 
   // Fetch Contents
   useEffect(() => {
     const fetchContents = async () => {
       setLoading(true);
+
+      const fetchCategories = async () => {
+        try {
+          const res = await axios.get("/api/categories");
+          setCategories(res.data);
+        } catch (err) {
+          handleClientError(err, "Failed to fetch categories.");
+        }
+      };
+
+      fetchCategories();
+
       try {
         const res = await axios.get(`/api/contents`);
         const data = res.data;
@@ -49,6 +62,10 @@ export default function PanelContentPage() {
       handleClientError(error, "Failed to delete content.");
     }
   }
+
+  useEffect(() => {
+    console.log(" Pedram is watching contents", contents);
+  }, [contents]);
 
   if (loading) {
     return <Loader />;
@@ -75,7 +92,7 @@ export default function PanelContentPage() {
           )
           // .filter((content) => !activeType || content.type === activeType)
           .map((content) => {
-            const meta = getContentTypeMeta(content.type);
+            const meta = getContentTypeMeta(content.category);
             const Icon = meta?.icon;
 
             return (

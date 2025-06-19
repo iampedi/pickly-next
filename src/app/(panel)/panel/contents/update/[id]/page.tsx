@@ -1,6 +1,6 @@
 // src/app/panel/contents/update/[id]/page.tsx
 "use client";
-import type { Content } from "@/types/contents";
+import type { Content } from "@/types/content";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
 // UI Imports

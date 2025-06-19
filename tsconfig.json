@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["react"],
+    "types": ["react", "node"],
     "incremental": true,
     "plugins": [
       {
@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/contexts/AuthContext.tsx"
-, "next-intl.config.js"  ],
+    "src/contexts/AuthContext.tsx",
+    "next-intl.config.js"
+  ],
   "exclude": ["node_modules"]
 }

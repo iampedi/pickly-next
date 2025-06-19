@@ -13,8 +13,7 @@ const registerSchema = z.object({
   username: z.string().min(3).optional(),
   email: z.string().email(),
   password: z.string().min(6),
-  isCurator: z.boolean().optional(),
-  isAdmin: z.boolean().optional(),
+  role: z.enum(["USER", "CURATOR", "ADMIN"]),
 });
 
 export async function POST(req: NextRequest) {
@@ -26,8 +25,7 @@ export async function POST(req: NextRequest) {
       throw new BadRequestError("Invalid input");
     }
 
-    const { fullname, username, email, password, isCurator, isAdmin } =
-      parsed.data;
+    const { fullname, username, email, password, role } = parsed.data;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
@@ -43,16 +41,14 @@ export async function POST(req: NextRequest) {
         email,
         username: username || email,
         password: hashedPassword,
-        isCurator: isCurator ?? false,
-        isAdmin: isAdmin ?? false,
+        role,
       },
     });
 
     const token = signJwt({
       userId: user.id,
       email: user.email,
-      isAdmin: user.isAdmin,
-      isCurator: user.isCurator,
+      role: user.role,
     });
 
     const response = NextResponse.json(
@@ -62,8 +58,7 @@ export async function POST(req: NextRequest) {
           email: user.email,
           fullname: user.fullname,
           username: user.username,
-          isCurator: user.isCurator,
-          isAdmin: user.isAdmin,
+          role: user.role,
         },
       },
       { status: 201 },

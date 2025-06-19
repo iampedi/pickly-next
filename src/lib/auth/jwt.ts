@@ -8,8 +8,7 @@ const JWT_EXPIRES_IN = "7d"; // token expiration duration
 export interface JwtPayload {
   userId: string;
   email: string;
-  isAdmin?: boolean;
-  isCurator?: boolean;
+  role: string;
 }
 
 // Generate a JWT token from a payload

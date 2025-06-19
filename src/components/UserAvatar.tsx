@@ -70,12 +70,12 @@ export const UserAvatar = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="center">
         <DropdownMenuLabel className="flex items-center gap-1.5 text-rose-600">
-          {user.isAdmin ? (
+          {user.role === "ADMIN" ? (
             <>
               <ShieldCheckIcon size={20} weight="duotone" />
               <span>Admin</span>
             </>
-          ) : user.isCurator ? (
+          ) : user.role === "CURATOR" ? (
             <>
               <CrownIcon size={20} weight="duotone" />
               <span>Curator</span>
@@ -90,7 +90,7 @@ export const UserAvatar = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          {(user.isAdmin || user.isCurator) && (
+          {(user.role === "ADMIN" || user.role === "CURATOR") && (
             <>
               <DropdownMenuItem
                 className="cursor-pointer hover:bg-gray-100"

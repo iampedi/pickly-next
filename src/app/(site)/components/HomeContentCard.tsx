@@ -2,7 +2,7 @@
 "use client";
 
 import { handleClientError } from "@/lib/handleClientError";
-import { Content } from "@/types/contents";
+import { Content } from "@/types/content";
 import axios from "axios";
 import { ComponentType, useEffect, useState } from "react";
 
