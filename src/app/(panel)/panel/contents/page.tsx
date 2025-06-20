@@ -13,6 +13,7 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { toast } from "sonner";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
+import { ContentTable } from "@/app/(panel)/components/ContentTable";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
@@ -77,7 +78,13 @@ export default function PanelContentPage() {
       </PanelPageHeader>
 
       <div className="_contents-list mb-10 flex flex-col gap-3">
-        {contents.length === 0 && (
+        <ContentTable
+          // key={content.id}
+          contents={contents}
+          // handleDelete={handleDelete}
+        />
+
+        {/* {contents.length === 0 && (
           <div className="flex items-center justify-center">
             <p className="text-gray-400">No content found.</p>
           </div>
@@ -94,9 +101,9 @@ export default function PanelContentPage() {
                 key={content.id}
                 content={content}
                 handleDelete={handleDelete}
-              />
+              />      
             );
-          })}
+          })} */}
       </div>
     </div>
   );

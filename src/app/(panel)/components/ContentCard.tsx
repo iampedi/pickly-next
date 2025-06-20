@@ -15,6 +15,7 @@ import {
   TagIcon,
   TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
 
 type ContentCardProps = {
   content: Content;
@@ -31,25 +32,68 @@ export const ContentCard = ({ content, handleDelete }: ContentCardProps) => {
   const IconComponent = IconMap[content.category.icon] || FolderIcon;
 
   return (
-    <div className="group flex flex-col gap-3 rounded-lg border border-lime-300/70 bg-lime-50/70 p-4 duration-300 md:border-gray-200/70 md:bg-gray-50/70 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2.5 text-lg font-medium capitalize group-hover:text-rose-600">
-          <TooltipWrapper tooltip={content.category.label}>
-            <IconComponent size={22} />
-          </TooltipWrapper>
-
-          {content.title}
-          {content.link && (
-            <TooltipWrapper tooltip="Open Link">
-              <a href={content.link} target="_blank" rel="noopener noreferrer">
-                <ArrowSquareOutIcon
-                  size={16}
-                  className="group-hover:text-gray-500 hover:text-black md:text-white"
-                />
-              </a>
+    <div className="group flex gap-4 rounded-lg border border-lime-300/70 bg-lime-50/70 p-4 duration-300 md:border-gray-200/70 md:bg-gray-50/70 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
+      <div className="_image">
+        <Image
+          className="rounded-md"
+          src={content.image}
+          alt={content.title}
+          width={100}
+          height={0}
+          priority
+        />
+      </div>
+      <div className="_content flex flex-1 justify-between gap-4">
+        <div className="flex flex-col gap-3">
+          <h2 className="flex items-center gap-2.5 text-lg font-medium capitalize group-hover:text-rose-600">
+            <TooltipWrapper tooltip={content.category.label}>
+              <IconComponent size={22} />
             </TooltipWrapper>
-          )}
-        </h2>
+
+            {content.title}
+            {content.link && (
+              <TooltipWrapper tooltip="Open Link">
+                <a
+                  href={content.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ArrowSquareOutIcon
+                    size={16}
+                    className="group-hover:text-gray-500 hover:text-black md:text-white"
+                  />
+                </a>
+              </TooltipWrapper>
+            )}
+          </h2>
+
+          {content?.contentTags.length > 0 || content.description ? (
+            <Fragment>
+              {content?.contentTags.length > 0 && (
+                <div className="flex items-center gap-2.5 capitalize">
+                  <TagIcon size={16} className="text-gray-600" />
+                  <div className="flex items-center gap-1">
+                    {content?.contentTags.map((item, index) => (
+                      <Fragment key={index}>
+                        <Badge variant={"outline"}>{item.tag.name}</Badge>
+
+                        {index < content.contentTags.length - 1 && (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </Fragment>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {content.description && (
+                <p className="line-clamp-2 text-gray-600">
+                  {content.description}
+                </p>
+              )}
+            </Fragment>
+          ) : null}
+        </div>
 
         {handleDelete && (
           <div className="_tools flex items-center justify-end gap-2 text-gray-400 drop-shadow-blue-300">
@@ -72,31 +116,6 @@ export const ContentCard = ({ content, handleDelete }: ContentCardProps) => {
           </div>
         )}
       </div>
-
-      {content?.contentTags.length > 0 || content.description ? (
-        <div className="space-y-2">
-          {content?.contentTags.length > 0 && (
-            <div className="flex items-center gap-2.5 capitalize">
-              <TagIcon size={16} className="text-gray-600" />
-              <div className="flex items-center gap-1">
-                {content?.contentTags.map((item, index) => (
-                  <Fragment key={index}>
-                    <Badge variant={"outline"}>{item.tag.name}</Badge>
-
-                    {index < content.contentTags.length - 1 && (
-                      <span className="text-gray-400">-</span>
-                    )}
-                  </Fragment>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {content.description && (
-            <p className="line-clamp-2 text-gray-600">{content.description}</p>
-          )}
-        </div>
-      ) : null}
     </div>
   );
 };
