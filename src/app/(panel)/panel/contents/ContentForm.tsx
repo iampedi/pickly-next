@@ -119,7 +119,7 @@ export default function ContentForm({
   if (mode === "update" && !initialValues) return <Loader />;
 
   return (
-    <div className="container mx-auto mt-6 max-w-lg">
+    <div className="container mx-auto mt-3 max-w-lg md:mt-6">
       <Card>
         <CardHeader>
           <CardDescription>
@@ -250,17 +250,14 @@ export default function ContentForm({
                 {...form.register("image")}
               />
 
-              <div className="mt-2 flex flex-col-reverse items-center gap-3 md:flex-row">
-                <Link href="/panel/contents" passHref>
+              <div className="mt-2 flex flex-col-reverse gap-3 md:col-span-2 md:flex-row">
+                <Link href="/panel/contents" passHref className="flex-1">
                   <Button variant="secondary" className="w-full">
                     Cancel
                   </Button>
                 </Link>
-                <Button
-                  type="submit"
-                  className="w-full md:col-span-2"
-                  disabled={loading}
-                >
+
+                <Button type="submit" disabled={loading} className="flex-1">
                   {loading ? (
                     <>
                       <CircleNotchIcon className="animate-spin" />

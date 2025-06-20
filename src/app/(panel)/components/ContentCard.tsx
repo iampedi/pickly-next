@@ -1,46 +1,43 @@
 // src/app/layout/ContentCard.tsx
 import { Content } from "@/types/content";
-import { IconProps } from "@phosphor-icons/react/dist/lib/types";
+import * as PhosphorIcons from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import { ComponentType, Fragment } from "react";
+import { Fragment } from "react";
+
 // UI Imports
 import { TooltipWrapper } from "@/components/theme/TooltipWrapper";
+import { Badge } from "@/components/ui/badge";
+import { IconProps } from "@phosphor-icons/react";
 import {
   ArrowSquareOutIcon,
+  FolderIcon,
   NotePencilIcon,
   TagIcon,
   TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Badge } from "@/components/ui/badge";
-
-type Meta = {
-  label: string;
-};
 
 type ContentCardProps = {
   content: Content;
-  Icon?: ComponentType<IconProps>;
-  meta?: Meta;
   handleDelete?: (id: string) => void;
 };
 
-export const ContentCard = ({
-  content,
-  Icon,
-  meta,
-  handleDelete,
-}: ContentCardProps) => {
+export const ContentCard = ({ content, handleDelete }: ContentCardProps) => {
   const router = useRouter();
+  const IconMap = PhosphorIcons as unknown as Record<
+    string,
+    React.FC<IconProps>
+  >;
+
+  const IconComponent = IconMap[content.category.icon] || FolderIcon;
 
   return (
     <div className="group flex flex-col gap-3 rounded-lg border border-lime-300/70 bg-lime-50/70 p-4 duration-300 md:border-gray-200/70 md:bg-gray-50/70 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2.5 text-lg font-medium group-hover:text-rose-600">
-          {Icon && (
-            <TooltipWrapper tooltip={meta?.label}>
-              <Icon size={22} />
-            </TooltipWrapper>
-          )}
+        <h2 className="flex items-center gap-2.5 text-lg font-medium capitalize group-hover:text-rose-600">
+          <TooltipWrapper tooltip={content.category.label}>
+            <IconComponent size={22} />
+          </TooltipWrapper>
+
           {content.title}
           {content.link && (
             <TooltipWrapper tooltip="Open Link">
@@ -76,17 +73,17 @@ export const ContentCard = ({
         )}
       </div>
 
-      {content.tags?.length > 0 || content.description ? (
+      {content?.contentTags.length > 0 || content.description ? (
         <div className="space-y-2">
-          {content.tags?.length > 0 && (
+          {content?.contentTags.length > 0 && (
             <div className="flex items-center gap-2.5 capitalize">
               <TagIcon size={16} className="text-gray-600" />
               <div className="flex items-center gap-1">
-                {content.tags.map((tag, index) => (
-                  <Fragment key={tag}>
-                    <Badge variant={"outline"}>{tag}</Badge>
+                {content?.contentTags.map((item, index) => (
+                  <Fragment key={index}>
+                    <Badge variant={"outline"}>{item.tag.name}</Badge>
 
-                    {index < content.tags.length - 1 && (
+                    {index < content.contentTags.length - 1 && (
                       <span className="text-gray-400">-</span>
                     )}
                   </Fragment>

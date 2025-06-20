@@ -1,5 +1,6 @@
 // src/components/PanelPageTitle.tsx
 "use client";
+
 import { usePathname } from "next/navigation";
 
 const titles: Record<string, string> = {

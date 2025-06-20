@@ -16,12 +16,8 @@ import { Category } from "@/types";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [, setCategories] = useState<Category[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
-
-  const getContentTypeMeta = (value: string) => {
-    return categories.find((c) => c.value === value);
-  };
 
   // Fetch Contents
   useEffect(() => {
@@ -63,6 +59,13 @@ export default function PanelContentPage() {
     }
   }
 
+  // Log in development mode
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("Contents:", contents);
+    }
+  }, [contents]);
+
   if (loading) {
     return <Loader />;
   }
@@ -81,22 +84,15 @@ export default function PanelContentPage() {
         )}
 
         {contents
-          .slice()
           .sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           )
-          // .filter((content) => !activeType || content.type === activeType)
           .map((content) => {
-            const meta = getContentTypeMeta(content.category);
-            const Icon = meta?.icon;
-
             return (
               <ContentCard
                 key={content.id}
                 content={content}
-                Icon={Icon}
-                meta={meta}
                 handleDelete={handleDelete}
               />
             );

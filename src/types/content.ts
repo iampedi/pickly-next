@@ -12,7 +12,9 @@ export type Content = {
   description: string;
   categoryId: string;
   category: Category;
-  contentTags: Tag[];
+  contentTags: {
+    tag: Tag;
+  }[];
   curations: Curation[];
   userContentActions: UserContentAction[];
   createdAt: string;

@@ -42,7 +42,7 @@ export function TagsInput({ value, onChange }: TagsInputProps) {
             <Badge
               key={tag}
               variant="secondary"
-              className="flex items-center gap-1 px-2 py-1"
+              className="flex items-center gap-1 px-2 py-1 capitalize"
             >
               {tag}
               <div

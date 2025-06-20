@@ -111,8 +111,9 @@ export async function GET() {
   try {
     const contents = await prisma.content.findMany({
       include: {
+        category: true,
         curations: true,
-        contentTags: { include: { tag: true } },
+        contentTags: { select: { tag: true } },
       },
       orderBy: { createdAt: "desc" },
     });
