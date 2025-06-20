@@ -1,50 +1,114 @@
 // src/app/api/contents/[id]/route.ts
 import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-export async function GET(request: Request, context: any) {
+type Params = {
+  params: {
+    id: string;
+  };
+};
+
+// Get a single content: GET /api/contents/:id
+export async function GET(request: NextRequest, { params }: Params) {
   try {
-    const { id } = context.params;
-    const content = await prisma.content.findUnique({ where: { id } });
+    const content = await prisma.content.findUnique({
+      where: { id: params.id },
+      include: {
+        curations: true,
+        contentTags: {
+          select: {
+            tag: true,
+          },
+        },
+      },
+    });
+
+    if (!content) {
+      return NextResponse.json(
+        { error: "Content not found." },
+        { status: 404 },
+      );
+    }
+
     return NextResponse.json(content);
   } catch (err) {
     return handleApiError(err);
   }
 }
 
-export async function PUT(request: Request, context: any) {
-  const { id } = context.params;
+// Update a Content: PUT /api/contents/:id
+export async function PUT(request: NextRequest, { params }: Params) {
   try {
+    const { id } = params;
     const body = await request.json();
-    const { title, type, link, tags, description } = body;
+    const { title, categoryId, link, tags, description, image } = body;
+    const normalizedTitle = title.trim().toLowerCase();
 
     const existing = await prisma.content.findFirst({
       where: {
-        title,
-        type,
-        NOT: { id },
+        title: normalizedTitle,
+        categoryId,
+        NOT: { id: id },
       },
     });
+
     if (existing) {
       return NextResponse.json(
-        { error: "A content with this title and type already exists." },
+        { error: "A content with this title already exists in this category." },
         { status: 400 },
       );
     }
 
-    const updated = await prisma.content.update({
-      where: { id },
-      data: {
-        title,
-        type,
-        link: link || "",
-        tags: tags || [],
-        description: description || "",
-      },
-    });
+    // Update the content
+    let updated;
+    try {
+      updated = await prisma.content.update({
+        where: { id },
+        data: {
+          title: normalizedTitle,
+          categoryId,
+          link: link || "",
+          image: image || "",
+          description: description || "",
+        },
+      });
+    } catch (err) {
+      handleApiError(err);
+    }
+
+    // Update tags (reset then recreate)
+    if (tags && Array.isArray(tags)) {
+      // Delete existing tag relations
+      await prisma.contentTag.deleteMany({
+        where: { contentId: id },
+      });
+
+      // Normalize and deduplicate
+      const normalizedTags = Array.from(
+        new Set(
+          tags
+            .map((t: { name: string }) => t.name.trim().toLowerCase())
+            .filter(Boolean), // remove empty strings
+        ),
+      );
+
+      // Create new tag relations
+      for (const name of normalizedTags) {
+        const tag = await prisma.tag.upsert({
+          where: { name: name },
+          update: {},
+          create: { name: name },
+        });
+
+        await prisma.contentTag.create({
+          data: {
+            contentId: id,
+            tagId: tag.id,
+          },
+        });
+      }
+    }
 
     return NextResponse.json(updated);
   } catch (err) {
@@ -55,10 +119,10 @@ export async function PUT(request: Request, context: any) {
 // Delete a Content: DELETE /api/contents/:id
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: { id: string } },
 ) {
   try {
-    const { id } = await params;
+    const { id } = params;
 
     const content = await prisma.content.findUnique({ where: { id } });
     if (!content) {

@@ -59,11 +59,6 @@ export default function ExplorePage() {
   //   ...contentCategories.filter((type) => usedTypes.has(type.value)),
   // ];
 
-  useEffect(() => {
-    console.log("Pedram is watching categories ...", category);
-    console.log("Pedram is watching contents ...", contents);
-  }, [category, contents]);
-
   return (
     <div className="flex flex-1 flex-col">
       {/* {filterItems.length > 1 && (

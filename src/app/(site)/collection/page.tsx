@@ -58,10 +58,6 @@ export default function CollectionPage() {
     fetchContents();
   }, [changeBookmark]);
 
-  useEffect(() => {
-    console.log(changeBookmark);
-  }, [changeBookmark]);
-
   return (
     <main className="flex flex-1 flex-col">
       {filterItems.length > 1 && (

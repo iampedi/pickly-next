@@ -111,14 +111,10 @@ export default function ContentForm({
       handleClientError(err, "Failed to submit content.");
     } finally {
       setLoading(false);
-      console.log("Form values:", values);
     }
   };
 
   const imageValue = form.watch("image");
-  
-  console.log("Current form values:", form.getValues());
-
 
   if (mode === "update" && !initialValues) return <Loader />;
 
@@ -213,7 +209,13 @@ export default function ContentForm({
                       <TagsInput
                         value={field.value.map((tag) => tag.name)}
                         onChange={(tags) =>
-                          field.onChange(tags.map((name: string) => ({ name })))
+                          field.onChange(
+                            Array.from(
+                              new Set(
+                                tags.map((name) => name.trim().toLowerCase()),
+                              ),
+                            ).map((name) => ({ name })),
+                          )
                         }
                       />
                     </FormControl>

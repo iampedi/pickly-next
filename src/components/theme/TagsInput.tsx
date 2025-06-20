@@ -16,8 +16,8 @@ export function TagsInput({ value, onChange }: TagsInputProps) {
   const safeValue = Array.isArray(value) ? value : [];
 
   const addTag = () => {
-    const newTag = inputValue.trim();
-    if (newTag && !safeValue.includes(newTag)) {
+    const newTag = inputValue.trim().toLowerCase();
+    if (newTag && !safeValue.map((t) => t.toLowerCase()).includes(newTag)) {
       onChange([...safeValue, newTag]);
     }
     setInputValue("");

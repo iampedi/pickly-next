@@ -63,10 +63,6 @@ export default function PanelContentPage() {
     }
   }
 
-  useEffect(() => {
-    console.log(" Pedram is watching contents", contents);
-  }, [contents]);
-
   if (loading) {
     return <Loader />;
   }

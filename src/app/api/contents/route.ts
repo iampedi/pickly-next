@@ -1,6 +1,6 @@
 // src/app/api/contents/route.ts
 import { prisma } from "@/lib/prisma";
-import { ContentSchema, contentSchema } from "@/lib/validations/content";
+import { contentSchema } from "@/lib/validations/content";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -8,6 +8,7 @@ function formatZodError(error: ZodError) {
   return error.flatten().fieldErrors;
 }
 
+// Create a new content
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -24,57 +25,63 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // تایپ دقیق برای tags
-    const { tags, ...rest } = parsed.data as ContentSchema;
-    const contentData: Omit<ContentSchema, "tags"> = rest;
+    // نرمال‌سازی، حذف تکراری‌ها و تایپ‌گذاری دقیق
+    const normalize = (name: string) => name.trim().toLowerCase();
+    const rawTags = parsed.data.tags ?? [];
 
-    // بررسی یکتا بودن عنوان و دسته
+    const dedupedTags = Array.from(
+      new Map(
+        rawTags.map((tag) => [
+          normalize(tag.name),
+          { ...tag, name: normalize(tag.name) },
+        ]),
+      ).values(),
+    );
+
+    const existingTags = dedupedTags.filter((tag) => tag.id);
+    const newTags = dedupedTags.filter((tag) => !tag.id);
+
+    const createdTags = await Promise.all(
+      newTags.map(async (tag) => {
+        const found = await prisma.tag.findUnique({
+          where: { name: tag.name },
+        });
+        return found ?? prisma.tag.create({ data: { name: tag.name } });
+      }),
+    );
+
+    const allTagIds: string[] = [
+      ...existingTags.map((tag) => tag.id!),
+      ...createdTags.map((tag) => tag.id),
+    ];
+
+    const normalizedTitle = parsed.data.title.trim().toLowerCase();
+
+    // بررسی یکتا بودن title + categoryId
     const existing = await prisma.content.findUnique({
       where: {
         title_categoryId: {
-          title: contentData.title,
-          categoryId: contentData.categoryId,
+          title: normalizedTitle,
+          categoryId: parsed.data.categoryId,
         },
       },
     });
 
     if (existing) {
       return NextResponse.json(
-        { error: "Content with this title and category already exists." },
+        { error: "A content with this title already exists in this category." },
         { status: 400 },
       );
     }
 
-    // دسته‌بندی تگ‌ها: موجود و جدید
-    const existingTags = (tags ?? []).filter((tag) => tag.id);
-    const newTags = (tags ?? []).filter((tag) => !tag.id);
-
-    const normalizedNewTags = newTags.map((tag) => ({
-      ...tag,
-      name: tag.name.trim().toLowerCase(),
-    }));
-
-    // ساخت یا یافتن تگ‌های جدید (یادداشت: جلوگیری از ساخت تگ تکراری)
-    const createdTags = await Promise.all(
-      normalizedNewTags.map(async (tag) => {
-        const found = await prisma.tag.findUnique({
-          where: { name: tag.name },
-        });
-        if (found) return found;
-        return prisma.tag.create({ data: { name: tag.name } });
-      }),
-    );
-
-    // جمع همه id تگ‌ها
-    const allTagIds: string[] = [
-      ...existingTags.map((tag) => tag.id!),
-      ...createdTags.map((tag) => tag.id),
-    ];
-
-    // ساخت Content و اتصال تگ‌ها
+    // ساخت Content و اتصال به Tagها
     const content = await prisma.content.create({
       data: {
-        ...contentData,
+        title: normalizedTitle,
+        categoryId: parsed.data.categoryId,
+        link: parsed.data.link || "",
+        image: parsed.data.image || "",
+        description: parsed.data.description || "",
         contentTags:
           allTagIds.length > 0
             ? {
