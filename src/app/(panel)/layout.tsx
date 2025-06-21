@@ -4,10 +4,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 // UI Imports
-import { PanelHeader } from "@/app/layout/PanelHeader";
-import { PanelSide } from "@/app/layout/PanelSide";
-import { Footer } from "@/app/layout/Footer";
 import Loader from "@/components/Loader";
+import { PanelShell } from "@/app/layout/PanelShell";
+import { Footer } from "@/app/layout/Footer";
 
 export const metadata: Metadata = {
   title: "PICKY :: App",
@@ -20,15 +19,9 @@ export default function PanelLayout({
   return (
     <div className="flex min-h-screen">
       <div className="container mx-auto flex max-w-5xl flex-col px-3">
-        <PanelHeader />
-
-        <div className="flex flex-1 gap-8">
-          <PanelSide />
-          <main className="flex-1">
-            <Suspense fallback={<Loader />}>{children}</Suspense>
-          </main>
-        </div>
-
+        <Suspense fallback={<Loader />}>
+          <PanelShell>{children}</PanelShell>
+        </Suspense>
         <Footer />
       </div>
     </div>

@@ -6,14 +6,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // UI Imports
-import Loader from "@/components/Loader";
+import { ContentTable } from "@/app/(panel)/components/ContentTable";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
-import { ContentTable } from "@/app/(panel)/components/ContentTable";
-import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
@@ -68,10 +67,6 @@ export default function PanelContentPage() {
     }
   }, [contents]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
@@ -92,6 +87,7 @@ export default function PanelContentPage() {
           searchTerm={searchTerm}
           contents={contents}
           handleDelete={handleDelete}
+          isLoading={loading}
         />
 
         {/* {contents.length === 0 && (

@@ -44,11 +44,13 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ContentTableProps = {
   contents: Content[];
   handleDelete: (id: string) => void;
   searchTerm: string;
+  isLoading: boolean;
 };
 
 const IconMap = PhosphorIcons as unknown as Record<string, React.FC<IconProps>>;
@@ -57,6 +59,7 @@ export const ContentTable = ({
   contents,
   handleDelete,
   searchTerm,
+  isLoading,
 }: ContentTableProps) => {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -200,7 +203,22 @@ export const ContentTable = ({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell>
+                  <Skeleton className="h-[34px] w-[34px] rounded-md" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[100px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[60px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[40px]" />
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

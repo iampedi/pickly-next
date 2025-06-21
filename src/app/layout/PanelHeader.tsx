@@ -1,10 +1,13 @@
 // src/app/layout/PanelHeader.tsx
 "use client";
+
+import { useState } from "react";
+
+// UI Imports
 import { Logo } from "@/components/Logo";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ListIcon } from "@phosphor-icons/react/dist/ssr";
 import { MobileMenu } from "@/app/layout/MobileMenu";
-import { useState } from "react";
 
 export const PanelHeader = () => {
   const [open, setOpen] = useState(false);
@@ -16,6 +19,7 @@ export const PanelHeader = () => {
 
         <div className="flex items-center gap-2">
           <UserAvatar />
+
           <ListIcon
             className="md:hidden"
             size={32}
@@ -24,6 +28,7 @@ export const PanelHeader = () => {
           />
         </div>
       </header>
+
       <MobileMenu open={open} setOpen={setOpen} />
     </>
   );

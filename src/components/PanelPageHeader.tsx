@@ -1,6 +1,9 @@
+// src/components/PanelPageHeader.tsx
 import React from "react";
-import { PanelPageTitle } from "./PanelPageTitle";
 import { cn } from "@/lib/utils";
+
+// UI Imports
+import { PanelPageTitle } from "./PanelPageTitle";
 
 type PositionProps = {
   children?: React.ReactNode;
