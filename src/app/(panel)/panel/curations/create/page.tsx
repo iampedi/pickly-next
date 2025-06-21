@@ -6,7 +6,8 @@ export default function CreateCurationPage() {
   return (
     <>
       <PanelPageHeader />
-      <ContentCurationForm />
+
+      <ContentCurationForm mode="create" />
     </>
   );
 }

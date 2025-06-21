@@ -58,7 +58,7 @@ export default function ContentForm({
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  // ======== 1. useForm Typing (Critical Part) ===========
+  // ======= useForm Typing (Critical Part) =======
   const form = useForm<ContentSchema>({
     resolver: zodResolver(contentSchema),
     defaultValues: {
@@ -66,9 +66,9 @@ export default function ContentForm({
       ...(initialValues ?? {}),
     },
   });
-  // ======================================================
 
   useEffect(() => {
+    // ======= Fetch categories =======
     const fetchCategories = async () => {
       try {
         const res = await axios.get("/api/categories");
@@ -94,7 +94,7 @@ export default function ContentForm({
     }
   }, [mode, initialValues, form]);
 
-  // ====== 2. Output type for onSubmit (matches validated data) ======
+  // ======= Output type for onSubmit (matches validated data) =======
   const onSubmit: SubmitHandler<ContentSchema> = async (values) => {
     setLoading(true);
 

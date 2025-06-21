@@ -1,62 +1,35 @@
 // src/app/api/curations/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { ContentType, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-
-// Type for expected request body
-type CurationPayload = {
-  type: ContentType;
-  title: string;
-  link?: string;
-  comment?: string;
-  userId: string;
-};
+import { curationCreateSchema } from "@/lib/validations/curation";
 
 // Create curation: POST /api/curations
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log("SERVER RECEIVED BODY:", body);
 
-    const { type, title, link, comment, userId } = body as CurationPayload;
+    const parse = curationCreateSchema.safeParse(body);
 
-    if (!type || !title || !userId) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 },
-      );
+    if (!parse.success) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    // Find or create content
-    let content = await prisma.content.findUnique({
-      where: { title_type: { title, type } },
-    });
+    const { contentId, comment, userId } = parse.data;
 
-    if (!content) {
-      content = await prisma.content.create({
-        data: {
-          title,
-          type,
-          link: link ?? "",
-        },
-      });
-    }
-
-    // Create curation
+    // No need to find or create Content! You already have contentId.
     const curation = await prisma.curation.create({
       data: {
         userId,
-        contentId: content.id,
+        contentId,
         comment,
       },
     });
 
     return NextResponse.json(curation, { status: 201 });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    } else {
-      console.error(error);
-    }
+  } catch (error) {
+    console.error("Error creating curation:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
@@ -69,7 +42,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
   const contentId = searchParams.get("contentId");
-  const type = searchParams.get("type");
+  const categoryId = searchParams.get("categoryId");
   const title = searchParams.get("title") ?? "";
 
   // حالت duplication check
@@ -81,10 +54,10 @@ export async function GET(request: NextRequest) {
   }
 
   // حالت سرچ محتوا
-  if (type) {
+  if (categoryId) {
     const contents = await prisma.content.findMany({
       where: {
-        type: type as ContentType,
+        categoryId,
         title: {
           contains: title,
           mode: "insensitive",
@@ -92,6 +65,10 @@ export async function GET(request: NextRequest) {
       },
       take: 5,
       orderBy: { updatedAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+      },
     });
     return NextResponse.json(contents);
   }

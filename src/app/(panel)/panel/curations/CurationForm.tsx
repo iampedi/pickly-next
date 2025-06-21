@@ -1,5 +1,17 @@
-// src/app/panel/curations/CurationForm.tsx
 "use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+import { useAuth } from "@/contexts/AuthContext";
+import { handleClientError } from "@/lib/handleClientError";
+import { getDefaultCurationValues } from "@/lib/validations/curation";
+
 import { Button } from "@/components/theme/button";
 import {
   Form,
@@ -24,219 +36,163 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { contentTypes } from "@/constants/content-categories";
-import { useAuth } from "@/contexts/AuthContext";
-import { handleClientError } from "@/lib/handleClientError";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
-import axios from "axios";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import {
+  curationFormSchema,
+  CurationFormSchema,
+} from "@/lib/validations/curation/formSchema";
+import { Category, Content } from "@/types";
 
-const CONTENT_TYPES = contentTypes.map((type) => type.value) as [
-  string,
-  ...string[],
-];
+type CurationFormProps = {
+  mode?: "create" | "update";
+  // initialValues?: Partial<CurationSchema>;
+  // id?: string;
+};
 
-// --- Validation Schema ---
-const formSchema = z.object({
-  type: z
-    .string()
-    .refine((val) => val && val !== "", {
-      message: "Please select a content type.",
-    })
-    .refine((val) => CONTENT_TYPES.includes(val), {
-      message: "Invalid content type.",
-    }),
-  title: z
-    .string()
-    .min(2, { message: "Title must be at least 2 characters." })
-    .max(100, { message: "Title must not exceed 100 characters." }),
-  comment: z
-    .string()
-    .max(500, { message: "Comment must not exceed 500 characters." })
-    .optional(),
-});
-
-// --- Suggestion type
 type Suggestion = {
   id: string;
   title: string;
-  type: string;
 };
 
-type ContentCurationFormProps = {
-  mode?: "create" | "update";
-  initialValues?: Partial<z.infer<typeof formSchema>>;
-  id?: string;
-};
-
-export default function ContentCurationForm({
-  mode = "create",
-  initialValues,
-  id,
-}: ContentCurationFormProps) {
-  const router = useRouter();
+export default function CurationForm({
+  mode,
+  // initialValues,
+  // id,
+}: CurationFormProps) {
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isDuplicate, setIsDuplicate] = useState(false);
-  const [, setCheckedContentId] = useState<string | null>(null);
-  const lastClickedTitle = useRef<string>("");
-  const checkedTypeRef = useRef<string>("");
-  const { user } = useAuth();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialValues || {
-      type: "",
-      title: "",
-      comment: "",
-    },
-  });
-
+  // ======= Load categories =======
   useEffect(() => {
-    if (initialValues) {
-      form.reset({
-        type: initialValues.type ?? "",
-        title: initialValues.title ?? "",
-        comment: initialValues.comment ?? "",
-      });
-    }
-  }, [initialValues, form]);
+    let isMounted = true;
 
-  // ---- Fetch suggestions on title/type change (create mode)
-  useEffect(() => {
-    if (mode === "update") return;
-    const type = form.watch("type");
-    const title = form.watch("title");
-
-    if (type && title.length > 1) {
-      const fetchSuggestions = async () => {
-        try {
-          const res = await axios.get("/api/curations", {
-            params: { type, title },
-          });
-          setSuggestions(res.data);
-        } catch {
-          setSuggestions([]);
-        }
-      };
-      fetchSuggestions();
-      setShowSuggestions(true);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, form.watch("type"), form.watch("title")]);
-
-  // --- Suggestion select: fill title, hide suggestions, check duplication
-  const handleSuggestionClick = async (s: Suggestion) => {
-    form.setValue("title", s.title);
-    lastClickedTitle.current = s.title;
-    checkedTypeRef.current = form.getValues("type");
-    setSuggestions([]);
-    setShowSuggestions(false);
-    setCheckedContentId(s.id);
-
-    // Check duplication
-    if (user?.id && s.id) {
+    const fetchCategories = async () => {
       try {
-        const res = await axios.get("/api/curations", {
-          params: { userId: user.id, contentId: s.id },
-        });
-
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          setIsDuplicate(true);
-          toast.warning(
-            "You have already curated this content. Please choose another one.",
-          );
-        } else {
-          setIsDuplicate(false);
+        const res = await axios.get("/api/categories");
+        if (Array.isArray(res.data) && isMounted) {
+          setCategories(res.data);
         }
-      } catch {
-        setIsDuplicate(false);
+      } catch (err) {
+        handleClientError(err, "Failed to fetch categories.");
       }
+    };
+
+    fetchCategories();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // ======= Fetch suggestions =======
+  const fetchSuggestions = async (title: string, categoryId: string) => {
+    if (!title || !categoryId) return;
+
+    try {
+      const res = await axios.get<Content[]>("/api/contents", {
+        params: {
+          categoryId,
+          title,
+        },
+      });
+      setSuggestions(res.data);
+      setShowSuggestions(true);
+    } catch (err) {
+      console.error("Failed to fetch suggestions:", err);
     }
   };
 
-  useEffect(() => {
-    if (mode === "update") return;
-    const subscription = form.watch((values) => {
-      if (
-        lastClickedTitle.current &&
-        (values.title !== lastClickedTitle.current ||
-          values.type !== checkedTypeRef.current)
-      ) {
-        setIsDuplicate(false);
-      }
-      if (!values.title || !values.type) setIsDuplicate(false);
-    });
-    return () => subscription.unsubscribe();
-  }, [form, mode]);
+  // ======= Handle suggestion click =======
+  const handleSuggestionClick = (s: Suggestion) => {
+    form.setValue("title", s.title);
+    form.setValue("contentId", s.id);
+    setShowSuggestions(false);
+  };
 
-  // Submit Handler
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
+  // ======= Use Form =======
+  const form = useForm<CurationFormSchema>({
+    resolver: zodResolver(curationFormSchema),
+    defaultValues: getDefaultCurationValues(),
+  });
+
+  // ======= Submit Form =======
+  const onSubmit = async (values: CurationFormSchema) => {
+    console.log("SUBMIT WORKED", values);
 
     try {
-      if (mode === "update" && id) {
-        await axios.put(`/api/curations/${id}`, { comment: values.comment });
-        toast.success("Curation updated successfully.");
-        router.push("/panel/curations");
+      setLoading(true);
+
+      let contentId = values.contentId || null;
+
+      // === 1. Check if curation already exists for this user/content ===
+      const existingCurationRes = await axios.get("/api/curations/check", {
+        params: {
+          title: values.title,
+          categoryId: values.categoryId,
+          userId: user?.id,
+        },
+      });
+
+      if (existingCurationRes.data.exists) {
+        toast.error("You have already curated this content.");
         return;
       }
 
-      // Duplication check
-      if (user?.id && values.title && values.type) {
-        const res = await axios.get("/api/curations", {
-          params: {
-            userId: user.id,
-            type: values.type,
-            title: values.title,
-          },
-        });
+      // === 2. Try to find existing content by title/category ===
+      const contentRes = await axios.get<Content[]>("/api/contents", {
+        params: {
+          title: values.title,
+          categoryId: values.categoryId,
+        },
+      });
 
-        let alreadyCurated = false;
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          const content = res.data[0];
-          const checkCuration = await axios.get("/api/curations", {
-            params: {
-              userId: user.id,
-              contentId: content.id,
-            },
-          });
-          alreadyCurated = checkCuration.data.length > 0;
-        }
-
-        if (alreadyCurated) {
-          toast.warning(
-            "You have already curated this content. You can edit your curation in the Curations section.",
-          );
-          setLoading(false);
-          setIsDuplicate(true);
-          return;
-        }
+      if (Array.isArray(contentRes.data) && contentRes.data.length > 0) {
+        contentId = contentRes.data[0].id;
       }
 
-      await axios.post("/api/curations", { ...values, userId: user?.id });
-      form.reset();
-      lastClickedTitle.current = "";
-      checkedTypeRef.current = "";
-      setIsDuplicate(false);
-      toast.success("Curation submitted successfully.");
-      router.push("/panel/curations");
+      // === 3. If content doesn't exist, create it ===
+      if (!contentId) {
+        const createContentRes = await axios.post("/api/contents", {
+          title: values.title,
+          categoryId: values.categoryId,
+          image: "/images/content-placeholder.webp",
+          description: "",
+          link: "",
+          contentTags: [],
+          tags: [],
+        });
+        contentId = createContentRes.data.id;
+      }
+
+      // === 4. Finally, create the curation if contentId exists ===
+      if (contentId) {
+        console.log("DATA SENDING TO SERVER:", {
+          contentId,
+          comment: values.comment,
+          userId: user?.id,
+        });
+
+        await axios.post("/api/curations", {
+          contentId,
+          comment: values.comment,
+          userId: user?.id,
+        });
+
+        toast.success("Curation created successfully.");
+        router.push("/panel/curations");
+      } else {
+        toast.error("Error: Content ID not found!");
+      }
     } catch (err) {
-      handleClientError(err, "Failed to submit curation.");
+      handleClientError(err, "Failed to create curation.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto mt-6 max-w-lg">
@@ -254,26 +210,32 @@ export default function ContentCurationForm({
               onSubmit={form.handleSubmit(onSubmit)}
               className="grid gap-3 md:grid-cols-2"
             >
+              {/* Category */}
               <FormField
                 control={form.control}
-                name="type"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Content Type</FormLabel>
+                    <FormLabel>Category</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(val) => {
+                        field.onChange(val);
+                        form.setValue("title", "");
+                        form.setValue("contentId", undefined);
+                        setSuggestions([]);
+                      }}
                       value={field.value}
                       disabled={mode === "update"}
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Select content type" />
+                          <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {contentTypes.map((type) => (
-                          <SelectItem key={type.value} value={type.value}>
-                            {type.label}
+                        {categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -283,6 +245,7 @@ export default function ContentCurationForm({
                 )}
               />
 
+              {/* Title */}
               <FormField
                 control={form.control}
                 name="title"
@@ -293,15 +256,28 @@ export default function ContentCurationForm({
                       <Input
                         autoComplete="off"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          form.setValue("contentId", undefined);
+                          fetchSuggestions(
+                            e.target.value,
+                            form.getValues("categoryId"),
+                          );
+                        }}
+                        onFocus={() => {
+                          if (suggestions.length > 0) setShowSuggestions(true);
+                        }}
+                        onBlur={() => {
+                          setTimeout(() => setShowSuggestions(false), 200);
+                        }}
                         disabled={mode === "update"}
                       />
                     </FormControl>
                     <FormMessage />
-                    {/* نمایش پیشنهادات فقط در حالت create */}
-                    {mode !== "update" &&
+                    {mode === "create" &&
                       showSuggestions &&
                       suggestions.length > 0 && (
-                        <div className="absolute top-16 right-0 left-0 z-10 max-h-56 overflow-y-auto rounded-b-lg border border-t-0 bg-white shadow-lg">
+                        <div className="absolute top-16 z-10 max-h-56 w-full overflow-y-auto rounded-b-lg border border-t-0 bg-white shadow-lg">
                           {suggestions.map((s) => (
                             <div
                               key={s.id}
@@ -317,13 +293,14 @@ export default function ContentCurationForm({
                 )}
               />
 
+              {/* Comment */}
               <FormField
                 control={form.control}
                 name="comment"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
                     <FormLabel>
-                      Your Note
+                      Your Note{" "}
                       <span className="text-xs text-gray-400">(Optional)</span>
                     </FormLabel>
                     <FormControl>
@@ -337,6 +314,8 @@ export default function ContentCurationForm({
                   </FormItem>
                 )}
               />
+
+              {/* Buttons */}
               <div className="mt-2 flex flex-col-reverse items-center gap-3 md:flex-row">
                 <Button className="w-full" variant="secondary" asChild>
                   <Link href="/panel/curations">Cancel</Link>
@@ -344,7 +323,7 @@ export default function ContentCurationForm({
                 <Button
                   type="submit"
                   className="w-full md:col-span-2"
-                  disabled={loading || (mode === "create" && isDuplicate)}
+                  // disabled={loading || (mode === "create" && isDuplicate)}
                 >
                   {loading ? (
                     <>

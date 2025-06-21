@@ -15,7 +15,11 @@ export async function POST(req: NextRequest) {
 
     // اعتبارسنجی با Zod
     const parsed = contentSchema.safeParse(body);
+    console.log("BODY RECEIVED:", body);
+    console.log("PARSED DATA:", parsed);
+
     if (!parsed.success) {
+      console.log("ZOD ERROR:", parsed.error.flatten());
       return NextResponse.json(
         {
           error: "Validation failed",
@@ -106,10 +110,24 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Read contents: GET /api/contents
-export async function GET() {
+// Read contents: GET /api/contents?categoryId=xxx&title=yyy
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const categoryId = searchParams.get("categoryId");
+  const title = searchParams.get("title");
+
   try {
     const contents = await prisma.content.findMany({
+      where: {
+        ...(categoryId && { categoryId }),
+        ...(title && {
+          title: {
+            contains: title,
+            mode: "insensitive",
+          },
+        }),
+      },
+
       include: {
         category: true,
         curations: true,

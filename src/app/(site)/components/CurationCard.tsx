@@ -1,20 +1,19 @@
 // src/app/layout/CurationCard.tsx
-import { IconProps } from "@phosphor-icons/react/dist/lib/types";
+import { Curation } from "@/types/curation";
 import { useRouter } from "next/navigation";
-import { ComponentType } from "react";
+
 // UI Imports
+import * as PhosphorIcons from "@phosphor-icons/react";
+import { IconProps } from "@phosphor-icons/react/dist/lib/types";
 import { TooltipWrapper } from "@/components/theme/TooltipWrapper";
 import {
+  FolderIcon,
   NotePencilIcon,
   QuotesIcon,
   TrashIcon,
   UserSoundIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { Curation } from "@/types/curation";
-
-type Meta = {
-  label: string;
-};
+import { Category } from "@/types";
 
 export type MiniUser = {
   id: string;
@@ -23,32 +22,32 @@ export type MiniUser = {
 type CurationCardProps = {
   curation: Curation;
   currentUser: MiniUser;
-  Icon?: ComponentType<IconProps>;
-  meta?: Meta;
+  category: Category;
   handleDelete?: (id: string) => void;
 };
 
 export const CurationCard = ({
   curation: curation,
   currentUser,
-  Icon,
-  meta,
+  category,
   handleDelete,
 }: CurationCardProps) => {
   const router = useRouter();
+  const IconMap = PhosphorIcons as unknown as Record<
+    string,
+    React.FC<IconProps>
+  >;
+  const IconComponent = IconMap[category.icon] || FolderIcon;
 
   return (
     <div className="group flex flex-col gap-2 rounded-lg border border-lime-300/70 bg-lime-50/70 p-4 duration-300 md:border-gray-200/70 md:bg-gray-50/70 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2.5 text-lg font-medium group-hover:text-rose-600">
-          {Icon && (
-            <TooltipWrapper tooltip={meta?.label}>
-              <Icon size={22} />
-            </TooltipWrapper>
-          )}
+          <TooltipWrapper tooltip={category.label}>
+            <IconComponent size={22} />
+          </TooltipWrapper>
           {curation.content?.title}
         </h2>
-
         <div className="_tools flex items-center justify-end gap-2 text-gray-400 drop-shadow-blue-300">
           <TooltipWrapper tooltip="Edit Content">
             <NotePencilIcon
@@ -72,9 +71,9 @@ export const CurationCard = ({
         <div className="flex items-center gap-1">
           <UserSoundIcon size={20} className="mr-1" />
           <span className="font-medium">
-            {curation.user.id === currentUser.id
+            {curation.user?.id === currentUser.id
               ? "You"
-              : curation.user.fullname}
+              : curation.user?.fullname}
           </span>
           <span>
             {curation.comment

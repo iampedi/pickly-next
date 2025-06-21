@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
         },
       });
     } catch (err) {
-      handleApiError(err);
+      return handleApiError(err);
     }
 
     // Update tags (reset then recreate)

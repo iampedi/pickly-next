@@ -21,47 +21,36 @@ export default function PanelCurationPage() {
   const [curations, setCurations] = useState<Curation[]>([]);
   const { user } = useAuth();
 
-  const getContentCategoryMeta = (value: string) => {
-    return categories.find((c) => c.value === value);
-  };
-
-  // Fetch Curations
+  // Fetch Categories & Curations together
   useEffect(() => {
     if (!user) return;
 
-    const fetchCurations = async () => {
+    async function fetchData() {
       setLoading(true);
-
-      const fetchCategories = async () => {
-        try {
-          const res = await axios.get("/api/categories");
-          setCategories(res.data);
-        } catch (err) {
-          handleClientError(err, "Failed to fetch categories.");
-        }
-      };
-
-      fetchCategories();
-
       try {
-        const params = user.role === "CURATOR" ? { userId: user.id } : {};
-        const res = await axios.get(`/api/curations`, { params });
-        const data = res.data;
-
-        setCurations(data);
-        setLoading(false);
+        // Fetch both in parallel
+        const [catRes, curationRes] = await Promise.all([
+          axios.get("/api/categories"),
+          axios.get("/api/curations", {
+            params: user?.role === "CURATOR" ? { userId: user.id } : {},
+          }),
+        ]);
+        setCategories(catRes.data);
+        setCurations(curationRes.data);
       } catch (err) {
-        handleClientError(err, "Failed to fetch curations.");
+        handleClientError(err, "Failed to fetch data.");
+      } finally {
+        setLoading(false);
       }
-    };
-    fetchCurations();
-  }, [user, categories]);
+    }
+    fetchData();
+  }, [user]);
 
   // Delete Curation
   async function handleDelete(id: string) {
     try {
       await axios.delete(`/api/curations/${id}`);
-      setCurations(curations.filter((c) => c.id !== id));
+      setCurations((prev) => prev.filter((c) => c.id !== id));
       toast.success("Curation deleted successfully!");
     } catch (err) {
       handleClientError(err, "Failed to delete curation.");
@@ -90,19 +79,18 @@ export default function PanelCurationPage() {
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           )
           .map((curation) => {
-            const meta = getContentCategoryMeta(
-              curation.content?.category || "",
-            );
-            const Icon = meta?.icon;
+            // Find related category object by categoryId
+            const categoryId = curation.content?.categoryId;
+            const category = categories.find((cat) => cat.id === categoryId);
 
             return (
-              user && (
+              user &&
+              category && (
                 <CurationCard
                   key={curation.id}
                   curation={curation}
                   currentUser={user}
-                  Icon={Icon}
-                  meta={meta}
+                  category={category}
                   handleDelete={handleDelete}
                 />
               )
