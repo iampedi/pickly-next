@@ -45,7 +45,7 @@ import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
 
 type ContentFormProps = {
   mode: "create" | "update";
-  initialValues?: Partial<ContentSchema>;
+  initialValues?: Partial<ContentSchema> | null;
   id?: string;
 };
 
@@ -119,7 +119,7 @@ export default function ContentForm({
   if (mode === "update" && !initialValues) return <Loader />;
 
   return (
-    <div className="container mx-auto mt-3 max-w-lg md:mt-6">
+    <div className="container mx-auto mt-1 max-w-lg md:my-3">
       <Card>
         <CardHeader>
           <CardDescription>

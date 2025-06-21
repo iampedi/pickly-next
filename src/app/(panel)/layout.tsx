@@ -6,7 +6,6 @@ import { Suspense } from "react";
 // UI Imports
 import Loader from "@/components/Loader";
 import { PanelShell } from "@/app/layout/PanelShell";
-import { Footer } from "@/app/layout/Footer";
 
 export const metadata: Metadata = {
   title: "PICKY :: App",
@@ -22,7 +21,6 @@ export default function PanelLayout({
         <Suspense fallback={<Loader />}>
           <PanelShell>{children}</PanelShell>
         </Suspense>
-        <Footer />
       </div>
     </div>
   );

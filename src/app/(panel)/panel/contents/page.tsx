@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { ContentTable } from "@/app/(panel)/components/ContentTable";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/theme/input";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
 import { toast } from "sonner";
@@ -73,7 +73,7 @@ export default function PanelContentPage() {
         <div className="flex w-full flex-1 items-center justify-end gap-2 md:gap-4">
           <Input
             placeholder="Search..."
-            className="w-full md:max-w-3xs"
+            className="w-full md:max-w-3xs focus-visible:ring-0"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

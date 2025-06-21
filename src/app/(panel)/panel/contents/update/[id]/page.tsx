@@ -6,7 +6,6 @@ import axios from "axios";
 import { use, useEffect, useState } from "react";
 
 // UI Imports
-import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import ContentForm from "../../ContentForm";
 import { handleClientError } from "@/lib/handleClientError";
@@ -66,10 +65,6 @@ export default function UpdateContentPage({
       fetchContent();
     }
   }, [id]);
-
-  if (!initialValues) {
-    return <Loader />;
-  }
 
   return (
     <>
