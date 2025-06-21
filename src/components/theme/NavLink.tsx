@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./Button";
+import { Button } from "./button";
 
 export function NavLink({
   href,

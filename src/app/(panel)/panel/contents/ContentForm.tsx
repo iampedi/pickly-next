@@ -16,7 +16,7 @@ import {
 } from "@/lib/validations/content";
 
 import Loader from "@/components/Loader";
-import { Button } from "@/components/theme/Button";
+import { Button } from "@/components/theme/button";
 import {
   Form,
   FormControl,

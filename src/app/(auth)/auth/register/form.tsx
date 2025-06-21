@@ -18,7 +18,7 @@ import { z } from "zod";
 // UI Imports
 import image from "@/assets/images/register.webp";
 import { Agree } from "@/components/Agree";
-import { Button } from "@/components/theme/Button";
+import { Button } from "@/components/theme/button";
 import { Input } from "@/components/theme/input";
 import {
   Select,

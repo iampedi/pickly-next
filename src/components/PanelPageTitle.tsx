@@ -40,7 +40,7 @@ export const PanelPageTitle = () => {
   }
 
   return (
-    <h1 className="flex items-center gap-2 font-semibold">
+    <h1 className="flex items-center gap-2 font-semibold pb-1.5">
       <span className="text-2xl text-gray-400">{"{"}</span>
       <span className="text-xl">{title}</span>
       <span className="text-2xl text-gray-400">{"}"}</span>

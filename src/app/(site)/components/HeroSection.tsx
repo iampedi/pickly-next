@@ -6,7 +6,7 @@ import Link from "next/link";
 
 // UI Imports
 import image from "@/assets/images/hero-section-01.webp";
-import { Button } from "@/components/theme/Button";
+import { Button } from "@/components/theme/button";
 
 export default function HeroSection() {
   return (

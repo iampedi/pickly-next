@@ -6,7 +6,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // UI Imports
-import { ContentCard } from "@/app/(panel)/components/ContentCard";
 import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
@@ -14,11 +13,13 @@ import { toast } from "sonner";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
 import { ContentTable } from "@/app/(panel)/components/ContentTable";
+import { Input } from "@/components/ui/input";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
   const [, setCategories] = useState<Category[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Fetch Contents
   useEffect(() => {
@@ -74,14 +75,23 @@ export default function PanelContentPage() {
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
-        <SubmitButton href="/panel/contents/create" />
+        <div className="flex w-full flex-1 items-center justify-end gap-2 md:gap-4">
+          <Input
+            placeholder="Search..."
+            className="w-full md:max-w-3xs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <SubmitButton href="/panel/contents/create" />
+        </div>
       </PanelPageHeader>
 
       <div className="_contents-list mb-10 flex flex-col gap-3">
         <ContentTable
           // key={content.id}
+          searchTerm={searchTerm}
           contents={contents}
-          // handleDelete={handleDelete}
+          handleDelete={handleDelete}
         />
 
         {/* {contents.length === 0 && (

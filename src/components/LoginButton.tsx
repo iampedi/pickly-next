@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
 // UI Imports
-import { Button } from "@/components/theme/Button";
+import { Button } from "@/components/theme/button";
 import { LockSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 
 type LoginButtonProps = {

@@ -1,6 +1,6 @@
 // src/app/panel/curations/CurationForm.tsx
 "use client";
-import { Button } from "@/components/theme/Button";
+import { Button } from "@/components/theme/button";
 import {
   Form,
   FormControl,

@@ -14,7 +14,7 @@ export const PanelPageHeader = ({ children, className }: PositionProps) => {
   return (
     <div
       className={cn(
-        "sticky top-16 z-10 flex h-12 items-center bg-white pb-2 md:top-20",
+        "sticky top-16 z-10 flex flex-col items-center gap-2 bg-white pb-2 md:top-20 md:h-12 md:flex-row",
         flexClass,
         className,
       )}

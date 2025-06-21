@@ -1,7 +1,7 @@
 // src/components/SubmitButton.tsx
 "use client";
 import Link from "next/link";
-import { Button } from "./theme/Button";
+import { Button } from "./theme/button";
 import { PlusCircleIcon } from "@phosphor-icons/react/dist/ssr";
 
 type SubmitButtonProps = {
