@@ -18,7 +18,7 @@ export const PanelShell = ({ children }: { children: React.ReactNode }) => {
     <>
       <PanelHeader />
 
-      <div className="flex flex-1 gap-8">
+      <div className="flex flex-1 flex-col gap-8 md:flex-row">
         <PanelSide />
 
         <main className="flex flex-1 flex-col">

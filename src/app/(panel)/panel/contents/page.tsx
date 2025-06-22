@@ -1,6 +1,8 @@
 // src/app/panel/contents/page.tsx
 "use client";
 
+import { handleClientError } from "@/lib/handleClientError";
+import { Category } from "@/types";
 import { Content } from "@/types/content";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,15 +12,40 @@ import { ContentTable } from "@/app/(panel)/components/ContentTable";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { Input } from "@/components/theme/input";
-import { handleClientError } from "@/lib/handleClientError";
-import { Category } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/theme/select";
 import { toast } from "sonner";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
-  const [, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+
+  const availableCategories = Array.from(
+    new Set(
+      contents
+        .map((c) => c.category?.label)
+        .filter(
+          (label): label is string => !!label && typeof label === "string",
+        ),
+    ),
+  );
+
+  const filteredCategoriesWithContent = categories.filter(
+    (cat): cat is Category =>
+      !!cat &&
+      typeof cat === "object" &&
+      "label" in cat &&
+      typeof cat.label === "string" &&
+      availableCategories.includes(cat.label),
+  );
 
   // ======= Fetch Contents =======
   useEffect(() => {
@@ -63,14 +90,27 @@ export default function PanelContentPage() {
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
-        <div className="flex w-full flex-1 items-center justify-end gap-2 md:gap-4">
+        <div className="flex w-full flex-1 flex-wrap items-center justify-between gap-2 md:justify-end md:gap-3">
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="order-1 w-[130px]">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              {filteredCategoriesWithContent.map((cat) => (
+                <SelectItem key={cat.id} value={cat.label}>
+                  {cat.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Input
             placeholder="Search..."
-            className="w-full focus-visible:ring-0 md:max-w-3xs"
+            className="order-3 w-full focus-visible:ring-0 md:order-2 md:max-w-3xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <SubmitButton href="/panel/contents/create" />
+          <SubmitButton href="/panel/contents/create" className="order-2" />
         </div>
       </PanelPageHeader>
 
@@ -80,6 +120,7 @@ export default function PanelContentPage() {
           contents={contents}
           handleDelete={handleDelete}
           isLoading={loading}
+          categoryFilter={categoryFilter}
         />
       </div>
     </div>

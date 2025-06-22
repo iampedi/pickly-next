@@ -130,13 +130,18 @@ export async function GET(request: NextRequest) {
 
       include: {
         category: true,
-        curations: true,
+        _count: { select: { curations: true } },
         contentTags: { select: { tag: true } },
       },
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(contents, { status: 200 });
+    const mappedContents = contents.map((item) => ({
+      ...item,
+      curationsCount: item._count.curations,
+    }));
+
+    return NextResponse.json(mappedContents, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch contents:", error);
     return NextResponse.json(
