@@ -15,11 +15,8 @@ export async function POST(req: NextRequest) {
 
     // اعتبارسنجی با Zod
     const parsed = contentSchema.safeParse(body);
-    console.log("BODY RECEIVED:", body);
-    console.log("PARSED DATA:", parsed);
 
     if (!parsed.success) {
-      console.log("ZOD ERROR:", parsed.error.flatten());
       return NextResponse.json(
         {
           error: "Validation failed",

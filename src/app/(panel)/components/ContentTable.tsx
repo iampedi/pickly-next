@@ -49,7 +49,7 @@ import { Badge } from "@/components/ui/badge";
 
 type ContentTableProps = {
   contents: Content[];
-  handleDelete: (id: string) => void;
+  onRequestDelete: (id: string) => void;
   searchTerm: string;
   isLoading: boolean;
   categoryFilter: string;
@@ -57,7 +57,7 @@ type ContentTableProps = {
 
 export const ContentTable = ({
   contents,
-  handleDelete,
+  onRequestDelete,
   searchTerm,
   isLoading,
   categoryFilter,
@@ -190,7 +190,7 @@ export const ContentTable = ({
                 <PencilSimpleLineIcon /> Edit
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleDelete(content.id)}
+                onClick={() => onRequestDelete(content.id)}
                 variant="destructive"
               >
                 <TrashSimpleIcon /> Delete

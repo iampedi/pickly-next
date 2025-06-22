@@ -14,12 +14,15 @@ import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
+import { DeleteDialog } from "@/components/DeleteDialog";
 
 export default function PanelCurationPage() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [curations, setCurations] = useState<Curation[]>([]);
   const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Fetch Categories & Curations together
   useEffect(() => {
@@ -91,11 +94,30 @@ export default function PanelCurationPage() {
                   curation={curation}
                   currentUser={user}
                   category={category}
-                  handleDelete={handleDelete}
+                  onRequestDelete={() => {
+                    setSelectedId(curation.id);
+                    setOpen(true);
+                  }}
                 />
               )
             );
           })}
+
+        {selectedId && (
+          <DeleteDialog
+            open={open}
+            onOpenChange={(v) => {
+              setOpen(v);
+              if (!v) setSelectedId(null);
+            }}
+            handleDelete={(id) => {
+              handleDelete(id);
+              setOpen(false);
+              setSelectedId(null);
+            }}
+            id={selectedId}
+          />
+        )}
       </div>
     </div>
   );

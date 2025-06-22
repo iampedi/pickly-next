@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/theme/select";
 import { toast } from "sonner";
+import { DeleteDialog } from "@/components/DeleteDialog";
 
 export default function PanelContentPage() {
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,8 @@ export default function PanelContentPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const availableCategories = Array.from(
     new Set(
@@ -118,11 +121,28 @@ export default function PanelContentPage() {
         <ContentTable
           searchTerm={searchTerm}
           contents={contents}
-          handleDelete={handleDelete}
           isLoading={loading}
           categoryFilter={categoryFilter}
+          onRequestDelete={(id: string) => {
+            setSelectedId(id);
+            setOpen(true);
+          }}
         />
       </div>
+
+      <DeleteDialog
+        open={open}
+        onOpenChange={(v) => {
+          setOpen(v);
+          if (!v) setSelectedId(null);
+        }}
+        handleDelete={(id) => {
+          handleDelete(id);
+          setOpen(false);
+          setSelectedId(null);
+        }}
+        id={selectedId!}
+      />
     </div>
   );
 }

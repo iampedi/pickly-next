@@ -121,7 +121,6 @@ export default function CurationForm({
 
   // ======= Submit Form =======
   const onSubmit = async (values: CurationFormSchema) => {
-    console.log("SUBMIT WORKED", values);
     setLoading(true);
 
     try {
@@ -179,12 +178,6 @@ export default function CurationForm({
 
       // === 4. Finally, create the curation if contentId exists ===
       if (contentId) {
-        console.log("DATA SENDING TO SERVER:", {
-          contentId,
-          comment: values.comment,
-          userId: user?.id,
-        });
-
         await axios.post("/api/curations", {
           contentId,
           comment: values.comment,
@@ -204,7 +197,6 @@ export default function CurationForm({
   };
 
   // log in dev mode to console
-  console.log("Form values:", initialValues);
 
   return (
     <div className="container mx-auto mt-6 max-w-lg">
@@ -289,11 +281,11 @@ export default function CurationForm({
                     {mode === "create" &&
                       showSuggestions &&
                       suggestions.length > 0 && (
-                        <div className="absolute top-16 z-10 max-h-56 w-full overflow-y-auto rounded-b-lg border border-t-0 bg-white shadow-lg">
+                        <div className="absolute top-16 z-10 max-h-56 w-full overflow-y-auto rounded-lg border bg-white text-sm shadow-lg">
                           {suggestions.map((s) => (
                             <div
                               key={s.id}
-                              className="cursor-pointer px-3 py-2 hover:bg-gray-100"
+                              className="cursor-pointer px-3 py-2 hover:bg-gray-100 capitalize"
                               onClick={() => handleSuggestionClick(s)}
                             >
                               {s.title}
