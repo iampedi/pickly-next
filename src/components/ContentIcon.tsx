@@ -5,8 +5,13 @@ import { FolderIcon } from "@phosphor-icons/react/dist/ssr";
 
 const IconMap = PhosphorIcons as unknown as Record<string, React.FC<IconProps>>;
 
-export const Icon = ({ icon }: { icon: string }) => {
+type IconPropsType = {
+  icon: string;
+  size?: number;
+};
+
+export const Icon = ({ icon, size }: IconPropsType) => {
   const IconComponent = IconMap[icon] || FolderIcon;
 
-  return <IconComponent size={20} />;
+  return <IconComponent size={size || 20} />;
 };
