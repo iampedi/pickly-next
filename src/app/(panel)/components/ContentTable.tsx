@@ -2,7 +2,6 @@
 "use client";
 
 import { Content } from "@/types/content";
-import * as PhosphorIcons from "@phosphor-icons/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -15,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -23,12 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IconProps } from "@phosphor-icons/react/dist/lib/types";
 import {
+  ArrowDownIcon,
   ArrowLineUpRightIcon,
   ArrowsDownUpIcon,
+  ArrowUpIcon,
   DotsThreeOutlineIcon,
-  FolderIcon,
   PencilSimpleLineIcon,
   TrashSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -44,7 +44,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Icon } from "@/components/ContentIcon";
 
 type ContentTableProps = {
   contents: Content[];
@@ -52,8 +52,6 @@ type ContentTableProps = {
   searchTerm: string;
   isLoading: boolean;
 };
-
-const IconMap = PhosphorIcons as unknown as Record<string, React.FC<IconProps>>;
 
 export const ContentTable = ({
   contents,
@@ -87,25 +85,34 @@ export const ContentTable = ({
     },
     {
       accessorKey: "category",
+      accessorFn: (row) => row.category?.label,
       header: ({ column }) => {
+        const sorted = column.getIsSorted();
+
         return (
           <Button
-            variant="ghost"
+            variant="link"
             className="!px-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Category
-            <ArrowsDownUpIcon />
+            {sorted === "asc" ? (
+              <ArrowDownIcon className="size-4" />
+            ) : sorted === "desc" ? (
+              <ArrowUpIcon className="size-4" />
+            ) : (
+              <ArrowsDownUpIcon className="size-4" />
+            )}
           </Button>
         );
       },
       cell: ({ row }) => {
-        const category = row.getValue("category") as Content["category"];
-        const IconComponent = IconMap[category.icon] || FolderIcon;
+        const category = row.original.category;
 
         return (
           <div className="flex items-center gap-1.5">
-            <IconComponent size={20} /> {category.label}
+            <Icon icon={category?.icon} />
+            {category.label}
           </div>
         );
       },

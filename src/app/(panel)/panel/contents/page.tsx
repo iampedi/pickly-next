@@ -20,7 +20,7 @@ export default function PanelContentPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Fetch Contents
+  // ======= Fetch Contents =======
   useEffect(() => {
     const fetchContents = async () => {
       setLoading(true);
@@ -49,7 +49,7 @@ export default function PanelContentPage() {
     fetchContents();
   }, []);
 
-  // Delete Content
+  // ======= Delete Content =======
   async function handleDelete(id: string) {
     try {
       await axios.delete(`/api/contents/${id}`);
@@ -60,20 +60,13 @@ export default function PanelContentPage() {
     }
   }
 
-  // Log in development mode
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("Contents:", contents);
-    }
-  }, [contents]);
-
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
         <div className="flex w-full flex-1 items-center justify-end gap-2 md:gap-4">
           <Input
             placeholder="Search..."
-            className="w-full md:max-w-3xs focus-visible:ring-0"
+            className="w-full focus-visible:ring-0 md:max-w-3xs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -83,33 +76,11 @@ export default function PanelContentPage() {
 
       <div className="_contents-list mb-10 flex flex-col gap-3">
         <ContentTable
-          // key={content.id}
           searchTerm={searchTerm}
           contents={contents}
           handleDelete={handleDelete}
           isLoading={loading}
         />
-
-        {/* {contents.length === 0 && (
-          <div className="flex items-center justify-center">
-            <p className="text-gray-400">No content found.</p>
-          </div>
-        )}
-
-        {contents
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          )
-          .map((content) => {
-            return (
-              <ContentCard
-                key={content.id}
-                content={content}
-                handleDelete={handleDelete}
-              />      
-            );
-          })} */}
       </div>
     </div>
   );

@@ -45,8 +45,8 @@ import { Category, Content } from "@/types";
 
 type CurationFormProps = {
   mode?: "create" | "update";
-  // initialValues?: Partial<CurationSchema>;
-  // id?: string;
+  initialValues?: Partial<CurationFormSchema>;
+  id?: string;
 };
 
 type Suggestion = {
@@ -56,8 +56,8 @@ type Suggestion = {
 
 export default function CurationForm({
   mode,
-  // initialValues,
-  // id,
+  initialValues,
+  id,
 }: CurationFormProps) {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
@@ -116,18 +116,27 @@ export default function CurationForm({
   // ======= Use Form =======
   const form = useForm<CurationFormSchema>({
     resolver: zodResolver(curationFormSchema),
-    defaultValues: getDefaultCurationValues(),
+    defaultValues: initialValues ?? getDefaultCurationValues(),
   });
 
   // ======= Submit Form =======
   const onSubmit = async (values: CurationFormSchema) => {
     console.log("SUBMIT WORKED", values);
+    setLoading(true);
 
     try {
-      setLoading(true);
-
+      // ===== Update Mode: Update curation =====
+      if (mode === "update" && id) {
+        await axios.put(`/api/curations/${id}`, {
+          comment: values.comment,
+        });
+        toast.success("Curation updated successfully.");
+        router.push("/panel/curations");
+        return;
+      }
       let contentId = values.contentId || null;
 
+      // ===== Create Mode =====
       // === 1. Check if curation already exists for this user/content ===
       const existingCurationRes = await axios.get("/api/curations/check", {
         params: {
@@ -193,6 +202,9 @@ export default function CurationForm({
       setLoading(false);
     }
   };
+
+  // log in dev mode to console
+  console.log("Form values:", initialValues);
 
   return (
     <div className="container mx-auto mt-6 max-w-lg">

@@ -9,7 +9,7 @@ import ContentCurationForm from "../../CurationForm";
 import { handleClientError } from "@/lib/handleClientError";
 
 type InitialValues = {
-  type: string;
+  categoryId: string;
   title: string;
   comment?: string;
 };
@@ -31,7 +31,7 @@ export default function UpdateCurationPage({
         const data = res.data;
 
         setInitialValues({
-          type: data.content?.type || "",
+          categoryId: data.content?.categoryId || "",
           title: data.content?.title || "",
           comment: data.comment || "",
         });
