@@ -231,7 +231,7 @@ export const ContentTable = ({
   }, [categoryFilter, table]);
 
   return (
-    <div className="_wrapper">
+    <div className="_wrapper flex flex-col gap-4">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -254,20 +254,22 @@ export const ContentTable = ({
 
         <TableBody>
           {isLoading ? (
-            <TableRow>
-              <TableCell>
-                <Skeleton className="h-[34px] w-[34px] rounded-md" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-[20px] w-[100px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-[20px] w-[60px]" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-[20px] w-[40px]" />
-              </TableCell>
-            </TableRow>
+            Array.from({ length: 10 }).map((_, i) => (
+              <TableRow key={i}>
+                <TableCell>
+                  <Skeleton className="h-[34px] w-[34px] rounded-md" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[100px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[60px]" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-[20px] w-[40px]" />
+                </TableCell>
+              </TableRow>
+            ))
           ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

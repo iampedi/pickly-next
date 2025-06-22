@@ -120,7 +120,7 @@ export default function ContentForm({
 
   return (
     <div className="container mx-auto mt-1 max-w-lg md:my-3">
-      <Card>
+      <Card className="gap-3">
         <CardHeader>
           <CardDescription>
             {mode === "create"

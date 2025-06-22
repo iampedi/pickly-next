@@ -8,7 +8,6 @@ import { curationCreateSchema } from "@/lib/validations/curation";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("SERVER RECEIVED BODY:", body);
 
     const parse = curationCreateSchema.safeParse(body);
 

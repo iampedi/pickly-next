@@ -42,10 +42,9 @@ export const CurationCard = ({
   return (
     <div className="group flex flex-col gap-2 rounded-lg border border-lime-300/70 bg-lime-50/70 p-4 duration-300 md:border-gray-200/70 md:bg-gray-50/70 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2.5 text-lg font-medium group-hover:text-rose-600">
-          <TooltipWrapper tooltip={category.label}>
-            <IconComponent size={22} />
-          </TooltipWrapper>
+        <h2 className="flex items-center gap-2 text-lg font-medium text-gray-500 capitalize group-hover:text-rose-600">
+          <IconComponent size={20} />
+          <span className="text-sm uppercase">[{category.label}] -</span>
           {curation.content?.title}
         </h2>
         <div className="_tools flex items-center justify-end gap-2 text-gray-400 drop-shadow-blue-300">
@@ -67,7 +66,7 @@ export const CurationCard = ({
           </TooltipWrapper>
         </div>
       </div>
-      <div className="text-gray-500 group-hover:text-lime-700">
+      <div className="pb-1 text-gray-500 group-hover:text-lime-700">
         <div className="flex items-center gap-1">
           <UserSoundIcon size={20} className="mr-1" />
           <span className="font-medium">
