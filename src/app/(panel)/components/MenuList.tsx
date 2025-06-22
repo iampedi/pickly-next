@@ -13,6 +13,7 @@ type MenuItem = {
   icon: React.ReactNode;
   onClick?: MenuListProps["onClick"];
   canAccess: (user: { role: string }) => boolean;
+  exact?: boolean;
 };
 
 type MenuListProps = {
@@ -21,10 +22,11 @@ type MenuListProps = {
 
 const panelMenu: MenuItem[] = [
   {
-    label: "Panel",
+    label: "Dashboard",
     href: "/panel",
     icon: <SquaresFourIcon weight="duotone" />,
     canAccess: () => true,
+    exact: true,
   },
   {
     label: "Curations",
@@ -55,6 +57,7 @@ export const MenuList = ({ onClick }: MenuListProps) => {
             key={item.href}
             href={item.href}
             onClick={onClick}
+            exact={item.exact}
           >
             {item.icon}
             <span>{item.label}</span>

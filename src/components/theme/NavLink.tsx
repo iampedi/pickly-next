@@ -1,5 +1,6 @@
 // src/components/theme/NavLink.tsx
 "use client";
+
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,7 +12,7 @@ export function NavLink({
   onClick,
   variant,
   size,
-  exact = true,
+  exact = false,
   className,
   ...props
 }: {
@@ -33,7 +34,9 @@ export function NavLink({
   activeClass?: string;
 }) {
   const pathname = usePathname();
-  const isActive = exact ? pathname === href : pathname.startsWith(href);
+  const isActive = exact
+    ? pathname === href
+    : pathname !== "/panel" && pathname.startsWith(href);
 
   return (
     <Button

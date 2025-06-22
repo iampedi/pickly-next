@@ -9,12 +9,12 @@ import { toast } from "sonner";
 
 // UI Imports
 import { CurationCard } from "@/app/(site)/components/CurationCard";
-import Loader from "@/components/Loader";
 import { PanelPageHeader } from "@/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
 import { DeleteDialog } from "@/components/DeleteDialog";
+import Loader from "@/components/Loader";
 
 export default function PanelCurationPage() {
   const [loading, setLoading] = useState(false);
@@ -60,10 +60,6 @@ export default function PanelCurationPage() {
     }
   }
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <div className="flex flex-1 flex-col gap-2">
       <PanelPageHeader>
@@ -71,37 +67,40 @@ export default function PanelCurationPage() {
       </PanelPageHeader>
 
       <div className="_curations-list mb-10 flex flex-col gap-3">
-        {curations.length === 0 && (
+        {loading ? (
+          <Loader />
+        ) : curations.length === 0 ? (
           <p className="text-center text-gray-400">No curations found.</p>
+        ) : (
+          curations
+            .slice()
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            )
+            .map((curation) => {
+              // Find related category object by categoryId
+              const categoryId = curation.content?.categoryId;
+              const category = categories.find((cat) => cat.id === categoryId);
+
+              return (
+                user &&
+                category && (
+                  <CurationCard
+                    key={curation.id}
+                    curation={curation}
+                    currentUser={user}
+                    category={category}
+                    onRequestDelete={() => {
+                      setSelectedId(curation.id);
+                      setOpen(true);
+                    }}
+                  />
+                )
+              );
+            })
         )}
-
-        {curations
-          .slice()
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          )
-          .map((curation) => {
-            // Find related category object by categoryId
-            const categoryId = curation.content?.categoryId;
-            const category = categories.find((cat) => cat.id === categoryId);
-
-            return (
-              user &&
-              category && (
-                <CurationCard
-                  key={curation.id}
-                  curation={curation}
-                  currentUser={user}
-                  category={category}
-                  onRequestDelete={() => {
-                    setSelectedId(curation.id);
-                    setOpen(true);
-                  }}
-                />
-              )
-            );
-          })}
 
         {selectedId && (
           <DeleteDialog

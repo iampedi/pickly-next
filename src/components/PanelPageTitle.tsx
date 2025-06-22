@@ -39,8 +39,10 @@ export const PanelPageTitle = () => {
     return "";
   }
 
+  if (pathname === "/panel") return null;
+
   return (
-    <h1 className="flex items-center gap-2 font-semibold pb-1.5">
+    <h1 className="flex items-center gap-2 pb-1.5 font-semibold">
       <span className="text-2xl text-gray-400">{"{"}</span>
       <span className="text-xl">{title}</span>
       <span className="text-2xl text-gray-400">{"}"}</span>
