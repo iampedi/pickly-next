@@ -92,8 +92,6 @@ export const HomeContentCard = ({
     }
   };
 
-  console.log("Pedram is watching... ", content.curations?.length);
-
   const curationsCount = content.curations?.length || 0;
 
   if (loading) return null;
@@ -110,9 +108,9 @@ export const HomeContentCard = ({
           priority
         />
       </CardHeader>
-      <CardContent className="flex h-full flex-col gap-2 rounded-b-lg bg-lime-50/75 p-3 duration-300 group-hover:bg-lime-300/25 md:gap-3 md:px-4 md:pb-4.5">
+      <CardContent className="flex h-full flex-col gap-2 rounded-b-lg bg-lime-50/75 p-3 duration-300 group-hover:bg-lime-300/25 md:gap-2.5 md:px-4.5 md:pb-4.5">
         <div className="flex flex-1 gap-1.5 text-lime-700 duration-300 group-hover:text-rose-600 md:gap-3">
-          <h2 className="line-clamp-2 text-base leading-snug font-medium capitalize md:text-lg md:leading-normal">
+          <h2 className="line-clamp-1 text-base leading-snug font-medium capitalize md:text-lg md:leading-normal">
             {content.title}
           </h2>
         </div>

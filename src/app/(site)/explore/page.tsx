@@ -1,6 +1,8 @@
 // src/app/(site)/explore/page.tsx
 "use client";
 
+import { handleClientError } from "@/lib/handleClientError";
+import { Category } from "@/types";
 import type { Content } from "@/types/content";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -9,14 +11,13 @@ import { useEffect, useState } from "react";
 import { HomeContentCard } from "@/app/(site)/components/HomeContentCard";
 import { ContentCategoryFilter } from "@/components/ContentCategoryFilter";
 import Loader from "@/components/Loader";
-import { handleClientError } from "@/lib/handleClientError";
-import { Category } from "@/types";
 
 export default function ExplorePage() {
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState<Category[]>([]);
+  const [, setCategories] = useState<Category[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
-  const [activeType, setActiveType] = useState<string | null>(null);
+  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -24,8 +25,8 @@ export default function ExplorePage() {
     const fetchCategories = async (): Promise<void> => {
       try {
         const res = await axios.get(`/api/categories`);
-        const categoryData: Category[] = res.data;
-        setCategory(categoryData);
+        const categoriesData: Category[] = res.data;
+        setCategories(categoriesData);
       } catch (err) {
         handleClientError(err, "Failed to fetch categories.");
       }
@@ -36,50 +37,48 @@ export default function ExplorePage() {
     const fetchContents = async (): Promise<void> => {
       try {
         const res = await axios.get(`/api/contents`);
-        const data: Content[] = res.data;
-        setContents(data);
-        setLoading(false);
+        const contentsData: Content[] = res.data;
+        setContents(contentsData);
+
+        const filteredContents = contentsData.filter(
+          (c) => !activeCategory || c.category?.id === activeCategory,
+        );
+        setFilteredContents(filteredContents);
       } catch (err) {
         handleClientError(err, "Failed to fetch contents.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchContents();
-  }, []);
+  }, [activeCategory]);
 
-  // const getContentCategoryMeta = (value: string) => {
-  //   return contentCategories.find((c) => c.value === value);
-  // };
-
-  // const usedTypes = new Set<string>(contents.map((c) => c.type));
-
-  // const filterItems: Category[] = [
-  //   { value: "", label: "All", icon: RowsIcon },
-  //   ...contentCategories.filter((type) => usedTypes.has(type.value)),
-  // ];
+  const usedCategories = Array.from(
+    new Map(contents.map((c) => [c.category?.id, c.category])).values(),
+  );
 
   return (
     <div className="flex flex-1 flex-col">
-      {/* {filterItems.length > 1 && (
-        <ContentCategoryFilter
-          filterItems={filterItems}
-          setActiveType={setActiveType}
-        />
-      )} */}
+      <ContentCategoryFilter
+        filterItems={usedCategories}
+        activeCategory={activeCategory}
+        setActiveCategory={(categoryId) => setActiveCategory(categoryId)}
+      />
 
       <div className="_content flex flex-1 flex-col">
         <div className="container mx-auto flex max-w-5xl flex-1 flex-col px-3">
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid flex-1 grid-cols-2 gap-3 content-start md:gap-5 md:grid-cols-4">
+            <div className="grid flex-1 grid-cols-2 content-start gap-3 md:grid-cols-4 md:gap-5">
               {!loading && contents.length === 0 && (
                 <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500">
                   There are no contents to show.
                 </div>
               )}
 
-              {contents
+              {filteredContents
                 .slice()
                 .sort(
                   (a, b) =>
