@@ -67,10 +67,12 @@ export default function PanelPage() {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
+
+  if (!user) return null;
 
   return (
-    <div className="mt-4 flex-1 md:pt-0">
+    <div className="mt-2 flex-1 md:pt-0">
       <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
         <PanelHomeModule
           title="My Curations"

@@ -4,28 +4,23 @@
 import { handleClientError } from "@/lib/handleClientError";
 import { Content } from "@/types/content";
 import axios from "axios";
-import { ComponentType, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // UI Imports
 import { ToggleIcon } from "@/components/theme/ToggleIcon";
 import { TooltipWrapper } from "@/components/theme/TooltipWrapper";
-import { Card, CardContent } from "@/components/ui/card";
-import { IconProps } from "@phosphor-icons/react/dist/lib/types";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   BookmarkIcon,
   HandsPrayingIcon,
   SparkleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { toast } from "sonner";
-
-type Meta = {
-  label: string;
-};
+import { Icon } from "@/components/ContentIcon";
+import Image from "next/image";
 
 type ContentCardProps = {
   content: Content;
-  Icon?: ComponentType<IconProps>;
-  meta?: Meta;
   handleDelete?: (id: string) => void;
   onChangeBookmark?: () => void;
 };
@@ -33,8 +28,6 @@ type ContentCardProps = {
 export const HomeContentCard = ({
   onChangeBookmark,
   content,
-  Icon,
-  meta,
 }: ContentCardProps) => {
   const [bookmarkActive, setBookmarkActive] = useState(false);
   const [inspiredActive, setInspiredActive] = useState(false);
@@ -99,57 +92,78 @@ export const HomeContentCard = ({
     }
   };
 
+  console.log("Pedram is watching... ", content.curations?.length);
+
+  const curationsCount = content.curations?.length || 0;
+
   if (loading) return null;
 
   return (
-    <Card className="group relative border-lime-200/75 bg-lime-50/35 duration-300 hover:border-lime-300/75 hover:bg-lime-50/70">
-      <CardContent className="flex flex-col gap-2.5">
-        <div className="flex items-center gap-3 text-lime-800 duration-300 group-hover:text-rose-600">
-          {Icon && (
-            <TooltipWrapper tooltip={meta?.label}>
-              <div className="rounded-full bg-lime-800/15 p-1.5 duration-300 group-hover:bg-rose-800/15">
-                <Icon size={20} />
-              </div>
-            </TooltipWrapper>
-          )}
-          <h2 className="text-lg font-medium">{content.title}</h2>
+    <Card className="group relative h-full flex-1 gap-0 border-none p-0 shadow-none duration-300">
+      <CardHeader className="gap-0 p-0">
+        <Image
+          src={content.image}
+          alt={content.title}
+          width={400}
+          height={0}
+          className="rounded-t-lg duration-300 group-hover:rounded-t-lg"
+          priority
+        />
+      </CardHeader>
+      <CardContent className="flex h-full flex-col gap-2 rounded-b-lg bg-lime-50/75 p-3 duration-300 group-hover:bg-lime-300/25 md:gap-3 md:px-4 md:pb-4.5">
+        <div className="flex flex-1 gap-1.5 text-lime-700 duration-300 group-hover:text-rose-600 md:gap-3">
+          <h2 className="line-clamp-2 text-base leading-snug font-medium capitalize md:text-lg md:leading-normal">
+            {content.title}
+          </h2>
         </div>
 
-        <div className="flex items-center justify-between pl-3 text-gray-500 group-hover:text-lime-800">
-          <div className="flex items-center gap-2">
-            <strong>{content.curations?.length || 0}</strong> time
-            {content.curations?.length === 1 ? "" : "s"} curated.
-          </div>
+        <div className="flex items-center gap-1.5 text-gray-500">
+          <Icon icon={content.category?.icon} className="size-5 md:size-6" />
+          <span className="text-sm md:text-base">
+            {content.category?.label}
+          </span>
         </div>
+
+        {/* <div className="flex items-center justify-between pl-1.5 text-gray-500 group-hover:text-lime-800 md:pl-3">
+          <div className="flex items-center gap-1.5 text-sm">
+            <strong>{content.curations?.length || 0}</strong> .
+          </div>
+        </div> */}
 
         {content.description && (
-          <p className="line-clamp-1 text-gray-400 group-hover:text-lime-800">
+          <p className="line-clamp-1 text-gray-500 group-hover:text-lime-800">
             {content.description}
           </p>
         )}
 
-        <div className="mt-2 flex h-6 items-center justify-end">
-          <div>
-            <div className="animate-in flex items-center gap-4 text-gray-400 duration-300 group-hover:text-lime-800">
-              <ToggleIcon
-                icon={BookmarkIcon}
-                tooltip="Collect"
-                active={bookmarkActive}
-                onClick={() => handleAction("BOOKMARK")}
-              />
-              <ToggleIcon
-                icon={SparkleIcon}
-                tooltip="Inspired"
-                active={inspiredActive}
-                onClick={() => handleAction("INSPIRED")}
-              />
-              <ToggleIcon
-                icon={HandsPrayingIcon}
-                tooltip="Thanks"
-                active={thanksActive}
-                onClick={() => handleAction("THANKS")}
-              />
-            </div>
+        <div className="flex items-center justify-between">
+          <div className="mt-1 flex items-center gap-3">
+            <ToggleIcon
+              icon={BookmarkIcon}
+              tooltip="Collect"
+              active={bookmarkActive}
+              onClick={() => handleAction("BOOKMARK")}
+            />
+            <ToggleIcon
+              icon={SparkleIcon}
+              tooltip="Inspired"
+              active={inspiredActive}
+              onClick={() => handleAction("INSPIRED")}
+            />
+            <ToggleIcon
+              icon={HandsPrayingIcon}
+              tooltip="Thanks"
+              active={thanksActive}
+              onClick={() => handleAction("THANKS")}
+            />
+          </div>
+
+          <div className="min-w-7 text-center font-medium text-gray-500">
+            <TooltipWrapper
+              tooltip={`Time${curationsCount < 1 ? "" : "s"} curated`}
+            >
+              <span>{curationsCount}</span>
+            </TooltipWrapper>
           </div>
         </div>
       </CardContent>

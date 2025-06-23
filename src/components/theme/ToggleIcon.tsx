@@ -1,5 +1,6 @@
 // src/components/theme/ToggleIcon
 "use client";
+
 import { StarIcon } from "@phosphor-icons/react/dist/ssr";
 import { TooltipWrapper } from "./TooltipWrapper";
 import { cn } from "@/lib/utils";
@@ -21,9 +22,8 @@ export function ToggleIcon({
     <TooltipWrapper tooltip={tooltip || ""}>
       <span onClick={onClick} className="cursor-pointer transition-colors">
         <Icon
-          size={24}
           weight="duotone"
-          className={cn(active ? "text-rose-600" : "text-gray-400")}
+          className={cn("size-5.5 md:size-6", active ? "text-rose-600" : "text-gray-500/80")}
         />
       </span>
     </TooltipWrapper>

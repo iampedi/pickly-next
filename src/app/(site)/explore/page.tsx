@@ -11,7 +11,6 @@ import { ContentCategoryFilter } from "@/components/ContentCategoryFilter";
 import Loader from "@/components/Loader";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";
-import { RowsIcon } from "@phosphor-icons/react/dist/ssr";
 
 export default function ExplorePage() {
   const [loading, setLoading] = useState(false);
@@ -69,38 +68,28 @@ export default function ExplorePage() {
       )} */}
 
       <div className="_content flex flex-1 flex-col">
-        <div className="container mx-auto flex max-w-4xl flex-1 flex-col px-4">
+        <div className="container mx-auto flex max-w-5xl flex-1 flex-col px-3">
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid flex-1 content-start gap-4 md:grid-cols-2">
+            <div className="grid flex-1 grid-cols-2 gap-3 content-start md:gap-5 md:grid-cols-4">
               {!loading && contents.length === 0 && (
                 <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500">
                   There are no contents to show.
                 </div>
               )}
 
-              {/* {contents
+              {contents
                 .slice()
                 .sort(
                   (a, b) =>
                     new Date(b.createdAt).getTime() -
                     new Date(a.createdAt).getTime(),
                 )
-                .filter((content) => !activeType || content.type === activeType)
+                // .filter((content) => !activeType || content.type === activeType)
                 .map((content) => {
-                  const typeMeta = getContentCategoryMeta(content.type);
-                  const Icon = typeMeta?.icon;
-
-                  return (
-                    <HomeContentCard
-                      key={content.id}
-                      content={content}
-                      Icon={Icon}
-                      meta={typeMeta}
-                    />
-                  );
-                })} */}
+                  return <HomeContentCard key={content.id} content={content} />;
+                })}
             </div>
           )}
         </div>

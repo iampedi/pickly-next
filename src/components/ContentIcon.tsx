@@ -8,10 +8,11 @@ const IconMap = PhosphorIcons as unknown as Record<string, React.FC<IconProps>>;
 type IconPropsType = {
   icon: string;
   size?: number;
+  className?: string;
 };
 
-export const Icon = ({ icon, size }: IconPropsType) => {
+export const Icon = ({ icon, size, className }: IconPropsType) => {
   const IconComponent = IconMap[icon] || FolderIcon;
 
-  return <IconComponent size={size || 20} />;
+  return <IconComponent size={size || 20} className={className} />;
 };
