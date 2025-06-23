@@ -82,7 +82,8 @@ export const ContentTable = ({
           alt={row.getValue("title")}
           className="mx-auto aspect-square rounded-md"
           width={30}
-          height={0}
+          height={30}
+          priority
         />
       ),
     },

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 // UI Imports
 import { HomeContentCard } from "@/app/(site)/components/HomeContentCard";
-import { ContentCategoryFilter } from "@/components/ContentCategoryFilter";
+import { ContentCategoryFilter } from "@/app/(site)/components/ContentCategoryFilter";
 import Loader from "@/components/Loader";
 
 export default function ExplorePage() {

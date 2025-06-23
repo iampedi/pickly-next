@@ -7,7 +7,7 @@ import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 
 // UI Imports
-import { PanelHomeModule } from "@/components/PanelHomeModule";
+import { PanelHomeModule } from "@/app/(panel)/components/PanelHomeModule";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function PanelPage() {

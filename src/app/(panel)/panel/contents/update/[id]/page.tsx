@@ -6,7 +6,7 @@ import axios from "axios";
 import { use, useEffect, useState } from "react";
 
 // UI Imports
-import { PanelPageHeader } from "@/components/PanelPageHeader";
+import { PanelPageHeader } from "@/app/(panel)/components/PanelPageHeader";
 import ContentForm from "../../ContentForm";
 import { handleClientError } from "@/lib/handleClientError";
 

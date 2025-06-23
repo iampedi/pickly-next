@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 // UI Imports
 import { ContentTable } from "@/app/(panel)/components/ContentTable";
-import { PanelPageHeader } from "@/components/PanelPageHeader";
+import { PanelPageHeader } from "@/app/(panel)/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { Input } from "@/components/theme/input";
 import {

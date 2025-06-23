@@ -12,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/theme/carousel";
-import { Icon } from "./ContentIcon";
+import { Icon } from "@/components/ContentIcon";
 
 type ContentCategoryFilterProps = {
   filterItems: Category[];

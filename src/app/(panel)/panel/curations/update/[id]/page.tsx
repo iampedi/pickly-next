@@ -2,7 +2,7 @@
 "use client";
 
 import Loader from "@/components/Loader";
-import { PanelPageHeader } from "@/components/PanelPageHeader";
+import { PanelPageHeader } from "@/app/(panel)/components/PanelPageHeader";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
 import ContentCurationForm from "../../CurationForm";

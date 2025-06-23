@@ -1,7 +1,6 @@
 // src/app/(site)/collection/page.tsx
 "use client";
 
-import { contentTypes } from "@/constants/content-categories";
 import { cn } from "@/lib/utils";
 import type { Content } from "@/types/content";
 import axios from "axios";
@@ -25,19 +24,19 @@ export default function CollectionPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [activeType, setActiveType] = useState<string | null>(null);
   const [changeBookmark, setChangeBookmark] = useState(0);
-  const usedTypes = new Set<string>(contents.map((c) => c.type));
-  const filterItems = [
-    { value: null, label: "All", icon: RowsIcon },
-    ...contentTypes.filter((type) => usedTypes.has(type.value)),
-  ];
+  // const usedTypes = new Set<string>(contents.map((c) => c.type));
+  // const filterItems = [
+  //   { value: null, label: "All", icon: RowsIcon },
+  //   ...contentTypes.filter((type) => usedTypes.has(type.value)),
+  // ];
 
   function handleFilterClick(type: string | null) {
     setActiveType(type);
   }
 
-  const getContentTypeMeta = (value: string) => {
-    return contentTypes.find((c) => c.value === value);
-  };
+  // const getContentTypeMeta = (value: string) => {
+  //   return contentTypes.find((c) => c.value === value);
+  // };
 
   useEffect(() => {
     const fetchContents = async () => {
@@ -60,7 +59,7 @@ export default function CollectionPage() {
 
   return (
     <main className="flex flex-1 flex-col">
-      {filterItems.length > 1 && (
+      {/* {filterItems.length > 1 && (
         <div className="_carousel mx-auto max-w-full md:max-w-4xl md:px-2.5">
           <Carousel
             opts={{
@@ -136,7 +135,7 @@ export default function CollectionPage() {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }

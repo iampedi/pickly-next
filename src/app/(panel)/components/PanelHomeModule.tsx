@@ -1,7 +1,7 @@
 // src/components/PanelHomeModule.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Loader from "./Loader";
-import { Icon } from "./ContentIcon";
+import Loader from "../../../components/Loader";
+import { Icon } from "../../../components/ContentIcon";
 
 type PanelHomeModuleProps = {
   title: string;

@@ -41,7 +41,7 @@ const panelMenu: MenuItem[] = [
     canAccess: (user) => user.role === "ADMIN",
   },
 ];
-export const MenuList = ({ onClick }: MenuListProps) => {
+export const PanelMenuList = ({ onClick }: MenuListProps) => {
   const { user } = useAuth();
 
   if (!user) return null;

@@ -2,17 +2,21 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 // UI Imports
 import { Logo } from "@/components/Logo";
 import { UserAvatar } from "@/components/UserAvatar";
 import { NavLink } from "@/components/theme/NavLink";
+import { ListIcon } from "@phosphor-icons/react/dist/ssr";
+import { MobileMenu } from "./MobileMenu";
 
 type MenuListProps = {
   onClick?: () => void;
 };
 
 export const Header = ({ onClick }: MenuListProps) => {
+  const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
   return (
@@ -23,6 +27,7 @@ export const Header = ({ onClick }: MenuListProps) => {
 
           <div className="flex items-center gap-8">
             <NavLink
+              className="hidden md:block"
               variant="menu"
               size="link"
               key={"explore"}
@@ -34,6 +39,7 @@ export const Header = ({ onClick }: MenuListProps) => {
 
             {user && (
               <NavLink
+                className="hidden md:block"
                 variant="menu"
                 size="link"
                 key={"collection"}
@@ -44,7 +50,18 @@ export const Header = ({ onClick }: MenuListProps) => {
               </NavLink>
             )}
 
-            <UserAvatar />
+            <div className="flex items-center gap-2">
+              <UserAvatar />
+
+              <ListIcon
+                className="md:hidden"
+                size={32}
+                weight="bold"
+                onClick={() => setOpen(true)}
+              />
+            </div>
+
+            <MobileMenu open={open} setOpen={setOpen} />
           </div>
         </div>
       </div>

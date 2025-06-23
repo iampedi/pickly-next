@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Logo } from "@/components/Logo";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ListIcon } from "@phosphor-icons/react/dist/ssr";
-import { MobileMenu } from "@/app/layout/MobileMenu";
+import { PanelMobileMenu } from "@/app/layout/PanelMobileMenu";
 
 export const PanelHeader = () => {
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ export const PanelHeader = () => {
         </div>
       </header>
 
-      <MobileMenu open={open} setOpen={setOpen} />
+      <PanelMobileMenu open={open} setOpen={setOpen} />
     </>
   );
 };

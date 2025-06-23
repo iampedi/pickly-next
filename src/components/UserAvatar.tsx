@@ -4,7 +4,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { handleClientError } from "@/lib/handleClientError";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 // UI Imports
@@ -27,11 +27,13 @@ import {
   SquaresFourIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { LoginButton } from "./LoginButton";
+import { LoginButton } from "@/app/(site)/components/LoginButton";
+import { HouseIcon } from "@phosphor-icons/react";
 
 export const UserAvatar = () => {
   const { user, loading, setUser, refetch } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     try {
@@ -90,8 +92,18 @@ export const UserAvatar = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          {(user.role === "ADMIN" || user.role === "CURATOR") && (
-            <>
+          {(user.role === "ADMIN" || user.role === "CURATOR") &&
+            (pathname.includes("/panel") ? (
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => router.push("/")}
+              >
+                Home
+                <DropdownMenuShortcut>
+                  <HouseIcon />
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
+            ) : (
               <DropdownMenuItem
                 className="cursor-pointer hover:bg-gray-100"
                 onClick={() => router.push("/panel")}
@@ -101,8 +113,7 @@ export const UserAvatar = () => {
                   <SquaresFourIcon />
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
-            </>
-          )}
+            ))}
 
           <DropdownMenuItem
             className="cursor-pointer hover:bg-gray-100"

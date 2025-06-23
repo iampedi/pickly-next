@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 // UI Imports
 import { CurationCard } from "@/app/(site)/components/CurationCard";
-import { PanelPageHeader } from "@/components/PanelPageHeader";
+import { PanelPageHeader } from "@/app/(panel)/components/PanelPageHeader";
 import { SubmitButton } from "@/components/SubmitButton";
 import { handleClientError } from "@/lib/handleClientError";
 import { Category } from "@/types";

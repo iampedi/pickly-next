@@ -1,5 +1,5 @@
 // src/app/panel/curations/create/page.tsx
-import { PanelPageHeader } from "@/components/PanelPageHeader";
+import { PanelPageHeader } from "@/app/(panel)/components/PanelPageHeader";
 import ContentCurationForm from "../CurationForm";
 
 export default function CreateCurationPage() {
