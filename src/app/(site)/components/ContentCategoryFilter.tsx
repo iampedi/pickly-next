@@ -25,11 +25,6 @@ export const ContentCategoryFilter = ({
   activeCategory,
   setActiveCategory,
 }: ContentCategoryFilterProps) => {
-  const categories = [
-    { id: "", label: "All", icon: "FolderIcon" },
-    ...filterItems,
-  ];
-
   function handleFilterClick(categoryId: string | null) {
     setActiveCategory(categoryId);
   }
@@ -43,7 +38,7 @@ export const ContentCategoryFilter = ({
         className="w-full py-4 duration-300 md:py-5"
       >
         <CarouselContent>
-          {categories.map((category) => {
+          {filterItems.map((category) => {
             return (
               <CarouselItem
                 key={category.id}

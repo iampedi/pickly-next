@@ -1,4 +1,4 @@
-// src/app/panel/layout.tsx
+// src/app/(panel)/layout.tsx
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Suspense } from "react";

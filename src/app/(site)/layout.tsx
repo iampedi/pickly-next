@@ -1,18 +1,18 @@
-import { Footer } from "@/app/layout/Footer";
-import { Header } from "@/app/layout/Header";
+// src/app/(site)/layout.tsx
+import { Suspense } from "react";
+
+// UI Imports
+import { SiteShell } from "@/app/layout/SiteShell";
+import Loader from "@/components/Loader";
 
 export default function SiteLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="_site flex flex-1 flex-col">
-      <Header />
-
-      {children}
-
-      <Footer />
+    <div className="flex min-h-screen flex-col">
+      <Suspense fallback={<Loader />}>
+        <SiteShell>{children}</SiteShell>
+      </Suspense>
     </div>
   );
 }

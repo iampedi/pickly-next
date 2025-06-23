@@ -18,6 +18,8 @@ import {
 import { toast } from "sonner";
 import { Icon } from "@/components/ContentIcon";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 type ContentCardProps = {
   content: Content;
@@ -33,6 +35,7 @@ export const HomeContentCard = ({
   const [inspiredActive, setInspiredActive] = useState(false);
   const [thanksActive, setThanksActive] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const fetchActions = async () => {
@@ -99,14 +102,22 @@ export const HomeContentCard = ({
   return (
     <Card className="group relative h-full flex-1 gap-0 border-none p-0 shadow-none duration-300">
       <CardHeader className="gap-0 p-0">
-        <Image
-          src={content.image}
-          alt={content.title}
-          width={400}
-          height={0}
-          className="rounded-t-lg duration-300 group-hover:rounded-t-lg"
-          priority
-        />
+        <div className="relative h-[291px] w-[233px] overflow-hidden rounded-t-lg">
+          <Skeleton className="absolute inset-0 h-full w-full" />
+          <Image
+            src={content.image}
+            alt={content.title}
+            width={400}
+            height={500}
+            onLoad={() => setImageLoaded(true)}
+            className={cn(
+              "rounded-t-lg transition-opacity duration-300",
+              imageLoaded ? "opacity-100" : "opacity-0",
+              "absolute inset-0 h-full w-full object-cover",
+            )}
+            priority
+          />
+        </div>
       </CardHeader>
       <CardContent className="flex h-full flex-col gap-2 rounded-b-lg bg-lime-50/75 p-3 duration-300 group-hover:bg-lime-300/25 md:gap-2.5 md:px-4.5 md:pb-4.5">
         <div className="flex flex-1 gap-1.5 text-lime-700 duration-300 group-hover:text-rose-600 md:gap-3">
