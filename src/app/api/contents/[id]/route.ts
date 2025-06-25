@@ -3,17 +3,16 @@ import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
 // Get a single content: GET /api/contents/:id
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+
   try {
     const content = await prisma.content.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: {
         curations: true,
         contentTags: {
@@ -38,9 +37,12 @@ export async function GET(request: NextRequest, { params }: Params) {
 }
 
 // Update a Content: PUT /api/contents/:id
-export async function PUT(request: NextRequest, { params }: Params) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { title, categoryId, link, tags, description, image } = body;
     const normalizedTitle = title.trim().toLowerCase();
@@ -119,10 +121,10 @@ export async function PUT(request: NextRequest, { params }: Params) {
 // Delete a Content: DELETE /api/contents/:id
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const content = await prisma.content.findUnique({ where: { id } });
     if (!content) {

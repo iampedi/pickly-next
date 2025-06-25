@@ -4,7 +4,7 @@
 import { handleClientError } from "@/lib/handleClientError";
 import { Content } from "@/types/content";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // UI Imports
 import { ToggleIcon } from "@/components/theme/ToggleIcon";

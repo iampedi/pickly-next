@@ -27,8 +27,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "src",
     ".next/types/**/*.ts",
-    "src/contexts/AuthContext.tsx",
     "next-intl.config.js"
   ],
   "exclude": ["node_modules"]
