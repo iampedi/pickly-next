@@ -22,7 +22,7 @@ export const Header = ({ onClick }: MenuListProps) => {
   return (
     <header>
       <div className="continer mx-auto h-full max-w-5xl px-4">
-        <div className="leadin flex items-center justify-between py-5">
+        <div className="leadin flex items-center justify-between py-4 md:py-5">
           <Logo />
 
           <div className="flex items-center gap-8">

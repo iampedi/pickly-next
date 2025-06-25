@@ -17,7 +17,6 @@ export default function ExplorePage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [activeCategory, setActiveCategory] = useState<string | null>("");
 
-  // فقط contents رو بگیر
   useEffect(() => {
     const fetchContents = async () => {
       setLoading(true);
@@ -33,7 +32,6 @@ export default function ExplorePage() {
     fetchContents();
   }, []);
 
-  // همون منطق فیلتر دسته‌های استفاده‌شده
   const usedCategories = useMemo(
     () =>
       Array.from(

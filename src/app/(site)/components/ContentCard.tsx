@@ -83,10 +83,6 @@ export const ContentCard = ({
 
   const curationsCount = content.curations?.length || 0;
 
-  useEffect(() => {
-    console.log("Watching...", content);
-  }, [content]);
-
   return (
     <Card className="group relative h-full flex-1 gap-0 border-none p-0 shadow-none duration-300">
       <CardHeader className="gap-0 p-0">
