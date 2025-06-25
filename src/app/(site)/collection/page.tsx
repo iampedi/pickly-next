@@ -59,16 +59,18 @@ export default function CollectionPage() {
   return (
     <div className="_explore-page flex flex-1 flex-col">
       <div className="container mx-auto h-full max-w-5xl px-4">
-        <ContentCategoryFilter
-          filterItems={categoriesWithAll as Category[]}
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
-        />
+        {filteredContents.length > 0 && (
+          <ContentCategoryFilter
+            filterItems={categoriesWithAll as Category[]}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
+        )}
 
         <div className="_content flex flex-1 flex-col py-4">
           <div className="grid flex-1 grid-cols-2 content-start gap-3 md:grid-cols-4 md:gap-5">
             {filteredContents.length === 0 ? (
-              <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500">
+              <div className="col-span-2 flex flex-1 items-center justify-center text-gray-500 md:col-span-4">
                 There are no contents to show.
               </div>
             ) : (

@@ -18,17 +18,18 @@ export default function HeroSection() {
               <h2 className="mb-2 text-[26px] font-semibold md:mb-4 md:text-[40px] md:font-medium">
                 Content worth your time.
               </h2>
-              <p className="text-xl text-gray-600 md:text-2xl md:leading-9">
-                In a world overwhelmed by noise, we’re building a space for
-                clarity, connection, and care. Here, real people share real
-                recommendations — not for attention, but for intention.
-                <br />
-                <span className="text-black underline">
+              <div className="space-y-3 text-xl text-gray-600 md:text-2xl md:leading-9">
+                <p>
+                  In a world overwhelmed by noise, we’re building a space for
+                  clarity, connection, and care. Here, real people share real
+                  recommendations — not for attention, but for intention.
+                </p>
+                <p className="text-black underline">
                   No likes. No followers. Just curated content.
-                </span>
-              </p>
+                </p>
+              </div>
               <Button
-                className="mt-5 w-full md:mt-8 md:w-auto"
+                className="mt-6 w-full md:mt-8 md:w-auto"
                 size={"lg"}
                 asChild
               >

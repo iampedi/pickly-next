@@ -50,15 +50,24 @@ export const HomeLatestContents = () => {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {loading && <Loader className="col-span-2 md:col-span-4" />}
 
-          {contents.map((content) => (
-            <ContentCard key={content.id} content={content} />
-          ))}
+          {contents.length > 0 ? (
+            contents.map((content) => (
+              <ContentCard key={content.id} content={content} />
+            ))
+          ) : (
+            <p className="col-span-2 text-center md:col-span-4">
+              There are no contents to show.
+            </p>
+          )}
         </div>
-        <div className="mt-10 text-center">
-          <Button variant="outline" asChild>
-            <Link href="/explore">Explore All Contents</Link>
-          </Button>
-        </div>
+
+        {contents.length > 0 && (
+          <div className="mt-10 text-center">
+            <Button variant="outline" asChild>
+              <Link href="/explore">Explore All Contents</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
