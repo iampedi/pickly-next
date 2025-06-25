@@ -20,6 +20,7 @@ export type Content = {
     inspired: boolean;
     thanks: boolean;
   };
+  curationsCount: number;
   curations: Curation[];
   userContentActions: UserContentAction[];
   createdAt: string;

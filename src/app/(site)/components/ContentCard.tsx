@@ -81,8 +81,6 @@ export const ContentCard = ({
     }
   };
 
-  const curationsCount = content.curations?.length || 0;
-
   return (
     <Card className="group relative h-full flex-1 gap-0 border-none p-0 shadow-none duration-300">
       <CardHeader className="gap-0 p-0">
@@ -147,9 +145,9 @@ export const ContentCard = ({
 
           <div className="min-w-7 text-center font-medium text-gray-500">
             <TooltipWrapper
-              tooltip={`Time${curationsCount < 1 ? "" : "s"} curated`}
+              tooltip={`Time${content.curationsCount < 2 ? "" : "s"} curated`}
             >
-              <span>{curationsCount}</span>
+              <span>{content.curationsCount || 0}</span>
             </TooltipWrapper>
           </div>
         </div>

@@ -24,6 +24,7 @@ export const HomeLatestContents = () => {
       try {
         const res = await axios.get("/api/contents");
         const latestContents = res.data
+          .filter((content: Content) => content.curationsCount > 0)
           .sort(
             (a: Content, b: Content) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -47,10 +48,11 @@ export const HomeLatestContents = () => {
         <h2 className="mb-6 flex items-center gap-2 text-xl font-medium text-lime-700">
           <ClockClockwiseIcon size={28} /> Latest Contents
         </h2>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {loading && <Loader className="col-span-2 md:col-span-4" />}
 
-          {contents.length > 0 ? (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {loading ? (
+            <Loader className="col-span-2 md:col-span-4" />
+          ) : contents.length > 0 ? (
             contents.map((content) => (
               <ContentCard key={content.id} content={content} />
             ))

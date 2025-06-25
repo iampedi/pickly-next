@@ -22,7 +22,10 @@ export default function ExplorePage() {
       setLoading(true);
       try {
         const res = await axios.get("/api/contents");
-        setContents(res.data);
+        const curatedContents = res.data.filter(
+          (c: Content) => c.curationsCount > 0,
+        );
+        setContents(curatedContents);
       } catch (err) {
         handleClientError(err, "Failed to fetch contents.");
       } finally {
@@ -71,7 +74,6 @@ export default function ExplorePage() {
               </div>
             ) : (
               filteredContents
-                .slice()
                 .sort(
                   (a, b) =>
                     new Date(b.createdAt).getTime() -
