@@ -27,34 +27,20 @@ type ContentCardProps = {
   onChangeBookmark?: () => void;
 };
 
-export const HomeContentCard = ({
+export const ContentCard = ({
   onChangeBookmark,
   content,
 }: ContentCardProps) => {
-  const [bookmarkActive, setBookmarkActive] = useState(false);
-  const [inspiredActive, setInspiredActive] = useState(false);
-  const [thanksActive, setThanksActive] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [bookmarkActive, setBookmarkActive] = useState(
+    content.actions?.bookmark ?? false,
+  );
+  const [inspiredActive, setInspiredActive] = useState(
+    content.actions?.inspired ?? false,
+  );
+  const [thanksActive, setThanksActive] = useState(
+    content.actions?.thanks ?? false,
+  );
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  useEffect(() => {
-    const fetchActions = async () => {
-      try {
-        const res = await axios.get("/api/action", {
-          params: { contentId: content.id },
-          withCredentials: true,
-        });
-        setBookmarkActive(res.data.bookmark);
-        setInspiredActive(res.data.inspired);
-        setThanksActive(res.data.thanks);
-      } catch (err) {
-        handleClientError(err, "Failed to fetch actions.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchActions();
-  }, [content.id]);
 
   const handleAction = async (type: "BOOKMARK" | "INSPIRED" | "THANKS") => {
     try {
@@ -97,12 +83,14 @@ export const HomeContentCard = ({
 
   const curationsCount = content.curations?.length || 0;
 
-  if (loading) return null;
+  useEffect(() => {
+    console.log("Watching...", content);
+  }, [content]);
 
   return (
     <Card className="group relative h-full flex-1 gap-0 border-none p-0 shadow-none duration-300">
       <CardHeader className="gap-0 p-0">
-        <div className="relative h-[291px] w-[233px] overflow-hidden rounded-t-lg">
+        <div className="relative aspect-[4/5] max-w-[233px] overflow-hidden rounded-t-lg">
           <Skeleton className="absolute inset-0 h-full w-full" />
           <Image
             src={content.image}
@@ -132,12 +120,6 @@ export const HomeContentCard = ({
             {content.category?.label}
           </span>
         </div>
-
-        {/* <div className="flex items-center justify-between pl-1.5 text-gray-500 group-hover:text-lime-800 md:pl-3">
-          <div className="flex items-center gap-1.5 text-sm">
-            <strong>{content.curations?.length || 0}</strong> .
-          </div>
-        </div> */}
 
         {content.description && (
           <p className="line-clamp-1 text-gray-500 group-hover:text-lime-800">

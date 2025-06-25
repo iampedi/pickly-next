@@ -15,6 +15,11 @@ export type Content = {
   contentTags: {
     tag: Tag;
   }[];
+  actions?: {
+    bookmark: boolean;
+    inspired: boolean;
+    thanks: boolean;
+  };
   curations: Curation[];
   userContentActions: UserContentAction[];
   createdAt: string;

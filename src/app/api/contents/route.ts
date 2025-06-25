@@ -1,6 +1,8 @@
 // src/app/api/contents/route.ts
+import { verifyJwt } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/prisma";
 import { contentSchema } from "@/lib/validations/content";
+import { ActionType } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -113,6 +115,14 @@ export async function GET(request: NextRequest) {
   const categoryId = searchParams.get("categoryId");
   const title = searchParams.get("title");
 
+  const token = request.cookies.get("token")?.value;
+  let userId: string | null = null;
+
+  if (token) {
+    const payload = verifyJwt(token);
+    if (payload?.userId) userId = payload.userId;
+  }
+
   try {
     const contents = await prisma.content.findMany({
       where: {
@@ -133,10 +143,37 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    const mappedContents = contents.map((item) => ({
-      ...item,
-      curationsCount: item._count.curations,
-    }));
+    let actionsMap: Record<string, ActionType[]> = {};
+
+    if (userId) {
+      const actions = await prisma.userContentAction.findMany({
+        where: { userId },
+        select: { contentId: true, type: true },
+      });
+
+      actionsMap = actions.reduce(
+        (acc, action) => {
+          acc[action.contentId] = acc[action.contentId] || [];
+          acc[action.contentId].push(action.type);
+          return acc;
+        },
+        {} as Record<string, ActionType[]>,
+      );
+    }
+
+    const mappedContents = contents.map((item) => {
+      const actionTypes = actionsMap[item.id] || [];
+
+      return {
+        ...item,
+        curationsCount: item._count.curations,
+        actions: {
+          bookmark: actionTypes.includes("BOOKMARK"),
+          inspired: actionTypes.includes("INSPIRED"),
+          thanks: actionTypes.includes("THANKS"),
+        },
+      };
+    });
 
     return NextResponse.json(mappedContents, { status: 200 });
   } catch (error) {

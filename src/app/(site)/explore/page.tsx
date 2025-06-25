@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 
 // UI Imports
-import { HomeContentCard } from "@/app/(site)/components/HomeContentCard";
+import { ContentCard } from "@/app/(site)/components/ContentCard";
 import { ContentCategoryFilter } from "@/app/(site)/components/ContentCategoryFilter";
 import Loader from "@/components/Loader";
 
@@ -78,7 +78,7 @@ export default function ExplorePage() {
                     new Date(a.createdAt).getTime(),
                 )
                 .map((content) => {
-                  return <HomeContentCard key={content.id} content={content} />;
+                  return <ContentCard key={content.id} content={content} />;
                 })
             )}
           </div>
