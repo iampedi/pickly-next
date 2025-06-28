@@ -15,6 +15,8 @@ import {
   ContentSchema,
 } from "@/lib/validations/content";
 
+// UI Imports
+
 import Loader from "@/components/Loader";
 import { Button } from "@/components/theme/button";
 import {
@@ -42,6 +44,7 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { CircleNotchIcon } from "@phosphor-icons/react/dist/ssr";
+import { FileUploader } from "../../components/FileUploader";
 
 type ContentFormProps = {
   mode: "create" | "update";
@@ -113,8 +116,6 @@ export default function ContentForm({
       setLoading(false);
     }
   };
-
-  const imageValue = form.watch("image");
 
   if (mode === "update" && !initialValues) return <Loader />;
 
@@ -243,11 +244,11 @@ export default function ContentForm({
                 )}
               />
 
-              {/* Hidden image */}
-              <input
-                type="hidden"
-                value={imageValue}
-                {...form.register("image")}
+              {/* Image */}
+              <FileUploader
+                className="md:col-span-2"
+                onUploaded={(url) => form.setValue("image", url)}
+                setLoading={setLoading}
               />
 
               <div className="mt-2 flex flex-col-reverse gap-3 md:col-span-2 md:flex-row">

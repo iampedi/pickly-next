@@ -3,9 +3,17 @@ import withNextIntl from "next-intl/plugin";
 import type { NextConfig } from "next";
 
 const config: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.ufs.sh",
+      },
+    ],
+  },
   reactStrictMode: true,
   experimental: {
-    nodeMiddleware: true, // این flag لازم است
+    nodeMiddleware: true,
   },
 };
 
