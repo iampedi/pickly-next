@@ -26,6 +26,8 @@ export default function ExplorePage() {
           (c: Content) => c.curationsCount > 0,
         );
         setContents(curatedContents);
+        console.log("curatedContents", curatedContents);
+        
       } catch (err) {
         handleClientError(err, "Failed to fetch contents.");
       } finally {

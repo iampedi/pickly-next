@@ -80,7 +80,7 @@ export const ContentTable = ({
         <Image
           src={row.getValue("image")}
           alt={row.getValue("title")}
-          className="mx-auto aspect-square rounded-md"
+          className="mx-auto aspect-square rounded-full"
           width={30}
           height={30}
           priority
