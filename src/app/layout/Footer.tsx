@@ -2,7 +2,7 @@
 export const Footer = () => {
   return (
     <footer>
-      <div className="continer mx-auto h-full max-w-5xl px-4">
+      <div className="container mx-auto h-full max-w-5xl px-4">
         <div className="flex h-16 items-center justify-center">
           <p className="text-muted-foreground text-[15px]">
             &copy; 2025 Pickly. Desing with 🔥 by{" "}

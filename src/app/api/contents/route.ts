@@ -1,6 +1,7 @@
 // src/app/api/contents/route.ts
 import { verifyJwt } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/prisma";
+import { slugify } from "@/lib/slugify";
 import { contentSchema } from "@/lib/validations/content";
 import { ActionType } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // اعتبارسنجی با Zod
+    // Validate the input data using Zod
     const parsed = contentSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // نرمال‌سازی، حذف تکراری‌ها و تایپ‌گذاری دقیق
+    // Normalize and deduplicate tags
     const normalize = (name: string) => name.trim().toLowerCase();
     const rawTags = parsed.data.tags ?? [];
 
@@ -59,12 +60,13 @@ export async function POST(req: NextRequest) {
     ];
 
     const normalizedTitle = parsed.data.title.trim().toLowerCase();
+    const slug = slugify(normalizedTitle);
 
-    // بررسی یکتا بودن title + categoryId
+    // Check if a content with the same title already exists
     const existing = await prisma.content.findUnique({
       where: {
-        title_categoryId: {
-          title: normalizedTitle,
+        slug_categoryId: {
+          slug,
           categoryId: parsed.data.categoryId,
         },
       },
@@ -77,10 +79,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ساخت Content و اتصال به Tagها
+    // Create content and its tags in a single transaction
     const content = await prisma.content.create({
       data: {
         title: normalizedTitle,
+        slug,
         categoryId: parsed.data.categoryId,
         link: parsed.data.link || "",
         image: parsed.data.image || "",

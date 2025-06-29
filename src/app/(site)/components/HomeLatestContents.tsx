@@ -44,7 +44,7 @@ export const HomeLatestContents = () => {
 
   return (
     <div className="py-8 md:py-10">
-      <div className="continer mx-auto h-full max-w-5xl px-4">
+      <div className="container mx-auto h-full max-w-5xl px-4">
         <h2 className="mb-6 flex items-center gap-2 text-xl font-medium text-lime-700">
           <ClockClockwiseIcon size={28} /> Latest Contents
         </h2>
@@ -63,7 +63,7 @@ export const HomeLatestContents = () => {
           )}
         </div>
 
-        {contents.length > 0 && (
+        {contents.length > 4 && (
           <div className="mt-10 text-center">
             <Button variant="outline" asChild>
               <Link href="/explore">Explore All Contents</Link>

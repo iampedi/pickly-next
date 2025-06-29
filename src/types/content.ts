@@ -7,6 +7,7 @@ import { Tag } from "./tag";
 export type Content = {
   id: string;
   title: string;
+  slug: string;
   image: string;
   link: string;
   description: string;

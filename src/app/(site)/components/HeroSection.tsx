@@ -11,7 +11,7 @@ import { Button } from "@/components/theme/button";
 export default function HeroSection() {
   return (
     <div className="_hero-section bg-gradient-to-t from-lime-100 to-white">
-      <div className="continer mx-auto h-full max-w-5xl px-4">
+      <div className="container mx-auto h-full max-w-5xl px-4">
         <div className="_wrapper flex h-full flex-col">
           <div className="_content flex flex-1 flex-col content-around items-center justify-center gap-8 px-2 pt-6 pb-12 md:flex-row md:gap-10 md:px-0 md:py-20">
             <div className="md:w-2/3">
