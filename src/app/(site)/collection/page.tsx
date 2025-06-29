@@ -82,13 +82,7 @@ export default function CollectionPage() {
                     new Date(a.createdAt).getTime(),
                 )
                 .map((content) => {
-                  return (
-                    <ContentCard
-                      key={content.id}
-                      content={content}
-                      onChangeBookmark={fetchContents}
-                    />
-                  );
+                  return <ContentCard key={content.id} content={content} />;
                 })
             )}
           </div>

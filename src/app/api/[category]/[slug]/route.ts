@@ -5,22 +5,28 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { category: string; slug: string } },
+  context: { params: Promise<{ category: string; slug: string }> },
 ) {
-  const { category, slug } = params;
+  const { category, slug } = await context.params;
 
   try {
+    const categoryRecord = await prisma.category.findUnique({
+      where: { value: category },
+      select: { id: true },
+    });
+
+    if (!categoryRecord) {
+      return NextResponse.json(
+        { error: "Category not found." },
+        { status: 404 },
+      );
+    }
+
     const content = await prisma.content.findUnique({
       where: {
         slug_categoryId: {
           slug,
-          categoryId:
-            (
-              await prisma.category.findUnique({
-                where: { value: category },
-                select: { id: true },
-              })
-            )?.id ?? "",
+          categoryId: categoryRecord.id,
         },
       },
       include: {
