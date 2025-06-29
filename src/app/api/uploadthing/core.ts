@@ -4,6 +4,7 @@ import { UploadThingError } from "uploadthing/server";
 const f = createUploadthing();
 
 // Fake auth function (replace with real logic if needed)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const auth = (_req: Request) => ({ id: "fakeId" });
 
 export const ourFileRouter = {
