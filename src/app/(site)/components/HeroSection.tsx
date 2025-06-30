@@ -41,6 +41,7 @@ export default function HeroSection() {
                 src={image}
                 alt="Hero Section"
                 className="max-h-[55vw] object-contain"
+                priority
               />
             </div>
           </div>

@@ -3,6 +3,7 @@ import { handleApiError } from "@/lib/handleApiError";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
+// Get a single content: GET /api/:category/:slug
 export async function GET(
   req: NextRequest,
   context: { params: Promise<{ category: string; slug: string }> },
@@ -30,7 +31,17 @@ export async function GET(
         },
       },
       include: {
-        curations: true,
+        curations: {
+          include: {
+            user: {
+              select: {
+                fullname: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+        category: true,
         contentTags: {
           select: {
             tag: true,

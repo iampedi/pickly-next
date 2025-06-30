@@ -29,14 +29,14 @@ export const ContentCard = ({ content }: ContentCardProps) => {
             <Image
               src={content.image}
               alt={content.title}
-              width={400}
-              height={500}
-              onLoad={() => setImageLoaded(true)}
               className={cn(
                 "rounded-t-lg transition-opacity duration-300",
                 imageLoaded ? "opacity-100" : "opacity-0",
                 "absolute inset-0 h-full w-full object-cover",
               )}
+              width={400}
+              height={500}
+              onLoad={() => setImageLoaded(true)}
               priority
             />
           </div>
