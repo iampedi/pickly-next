@@ -67,7 +67,7 @@ export default function ExplorePage() {
         )}
 
         <div className="_content flex flex-1 flex-col py-4">
-          <div className="grid flex-1 grid-cols-2 content-start gap-3 md:grid-cols-4 md:gap-5">
+          <div className="grid flex-1 content-start gap-3 md:grid-cols-3 md:gap-5">
             {filteredContents.length === 0 ? (
               <div className="col-span-2 flex items-center justify-center text-gray-500 md:col-span-4">
                 There are no contents to show.

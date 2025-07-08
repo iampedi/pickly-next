@@ -49,7 +49,7 @@ export const HomeLatestContents = () => {
           <ClockClockwiseIcon size={28} /> Latest Contents
         </h2>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-3">
           {loading ? (
             <Loader className="col-span-2 md:col-span-4" />
           ) : contents.length > 0 ? (

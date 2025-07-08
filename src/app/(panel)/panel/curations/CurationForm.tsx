@@ -199,7 +199,7 @@ export default function CurationForm({
   // log in dev mode to console
 
   return (
-    <div className="container mx-auto mt-6 max-w-lg">
+    <div className="container mx-auto mt-6 max-w-lg flex-1">
       <Card>
         <CardHeader>
           <CardDescription>
@@ -285,7 +285,7 @@ export default function CurationForm({
                           {suggestions.map((s) => (
                             <div
                               key={s.id}
-                              className="cursor-pointer px-3 py-2 hover:bg-gray-100 capitalize"
+                              className="cursor-pointer px-3 py-2 capitalize hover:bg-gray-100"
                               onClick={() => handleSuggestionClick(s)}
                             >
                               {s.title}

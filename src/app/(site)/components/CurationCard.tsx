@@ -33,7 +33,7 @@ export const CurationCard = ({
   const router = useRouter();
 
   return (
-    <div className="group relative flex gap-3 rounded-lg border border-lime-300/70 bg-lime-50/70 p-3 duration-300 md:gap-4 md:border-gray-200/70 md:bg-gray-50/70 md:p-4 md:hover:border-lime-300/70 md:hover:bg-lime-50/70">
+    <div className="group relative flex gap-3 rounded-lg border border-lime-300/70 p-3 duration-300 md:gap-4 md:border-gray-200/70 md:p-4 md:hover:border-lime-300/70">
       <div className="_image pb-7 md:min-w-[100px] md:pb-0">
         <Image
           src={curation.content?.image ?? ""}
@@ -69,7 +69,7 @@ export const CurationCard = ({
             </span>
           </div>
           {curation.comment && (
-            <p className="line-clamp-2 text-[15px] md:line-clamp-3 md:pl-7 md:text-base leading-6">
+            <p className="line-clamp-2 text-[15px] leading-6 md:line-clamp-3 md:pl-7 md:text-base">
               {curation.comment}
             </p>
           )}
